@@ -110,7 +110,7 @@ export const rotulos: Record<string, string> = Object.fromEntries(
 export const textoSucesso = {
   titulo: 'Recebi.',
   corpo:
-    'Abri o WhatsApp com o seu briefing já escrito. Se não abriu, o botão ' +
+    'Abri o WhatsApp com suas respostas já organizadas. Se não abriu, o botão ' +
     'abaixo tenta de novo.',
   sugestoes: 'Enquanto isso, essas áreas batem com o que você marcou:',
 };

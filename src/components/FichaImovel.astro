@@ -64,7 +64,9 @@ const linhas = [
   { rotulo: 'Finalidade', valor: d.finalidade.map((f) => rotuloFinalidade(f)).join(' · ') },
   { rotulo: 'Água', valor: d.agua },
   { rotulo: 'Acesso', valor: descreverAcesso(d.acesso.asfaltoKm, d.acesso.terraKm) },
-  { rotulo: 'De Vitória', valor: d.tempoDeVitoria },
+  ...(d.tempoDeVitoria !== 'A confirmar'
+    ? [{ rotulo: 'De Vitória', valor: d.tempoDeVitoria }]
+    : []),
 ];
 
 function rotuloFinalidade(f: string) {

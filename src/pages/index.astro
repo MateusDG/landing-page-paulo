@@ -256,29 +256,29 @@ const jsonLd = {
     </div>
   </section>
 
-  {/* =================================================== 09 · BRIEFING === */}
-  <section class="secao secao--filete" id="briefing" aria-labelledby="briefing-titulo">
-    <div class="env briefing-secao">
-      <div class="briefing-secao__texto">
+  {/* =============================================== 09 · PERGUNTAS === */}
+  <section class="secao secao--filete" id="perguntas" aria-label="Responder perguntas sobre o que você procura">
+    <div class="env perguntas-secao">
+      <div class="perguntas-secao__texto">
         <CabecalhoSecao
           kicker="Conversa"
           titulo="Me diga o que você procura em cinco cliques"
-          subtitulo="Sem formulário longo, sem e-mail obrigatório. No fim abre o WhatsApp com o seu briefing já escrito."
+          subtitulo="Sem formulário longo, sem e-mail obrigatório. No fim, suas respostas seguem organizadas para o WhatsApp."
         />
 
-        <ul class="briefing-secao__lista">
+        <ul class="perguntas-secao__lista">
           <li>Você responde clicando, digita só nome e telefone, no fim.</li>
           <li>Eu recebo o resumo estruturado, com região, área e prazo.</li>
           <li>{corretor.sla}</li>
         </ul>
 
-        <div class="briefing-secao__alt">
+        <div class="perguntas-secao__alt">
           <p class="rotulo rotulo--fraco">Prefere ir direto?</p>
-          <BotaoWhats origem="briefing-secao" variante="secundario" rotulo="Falar no WhatsApp agora" />
+          <BotaoWhats origem="perguntas-secao" variante="secundario" rotulo="Falar no WhatsApp agora" />
         </div>
       </div>
 
-      <div class="briefing-secao__form">
+      <div class="perguntas-secao__form">
         <Briefing origem="home" />
       </div>
     </div>
@@ -491,36 +491,36 @@ const jsonLd = {
     }
   }
 
-  /* ---- 09 Briefing ------------------------------------------------------ */
-  .briefing-secao {
+  /* ---- 09 Perguntas ----------------------------------------------------- */
+  .perguntas-secao {
     display: grid;
     grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
     gap: var(--s-8);
     align-items: start;
   }
 
-  .briefing-secao__lista {
+  .perguntas-secao__lista {
     display: grid;
     gap: var(--s-3);
     border-top: var(--borda);
     padding-top: var(--s-5);
   }
 
-  .briefing-secao__lista li {
+  .perguntas-secao__lista li {
     position: relative;
     padding-left: var(--s-5);
     font-size: var(--t-peq);
     color: var(--grafite-70);
   }
 
-  .briefing-secao__lista li::before {
+  .perguntas-secao__lista li::before {
     content: '•';
     position: absolute;
     left: 0;
     color: var(--terra);
   }
 
-  .briefing-secao__alt {
+  .perguntas-secao__alt {
     display: grid;
     gap: var(--s-3);
     justify-items: start;
@@ -530,7 +530,7 @@ const jsonLd = {
   }
 
   @media (max-width: 900px) {
-    .briefing-secao {
+    .perguntas-secao {
       grid-template-columns: minmax(0, 1fr);
     }
   }

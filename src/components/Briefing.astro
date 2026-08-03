@@ -26,13 +26,13 @@ interface Props {
   origem?: string;
 }
 
-const { origem = 'briefing-home' } = Astro.props;
+const { origem = 'perguntas-home' } = Astro.props;
 ---
 
 <div class="bf" data-briefing data-origem={origem}>
   <form class="bf__form" action={baseWhats} method="get" target="_blank" data-form>
     <div class="bf__cabecalho">
-      <p class="rotulo rotulo--terra" data-progresso-rotulo>Briefing</p>
+      <p class="rotulo rotulo--terra" data-progresso-rotulo>Suas preferências</p>
       <div class="bf__cota">
         <CotaDimensional valor="1 / 5" />
       </div>
@@ -140,7 +140,7 @@ const { origem = 'briefing-home' } = Astro.props;
         Continuar
       </button>
       <button type="submit" class="botao botao--primario" data-enviar>
-        Enviar meu briefing
+        Enviar minhas respostas
       </button>
     </div>
 
@@ -150,7 +150,7 @@ const { origem = 'briefing-home' } = Astro.props;
   {/* Tela de sucesso. Sem JS nunca aparece, e sem JS ela não é necessária. */}
   <div class="bf__sucesso" data-sucesso hidden>
     <p class="rotulo rotulo--terra">Recebido</p>
-    <h3 class="bf__sucesso-titulo">Abri o WhatsApp com o seu briefing escrito.</h3>
+    <h3 class="bf__sucesso-titulo">Abri o WhatsApp com suas respostas.</h3>
     <p class="bf__nota">
       Se não abriu, use o botão abaixo. O bloqueador de pop-up costuma ser o
       motivo. {corretor.sla}

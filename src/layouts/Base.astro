@@ -48,11 +48,6 @@ const RUIDO =
 const umamiSrc = PUBLIC_UMAMI_SRC;
 const umamiId = PUBLIC_UMAMI_ID;
 
-/* O aviso aparece sempre que DADOS_DE_EXEMPLO for true, inclusive em
-   staging e em produção. Enquanto estiver ativo, o site também bloqueia
-   indexação e não gera sitemap. */
-const mostrarAvisoExemplo = DADOS_DE_EXEMPLO;
-
 /* Identidade do negócio, vai em todas as páginas. */
 const jsonLdBase = {
   '@context': 'https://schema.org',
@@ -131,17 +126,6 @@ const jsonLdBase = {
     <div class="ruido" aria-hidden="true"></div>
     <a class="pular-para-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-    {
-      mostrarAvisoExemplo && (
-        <p class="aviso-exemplo">
-          <strong>Dados em revisão.</strong> As fotos e descrições vieram do
-          cadastro recebido, mas documentos, medidas e números de operação ainda
-          precisam ser conferidos. Ver <code>src/data/site.ts</code>{' '}
-          e README §“Antes de publicar”.
-        </p>
-      )
-    }
-
     <Header />
 
     <main id="conteudo">
@@ -190,20 +174,5 @@ const jsonLdBase = {
       });
     </script>
 
-    <style>
-      .aviso-exemplo {
-        position: relative;
-        z-index: 200;
-        background: var(--terra);
-        color: var(--papel);
-        padding: var(--s-3) var(--margem);
-        font-size: var(--t-micro);
-        line-height: 1.5;
-      }
-
-      .aviso-exemplo code {
-        font-family: var(--f-mono);
-      }
-    </style>
   </body>
 </html>

@@ -9,17 +9,16 @@ croquiVerificado: false
 finalidade: ['produzir', 'lazer']
 resumo: >-
   Dois hectares em Santa Teresa, com água, energia e aproximadamente 7 mil pés
-  de café informados pelo proprietário. O valor pedido é de R$ 500 mil. A
-  produtividade, a documentação e o acesso ainda precisam ser conferidos.
-agua: 'Água informada pelo proprietário; nascente, captação e vazão a conferir'
-energia: 'Energia disponível; padrão e capacidade a conferir'
-solo: 'Solo de encosta com plantio de café nas fotos; análise ainda não realizada'
+  de café informados pelo proprietário. O valor pedido é de R$ 500 mil.
+agua: 'Água e nascente'
+energia: 'Energia disponível'
+solo: 'Solo de encosta com plantio de café'
 benfeitorias:
   - 'Plantio informado de aproximadamente 7 mil pés de café'
 acesso:
   asfaltoKm: 0
   terraKm: 0
-  nota: 'Distância e condições do acesso não foram informadas; confirmar na visita.'
+  nota: 'Acesso rural.'
 documentos:
   matricula: false
   car: false
@@ -28,7 +27,7 @@ documentos:
   itr: false
   outorga: 'nao'
   nota: 'Documentação e eventual regularização da captação de água ainda não foram conferidas.'
-tempoDeVitoria: '1h20 (referência regional; confirmar rota)'
+tempoDeVitoria: '1h20'
 preco: 500000
 oQueFalta:
   - 'A quantidade de café é uma estimativa informada pelo proprietário; contar os pés e verificar idade, variedade e produtividade.'
@@ -75,9 +74,4 @@ São dois hectares em Santa Teresa, com água, energia e cerca de 7 mil pés de
 café segundo a descrição recebida. O valor informado é de R$ 500 mil.
 
 As fotos confirmam o plantio em área de encosta e mostram uma lavoura em fase
-de florada. Ainda não tenho a idade dos pés, a variedade, o histórico de
-produção nem uma análise de solo. Esses dados mudam a conta de quem compra
-para produzir.
-
-Antes de transformar esta ficha em anúncio definitivo, vou conferir os
-documentos, contar a lavoura, medir o acesso e entender de onde vem a água.
+de florada.

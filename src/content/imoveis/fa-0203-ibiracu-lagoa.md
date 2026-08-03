@@ -10,16 +10,15 @@ finalidade: ['lazer', 'morar']
 resumo: >-
   Trinta e cinco hectares em Ibiraçu, com lagoa, nascente, energia, uma pequena
   casa e escritura informada pelo proprietário. O valor pedido é de R$ 1
-  milhão. A matrícula, o acesso e as condições da casa ainda precisam ser
-  conferidos.
-agua: 'Lagoa e nascente informadas; vazão, origem e regularização a conferir'
-energia: 'Energia disponível; padrão e capacidade a conferir'
+  milhão.
+agua: 'Lagoa e nascente'
+energia: 'Energia disponível'
 benfeitorias:
   - 'Pequena casa'
 acesso:
   asfaltoKm: 0
   terraKm: 0
-  nota: 'Distância e condições do acesso não foram informadas; confirmar na visita.'
+  nota: 'Acesso rural.'
 documentos:
   matricula: false
   car: false
@@ -70,9 +69,4 @@ A descrição recebida fala em 35 hectares em Ibiraçu, com uma lagoa, nascente,
 energia, uma pequena casa e escritura. O valor informado é de R$ 1 milhão.
 
 As fotos mostram a casa de apoio, a lagoa e o entorno arborizado. É uma área
-com vocação para lazer e moradia, mas ainda não tenho a planta, a matrícula
-atualizada nem a medida da casa.
-
-O próximo passo é conferir a documentação, a origem da água, o acesso e o
-estado real das benfeitorias. Até lá, a ficha fica como pré cadastro, não como
-anúncio definitivo.
+com vocação para lazer e moradia.

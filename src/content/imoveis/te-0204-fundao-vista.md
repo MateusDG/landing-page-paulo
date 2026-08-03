@@ -11,9 +11,9 @@ resumo: >-
   Terreno em Fundão, a 4 km de estrada de chão, com vista para a serra e valor
   informado de R$ 30 por m². A área total ainda não foi informada, então o
   preço final permanece sob consulta.
-agua: 'Há um espelho d’água nas fotos; origem, uso e regularização a confirmar'
-energia: 'Não informado; confirmar disponibilidade na estrada e na área'
-solo: 'Área com pasto, vegetação e relevo visíveis nas fotos; análise a confirmar'
+agua: 'Espelho d’água'
+energia: 'Energia não informada'
+solo: 'Pasto, vegetação e relevo'
 benfeitorias: []
 acesso:
   asfaltoKm: 0
@@ -70,9 +70,4 @@ recebida informa o valor de R$ 30 por metro quadrado, mas não informa a área
 total. Por isso o valor final está sob consulta.
 
 As fotos mostram uma vista aberta para a serra, área de pasto ou terreno aberto
-e um espelho d’água. A origem da água, a metragem, a energia e a documentação
-ainda precisam ser confirmadas antes de qualquer anúncio definitivo.
-
-Esta ficha fica como pré cadastro até eu receber a área total e conferir a
-matrícula. Sem esses dois dados, não há como apresentar uma conta honesta do
-imóvel.
+e um espelho d’água.

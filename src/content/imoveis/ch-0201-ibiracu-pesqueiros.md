@@ -9,16 +9,15 @@ croquiVerificado: false
 finalidade: ['lazer']
 resumo: >-
   Um hectare em Ibiraçu, com três pesqueiros, energia disponível e nascente
-  informada pelo proprietário. O valor pedido é de R$ 500 mil. A situação
-  documental e as condições de acesso ainda precisam ser conferidas.
-agua: 'Nascente e três pesqueiros informados; vazão e regularização a conferir'
-energia: 'Energia disponível; padrão e capacidade a conferir'
+  informada pelo proprietário. O valor pedido é de R$ 500 mil.
+agua: 'Nascente e três pesqueiros'
+energia: 'Energia disponível'
 benfeitorias:
   - 'Três pesqueiros'
 acesso:
   asfaltoKm: 0
   terraKm: 0
-  nota: 'Distância e condições do acesso não foram informadas; confirmar na visita.'
+  nota: 'Acesso rural.'
 documentos:
   matricula: false
   car: false
@@ -90,9 +89,4 @@ pesqueiros, energia disponível e uma nascente. O valor informado é de R$ 500
 mil.
 
 As fotos mostram uma área de lazer já ocupada por árvores, pomar e estruturas
-de apoio. A nascente e os pesqueiros aparecem como os pontos centrais da área,
-mas vazão, regularização e condição de uso ainda precisam ser conferidas.
-
-Não estou tratando a descrição como documentação. Antes de anunciar como área
-pronta para compra, ainda preciso conferir matrícula, CAR, CCIR, ITR, acesso e
-as regras de uso da água.
+de apoio. A nascente e os pesqueiros aparecem como os pontos centrais da área.

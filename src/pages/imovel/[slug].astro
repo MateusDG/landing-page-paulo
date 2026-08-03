@@ -51,7 +51,9 @@ const linhasFicha = [
         })} alq`,
       }]
     : []),
-  { rotulo: 'De Vitória', valor: d.tempoDeVitoria },
+  ...(d.tempoDeVitoria !== 'A confirmar'
+    ? [{ rotulo: 'De Vitória', valor: d.tempoDeVitoria }]
+    : []),
   ...(d.distanciaVitoriaKm
     ? [{ rotulo: 'Distância', valor: `${d.distanciaVitoriaKm} km` }]
     : []),
@@ -157,9 +159,7 @@ const breadcrumb = {
                 class="im__cota"
               />
               <p class="rotulo rotulo--fraco im__croqui-nota">
-                {d.croquiVerificado
-                  ? 'Perímetro simplificado, para leitura. Não substitui a planta.'
-                  : 'Croqui ilustrativo. O perímetro e a planta ainda precisam ser conferidos.'}
+                {d.croquiVerificado ? 'Perímetro simplificado' : 'Perímetro aproximado'}
               </p>
             </div>
 
@@ -212,8 +212,8 @@ const breadcrumb = {
                       origem={`imovel:${d.codigo}`}
                       rotulo="Perguntar sobre esta área"
                     />
-                    <a class="botao botao--secundario" href="/#briefing">
-                      Fazer o briefing
+                    <a class="botao botao--secundario" href="/#perguntas">
+                      Responder perguntas rápidas
                     </a>
                   </div>
                 )
@@ -237,33 +237,6 @@ const breadcrumb = {
       <div class="env">
         <h2 class="im__h2" id="fotos-titulo">Fotografia</h2>
         <GaleriaImovel fotos={[...d.fotos]} municipio={d.municipio} />
-      </div>
-    </section>
-
-    {/* --- O que falta: a seção que nenhum concorrente publica ------------ */}
-    <section class="secao--compacta im__falta-env" aria-labelledby="falta-titulo">
-      <div class="env">
-        <div class="im__falta">
-          <div class="im__falta-cab">
-            <p class="rotulo rotulo--terra">Antes de você perguntar</p>
-            <h2 class="im__falta-titulo" id="falta-titulo">O que essa área não tem</h2>
-            <p class="peq secundario im__falta-sub">
-              Toda área tem pendência. Aqui elas estão listadas, e não
-              escondidas até a visita.
-            </p>
-          </div>
-
-          <ol class="im__falta-lista">
-            {
-              d.oQueFalta.map((item, i) => (
-                <li class="im__falta-item">
-                  <span class="mono im__falta-n">{String(i + 1).padStart(2, '0')}</span>
-                  <p>{item}</p>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
       </div>
     </section>
 
@@ -291,13 +264,13 @@ const breadcrumb = {
       </div>
     </section>
 
-    {/* --- Anotações de campo (corpo do markdown) ------------------------- */}
-    <section class="secao--compacta im__notas-env" aria-labelledby="notas-titulo">
+    {/* --- Descrição da área (corpo do markdown) -------------------------- */}
+    <section class="secao--compacta im__notas-env" aria-labelledby="descricao-titulo">
       <div class="env">
         <div class="im__notas">
           <div class="im__notas-cab">
-            <p class="rotulo rotulo--terra">Anotações de campo</p>
-            <h2 class="im__h2" id="notas-titulo">O que eu vi quando fui lá</h2>
+            <p class="rotulo rotulo--terra">Descrição</p>
+            <h2 class="im__h2" id="descricao-titulo">Descrição da área</h2>
           </div>
           <div class="prosa im__notas-corpo">
             <Content />
@@ -509,55 +482,6 @@ const breadcrumb = {
     gap: var(--s-6);
     position: sticky;
     top: var(--s-6);
-  }
-
-  /* --- O que falta ------------------------------------------------------ */
-  .im__falta-env {
-    background: var(--papel-2);
-    border-bottom: var(--borda);
-  }
-
-  .im__falta {
-    display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-    gap: var(--s-8);
-    align-items: start;
-  }
-
-  .im__falta-titulo {
-    font-size: var(--t-h2);
-    margin-top: var(--s-3);
-    max-width: 14ch;
-  }
-
-  .im__falta-sub {
-    margin-top: var(--s-4);
-    max-width: 34ch;
-  }
-
-  .im__falta-lista {
-    border-top: var(--borda);
-  }
-
-  .im__falta-item {
-    display: grid;
-    grid-template-columns: 2.5rem minmax(0, 1fr);
-    gap: var(--s-4);
-    padding-block: var(--s-5);
-    border-bottom: var(--borda-f);
-    align-items: start;
-  }
-
-  .im__falta-n {
-    font-size: var(--t-micro);
-    color: var(--terra);
-    letter-spacing: var(--tracking-rotulo);
-    padding-top: 0.3em;
-  }
-
-  .im__falta-item p {
-    max-width: 62ch;
-    line-height: 1.6;
   }
 
   /* --- Blocos gerais ---------------------------------------------------- */
