@@ -43,6 +43,22 @@ npm run dev
 > (`/og/padrao.png/`). No build de produção os arquivos saem no caminho exato
 > (`/og/padrao.png`) — que é o que os robôs e o WhatsApp buscam. Não é bug.
 
+### Publicação na Hostinger
+
+A branch `main` guarda somente o código-fonte. O workflow
+`.github/workflows/deploy-hostinger.yml` valida o projeto, executa
+`npm run build` e publica apenas o conteúdo de `dist/` na branch `hostinger`.
+
+No hPanel, em **Git**, configure:
+
+1. Repositório: `MateusDG/landing-page-paulo`
+2. Branch: `hostinger`
+3. Caminho de instalação: vazio, para publicar diretamente em `public_html`
+4. Implantação automática: ativada com o webhook fornecido pela Hostinger
+
+Não aponte a Hostinger para a branch `main`. Isso colocaria o código-fonte em
+`public_html` e deixaria arquivos internos acessíveis pela internet.
+
 ---
 
 ## Antes de publicar
