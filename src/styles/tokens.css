@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TOKENS — a única fonte de verdade do sistema.
+   TOKENS, a única fonte de verdade do sistema.
    Nenhum valor cru de cor, espaço, tipo ou tempo em qualquer outro arquivo.
    ========================================================================== */
 
@@ -15,7 +15,7 @@
   --grafite-70:   #55574d;
   /* Calibrado, não escolhido no olho: 4.60:1 sobre --papel-2, o fundo mais
      escuro em que aparece. O rótulo mono do sistema tem 12px, então precisa
-     do critério de texto normal (4.5:1) — o valor "bonito" anterior
+     do critério de texto normal (4.5:1), o valor "bonito" anterior
      (#83857a) só passava como texto grande. */
   --grafite-40:   #66685d;
   --filete:       #c9c5b8;
@@ -48,7 +48,7 @@
   --lh-titulo:  1.12;
   --lh-corpo:   1.62;
 
-  /* Rótulo monoespaçado — o "tell" documental do sistema.
+  /* Rótulo monoespaçado, o "tell" documental do sistema.
      Sempre caixa alta, sempre com este tracking. */
   --tracking-rotulo: 0.09em;
 
@@ -66,7 +66,7 @@
   --s-9: 7rem;
   --s-10: 11rem;
 
-  /* Respiro entre seções — varia por seção, nunca é o mesmo em toda a página */
+  /* Respiro entre seções, varia por seção, nunca é o mesmo em toda a página */
   --secao-y:     clamp(var(--s-8), 9vw, var(--s-10));
   --secao-y-sm:  clamp(var(--s-7), 6vw, var(--s-9));
 
@@ -74,7 +74,7 @@
   --largura-max: 1440px;
   --margem:      clamp(1.25rem, 5vw, 6rem);
   --gutter:      clamp(1rem, 2vw, 1.5rem);
-  --medida:      34em; /* 62–72 caracteres em corpo — inegociável */
+  --medida:      34em; /* 62 a 72 caracteres em corpo, inegociável */
 
   /* ---- Traço ----------------------------------------------------------
      Não existe box-shadow neste sistema. Elevação = fundo + filete. */

@@ -31,14 +31,14 @@ documentos:
   ccir: true
   itr: true
   outorga: 'na'
-  nota: 'Área abaixo de um módulo fiscal. Uso doméstico da nascente dispensa outorga — confirmar se houver mudança de uso.'
+  nota: 'Área abaixo de um módulo fiscal. Uso doméstico da nascente dispensa outorga, confirmar se houver mudança de uso.'
 tempoDeVitoria: '1h35'
 distanciaVitoriaKm: 105
 coordenada: '20°20′S 41°08′W'
 preco: 890000
 oQueFalta:
   - 'Não dá renda. Quatro hectares em platô, com o pomar ocupando parte, não fecham conta de produção. Se você quer que a área se pague, esta não é a área.'
-  - 'A vista do vale some em julho e agosto — a neblina fecha por dias seguidos. Para quem é da região isso é qualidade; para quem vem de fora, é bom saber antes.'
+  - 'A vista do vale some em julho e agosto, a neblina fecha por dias seguidos. Para quem é da região isso é qualidade; para quem vem de fora, é bom saber antes.'
   - 'O galpão foi feito sem projeto e não está averbado. Regularizar é rápido, mas é uma pendência.'
 status: 'ativa'
 destaque: true
@@ -52,7 +52,7 @@ são quatro hectares num platô, com a casa no ponto mais alto e nada
 escondido.
 
 A casa é de 2021, bem executada, com projeto e habite-se. A varanda pega o
-vale inteiro de frente — que é, honestamente, o que está sendo vendido aqui.
+vale inteiro de frente, que é, honestamente, o que está sendo vendido aqui.
 
 O acesso é o diferencial. Asfalto até a porteira, nove quilômetros do centro
 de Venda Nova. Em uma região onde a maioria das chácaras pede quatro ou cinco

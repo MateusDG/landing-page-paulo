@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PROTOCOLO DE CAMPO — os 14 pontos de verificação.
+   PROTOCOLO DE CAMPO, os 14 pontos de verificação.
 
    Esta é a seção mais importante do site. É ela que separa "corretor" de
    "corretor que eu quero". Duas regras:
@@ -7,7 +7,7 @@
    1. São 14 e não 10 ou 15 porque número redondo parece inventado e número
       contado parece contado. Não arredonde.
    2. O texto precisa refletir o processo REAL do corretor. Se ele não faz
-      um dos pontos, tire o ponto — não invente processo.
+      um dos pontos, tire o ponto, não invente processo.
 
    ▸ REVISAR com o corretor e com advogado agrário/imobiliário atuante no ES
      antes de publicar. As nomenclaturas seguem a prática corrente, mas
@@ -40,7 +40,7 @@ export const protocoloDocumental: PontoProtocolo[] = [
     titulo: 'Ônus, penhora e usufruto',
     detalhe:
       'Hipoteca, alienação fiduciária, penhora trabalhista, usufruto ' +
-      'vitalício de terceiro. Tudo consta na matrícula — se alguém olhar.',
+      'vitalício de terceiro. Tudo consta na matrícula, se alguém olhar.',
   },
   {
     n: 4,
@@ -69,7 +69,7 @@ export const protocoloDocumental: PontoProtocolo[] = [
     titulo: 'Outorga de uso da água',
     detalhe:
       'No ES a outorga é estadual. Captação de córrego, nascente ou poço ' +
-      'sem outorga é passivo — e é o que mais aparece em área produtiva.',
+      'sem outorga é passivo, e é o que mais aparece em área produtiva.',
   },
 ];
 
@@ -86,7 +86,7 @@ export const protocoloFisico: PontoProtocolo[] = [
     titulo: 'Água conferida em campo',
     detalhe:
       'Ver a nascente, o córrego ou o poço com os próprios olhos, e perguntar ' +
-      'como ficam em setembro — não em março.',
+      'como ficam em setembro, não em março.',
   },
   {
     n: 10,

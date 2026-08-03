@@ -2,12 +2,11 @@
 /**
  * RODAPÉ-FICHA
  *
- * O rodapé é a última ficha da página — mesma linguagem do resto, coerência
- * até o fim. Traz CRECI, contato, a data de atualização real da carteira e os
- * disclaimers que o negócio exige.
+ * O rodapé reúne contato, navegação e a data real da carteira.
  */
 import { corretor, navRodape } from '../data/site';
 import { dataCurta } from '../lib/format';
+import { linkWhats, numeroWhatsVisivel } from '../lib/whatsapp';
 import { getCollection } from 'astro:content';
 
 const imoveis = await getCollection('imoveis');
@@ -24,20 +23,15 @@ const ano = new Date().getFullYear();
       <div class="rod__marca">
         <p class="rod__nome">{corretor.nome}</p>
         <p class="rotulo rotulo--fraco">{corretor.papel}</p>
-        <p class="rotulo rod__creci">CRECI-{corretor.uf} {corretor.creci}</p>
 
         <dl class="rod__contato">
           <div>
             <dt class="rotulo rotulo--fraco">WhatsApp</dt>
             <dd>
-              <a href={`https://wa.me/${corretor.whatsapp}`} rel="noopener" target="_blank">
-                {corretor.whatsappVisivel}
+              <a href={linkWhats({ origem: 'rodape' })} rel="noopener" target="_blank">
+                {numeroWhatsVisivel}
               </a>
             </dd>
-          </div>
-          <div>
-            <dt class="rotulo rotulo--fraco">E-mail</dt>
-            <dd><a href={`mailto:${corretor.email}`}>{corretor.email}</a></dd>
           </div>
           <div>
             <dt class="rotulo rotulo--fraco">Base</dt>
@@ -88,7 +82,7 @@ const ano = new Date().getFullYear();
 
     <div class="rod__base">
       <p class="rotulo rotulo--fraco rod__estado">
-        Carteira atualizada em {ultima ? dataCurta(ultima) : '—'} · {ativas} áreas
+        Carteira atualizada em {ultima ? dataCurta(ultima) : 'data pendente'} · {ativas} áreas
         ativas
       </p>
       <p class="rod__aviso">
@@ -98,8 +92,7 @@ const ano = new Date().getFullYear();
         substitui a análise documental completa antes da compra.
       </p>
       <p class="rotulo rotulo--fraco">
-        © {ano} {corretor.nome} · CRECI-{corretor.uf} {corretor.creci} · Fotos
-        autorais
+        © {ano} {corretor.nome} · Fotos autorais
       </p>
     </div>
   </div>
@@ -124,11 +117,6 @@ const ano = new Date().getFullYear();
     font-size: var(--t-h3);
     font-weight: 600;
     letter-spacing: -0.02em;
-  }
-
-  .rod__creci {
-    margin-top: var(--s-2);
-    color: var(--grafite);
   }
 
   .rod__contato {

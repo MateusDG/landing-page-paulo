@@ -52,7 +52,7 @@ barragem no fim da seca, em janeiro, para ver a lavoura carregada, e em abril,
 para acompanhar a colheita.
 
 A barragem em setembro estava com pouco mais de metade da lâmina. Isso não é
-problema — é informação. Significa que o sistema aguenta um ano seco médio,
+problema, é informação. Significa que o sistema aguenta um ano seco médio,
 não que aguenta qualquer ano.
 
 O conilon clonal está bem conduzido, com material genético identificado e
@@ -65,5 +65,5 @@ manejo em andamento, não uma lavoura limpa.
 
 Do lado documental esta é uma das áreas mais organizadas que tenho:
 georreferenciamento certificado, reserva legal averbada em bloco único no
-fundo — longe da lavoura — e outorga vigente para irrigação. No Norte, isso é
+fundo, longe da lavoura, e outorga vigente para irrigação. No Norte, isso é
 o que separa uma fazenda negociável de uma fazenda que trava no cartório.

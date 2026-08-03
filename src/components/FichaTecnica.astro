@@ -1,6 +1,6 @@
 ---
 /**
- * FICHA TÉCNICA — o componente-base do sistema.
+ * FICHA TÉCNICA, o componente-base do sistema.
  *
  * Pares rótulo/valor em monoespaçado, separados por filete. É ele que
  * transforma metadado em "documento" em vez de "card de site", e por isso
@@ -12,7 +12,7 @@
 interface Linha {
   rotulo: string;
   valor: string;
-  /** Destaca o valor em terra — no máximo um por ficha. */
+  /** Destaca o valor em terra, no máximo um por ficha. */
   destaque?: boolean;
 }
 
@@ -114,7 +114,7 @@ const { titulo, linhas, nota, variante = 'caixa', class: classe = '' } = Astro.p
     border-top: var(--borda-f);
   }
 
-  /* Em telas estreitas o par vira duas linhas — rótulo acima, valor abaixo,
+  /* Em telas estreitas o par vira duas linhas, rótulo acima, valor abaixo,
      alinhado à esquerda. Duas colunas em 320px viram sopa. */
   @media (max-width: 400px) {
     .ficha__linha {

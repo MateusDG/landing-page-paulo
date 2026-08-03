@@ -1,11 +1,11 @@
 ---
 /**
- * FICHA DE IMÓVEL — o componente-assinatura da carteira.
+ * FICHA DE IMÓVEL, o componente-assinatura da carteira.
  *
  * Decisão contra-intuitiva e deliberada: **não tem foto**. A ficha mostra
  * croqui, área e dados. Motivos:
  *   1. Foto vai para a ficha completa, onde há espaço para as 12 da shot list.
- *   2. Sem foto a lista fica escaneável e densa — quem compra 40 ha compara
+ *   2. Sem foto a lista fica escaneável e densa, quem compra 40 ha compara
  *      água, acesso e documento, não decoração.
  *   3. É o que impede a carteira de virar galeria de estoque, que é o visual
  *      de todo portal imobiliário.
@@ -59,12 +59,13 @@ const Titulo = nivel === 2 ? 'h2' : 'h3';
 const d = imovel.data;
 const href = `/imovel/${imovel.id}/`;
 
-/* Estado documental resumido: quantos dos cinco itens registrais estão ok.
-   "Documentação completa" é afirmação forte — só aparece quando é verdade. */
+/* Estado resumido dos cinco documentos básicos exibidos na ficha. */
 const registrais = [d.documentos.matricula, d.documentos.car, d.documentos.geo, d.documentos.ccir, d.documentos.itr];
 const okCount = registrais.filter(Boolean).length;
 const docCompleta = okCount === registrais.length;
-const docTexto = docCompleta ? 'Completa' : `${okCount} de ${registrais.length} itens`;
+const docTexto = docCompleta
+  ? '5 documentos conferidos'
+  : `${okCount} de ${registrais.length} documentos`;
 
 const linhas = [
   { rotulo: 'Finalidade', valor: d.finalidade.map((f) => rotuloFinalidade(f)).join(' · ') },
@@ -94,7 +95,9 @@ function rotuloFinalidade(f: string) {
   data-status={d.status}
 >
   <header class="fi__topo">
-    <Croqui path={d.croqui} viewBox={d.croquiViewBox} tamanho={78} class="fi__croqui" />
+    <div class="fi__croqui">
+      <Croqui path={d.croqui} viewBox={d.croquiViewBox} tamanho={78} />
+    </div>
     <div class="fi__id">
       <p class="rotulo fi__codigo">{d.codigo}</p>
       <p class="rotulo rotulo--fraco">{d.municipio}/ES</p>
@@ -133,7 +136,7 @@ function rotuloFinalidade(f: string) {
       <dd class="fi__valor fi__valor--doc">
         <SeloVerificacao
           estado={docCompleta ? 'ok' : 'pendente'}
-          rotulo="Situação documental"
+          rotulo="Documentos básicos"
           tamanho={15}
         />
         {docTexto}
@@ -162,7 +165,7 @@ function rotuloFinalidade(f: string) {
     transition:
       background-color var(--dur-rapida) var(--ease),
       border-color var(--dur-rapida) var(--ease);
-    /* sem transform, sem scale, sem sombra — decisão do sistema */
+    /* sem transform, sem scale, sem sombra, decisão do sistema */
   }
 
   .fi:has(.fi__link:hover),

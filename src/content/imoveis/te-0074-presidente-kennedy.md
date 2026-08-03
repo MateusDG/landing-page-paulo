@@ -26,13 +26,13 @@ documentos:
   ccir: true
   itr: true
   outorga: 'na'
-  nota: 'Confirmei na prefeitura que a área está fora do perímetro urbano — segue como rural, com ITR e não IPTU.'
+  nota: 'Confirmei na prefeitura que a área está fora do perímetro urbano, segue como rural, com ITR e não IPTU.'
 tempoDeVitoria: '2h20'
 distanciaVitoriaKm: 168
 coordenada: '21°06′S 41°02′W'
 preco: 1900000
 oQueFalta:
-  - 'Não tem água. Nem curso, nem poço, nem rede. Perfurar poço na região é possível, mas é custo, prazo e risco de vazão — trate como investimento obrigatório, não como detalhe.'
+  - 'Não tem água. Nem curso, nem poço, nem rede. Perfurar poço na região é possível, mas é custo, prazo e risco de vazão, trate como investimento obrigatório, não como detalhe.'
   - 'Solo arenoso de tabuleiro, de baixa fertilidade natural. Para produzir exige correção pesada. Não é área agrícola barata: é área plana bem localizada.'
   - 'Boa parte do preço aqui é expectativa de valorização ligada à dinâmica logística do extremo sul. Expectativa não é garantia, e eu não vou te vender isso como se fosse.'
 status: 'reservada'
@@ -47,7 +47,7 @@ testada para asfalto. É exatamente o que parece: compra de estoque de terra.
 Fui ver em maio e a visita durou quarenta minutos, porque não há muito o que
 ver. O que importa aqui não está na paisagem, está no documento e no mapa: a
 área é plana, é regular, tem frente para estrada asfaltada, está
-georreferenciada e — confirmei na prefeitura — segue fora do perímetro urbano.
+georreferenciada e, confirmei na prefeitura, segue fora do perímetro urbano.
 Isso é o que faz ou não faz negócio nesse tipo de compra.
 
 Falo com franqueza sobre a tese: parte relevante do preço pedido é expectativa

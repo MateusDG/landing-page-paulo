@@ -9,6 +9,7 @@ import { corretor, emCampo } from '../data/site';
 import { protocoloDocumental, protocoloFisico, notaProtocolo } from '../data/protocolo';
 import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
 import { municipios as fmtMunicipios } from '../lib/format';
+import { numeroWhats } from '../lib/whatsapp';
 
 const totalMunicipios = territorios.reduce((s, t) => s + t.municipios.length, 0);
 
@@ -19,14 +20,8 @@ const jsonLd = {
     '@type': 'Person',
     name: corretor.nome,
     jobTitle: corretor.papel,
-    telephone: `+${corretor.whatsapp}`,
-    email: corretor.email,
+    telephone: `+${numeroWhats}`,
     knowsAbout: ['Imóvel rural', 'Café conilon', 'Café arábica', 'Georreferenciamento', 'CAR'],
-    identifier: {
-      '@type': 'PropertyValue',
-      name: 'CRECI',
-      value: `CRECI-${corretor.uf} ${corretor.creci}`,
-    },
   },
   inLanguage: 'pt-BR',
 };
@@ -34,7 +29,7 @@ const jsonLd = {
 
 <Base
   titulo="Sobre"
-  descricao={`${corretor.nome}, corretor de imóveis rurais no Espírito Santo desde ${corretor.desde}. CRECI-${corretor.uf} ${corretor.creci}. Como eu trabalho e o que eu confiro antes de anunciar.`}
+  descricao={`${corretor.nome}, corretor de imóveis rurais no Espírito Santo desde ${corretor.desde}. Como eu trabalho e o que eu confiro antes de anunciar.`}
   jsonLd={jsonLd}
 >
   <section class="secao--compacta sb__cab-env">
@@ -61,15 +56,14 @@ const jsonLd = {
 
         <div class="prosa">
           <p>
-            Sou {corretor.nome}, corretor com CRECI-{corretor.uf} {corretor.creci}.
-            Trabalho com imóvel rural desde {corretor.desde} e minha base é{' '}
+            Sou {corretor.nome}. Trabalho com imóvel rural desde {corretor.desde} e minha base é{' '}
             {corretor.cidadeBase}, no Espírito Santo.
           </p>
 
           <p>
             Não sou imobiliária e não tenho equipe. Você fala comigo do primeiro
             WhatsApp até a escritura. A contrapartida é que eu não consigo
-            atender todo mundo ao mesmo tempo — e prefiro assim, porque o
+            atender todo mundo ao mesmo tempo, e prefiro assim, porque o
             trabalho que eu faço não escala: envolve dirigir até a área, andar
             o perímetro e conversar com vizinho.
           </p>
@@ -84,8 +78,8 @@ const jsonLd = {
           </p>
 
           <p>
-            Nenhuma dessas coisas aparece na foto. Todas aparecem no cartório —
-            e nessa altura o comprador já pagou sinal.
+            Nenhuma dessas coisas aparece na foto. Todas aparecem no cartório,
+            quando o comprador já pode ter pagado o sinal.
           </p>
 
           <h2>Onde eu ando</h2>
@@ -111,7 +105,7 @@ const jsonLd = {
             <li>Não anuncio área que eu não visitei.</li>
             <li>Não publico foto de banco de imagens.</li>
             <li>
-              Não escondo o ponto fraco da área até a visita — ele vai escrito
+              Não escondo o ponto fraco da área até a visita, ele vai escrito
               na ficha.
             </li>
             <li>

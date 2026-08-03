@@ -7,12 +7,13 @@
  *
  * A oferta é deliberadamente generosa: "use com qualquer corretor, inclusive
  * comigo". Uma isca que serve mesmo ao comprador é a que circula em grupo de
- * WhatsApp — e circular é o objetivo.
+ * WhatsApp, e circular é o objetivo.
  */
 import Base from '../layouts/Base.astro';
 import { protocoloDocumental, protocoloFisico, notaProtocolo } from '../data/protocolo';
 import { corretor } from '../data/site';
 import { CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
+import { numeroWhatsVisivel } from '../lib/whatsapp';
 ---
 
 <Base
@@ -27,7 +28,7 @@ import { CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
         <h1 class="ck__titulo">14 pontos antes de comprar uma área rural</h1>
         <p class="ck__sub">
           Sete no papel, sete no chão. Imprima, leve na visita e use com
-          qualquer corretor — inclusive comigo.
+          qualquer corretor, inclusive comigo.
         </p>
       </div>
       <svg class="ck__mapa" viewBox={VIEWBOX_ES} aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -78,8 +79,7 @@ import { CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
       <div class="ck__assinatura">
         <p class="rotulo">{corretor.nome}</p>
         <p class="rotulo rotulo--fraco">
-          {corretor.papel} · CRECI-{corretor.uf} {corretor.creci} ·{' '}
-          {corretor.whatsappVisivel}
+          {corretor.papel} · {numeroWhatsVisivel}
         </p>
       </div>
       <p class="ck__aviso">

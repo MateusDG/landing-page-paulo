@@ -11,6 +11,7 @@ import BarraMobile from '../components/BarraMobile.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { PUBLIC_UMAMI_SRC, PUBLIC_UMAMI_ID } from 'astro:env/client';
 import { corretor, meta, DADOS_DE_EXEMPLO } from '../data/site';
+import { numeroWhats } from '../lib/whatsapp';
 
 interface Props {
   titulo?: string;
@@ -19,6 +20,7 @@ interface Props {
   og?: string;
   /** Some da indexação (páginas legais, obrigado). */
   noindex?: boolean;
+  ogTipo?: 'website' | 'article' | 'product';
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   class?: string;
 }
@@ -28,13 +30,15 @@ const {
   descricao = meta.descricao,
   og = '/og/padrao.png',
   noindex = false,
+  ogTipo = 'website',
   jsonLd,
   class: classe = '',
 } = Astro.props;
 
-const tituloFinal = titulo ? `${titulo} — ${corretor.nome}` : meta.titulo;
+const tituloFinal = titulo ? `${titulo} | ${corretor.nome}` : meta.titulo;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogUrl = new URL(og, Astro.site).href;
+const bloquearIndexacao = noindex || DADOS_DE_EXEMPLO;
 
 /* Ruído de papel: SVG inline em data URI. ~330 bytes, zero requisição.
    Tira o "digital limpo demais" que denuncia página gerada. */
@@ -44,13 +48,12 @@ const RUIDO =
 const umamiSrc = PUBLIC_UMAMI_SRC;
 const umamiId = PUBLIC_UMAMI_ID;
 
-/* O aviso aparece sempre que DADOS_DE_EXEMPLO for true — inclusive em
-   staging e em produção. É intencional: se o site foi ao ar com nome, CRECI
-   e telefone fictícios, esconder isso seria o pior resultado possível.
-   Sai sozinho ao virar a chave em src/data/site.ts. */
+/* O aviso aparece sempre que DADOS_DE_EXEMPLO for true, inclusive em
+   staging e em produção. Enquanto estiver ativo, o site também bloqueia
+   indexação e não gera sitemap. */
 const mostrarAvisoExemplo = DADOS_DE_EXEMPLO;
 
-/* Identidade do negócio — vai em todas as páginas. */
+/* Identidade do negócio, vai em todas as páginas. */
 const jsonLdBase = {
   '@context': 'https://schema.org',
   '@type': 'RealEstateAgent',
@@ -58,8 +61,7 @@ const jsonLdBase = {
   name: corretor.nome,
   description: meta.descricao,
   url: Astro.site?.href,
-  telephone: `+${corretor.whatsapp}`,
-  email: corretor.email,
+  telephone: `+${numeroWhats}`,
   areaServed: {
     '@type': 'State',
     name: 'Espírito Santo',
@@ -72,7 +74,6 @@ const jsonLdBase = {
     addressCountry: 'BR',
   },
   knowsLanguage: 'pt-BR',
-  identifier: { '@type': 'PropertyValue', name: 'CRECI', value: `CRECI-${corretor.uf} ${corretor.creci}` },
 };
 ---
 
@@ -84,22 +85,23 @@ const jsonLdBase = {
     <title>{tituloFinal}</title>
     <meta name="description" content={descricao} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {bloquearIndexacao && <meta name="robots" content="noindex, nofollow" />}
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogTipo} />
     <meta property="og:locale" content={meta.locale} />
     <meta property="og:site_name" content={corretor.nome} />
     <meta property="og:title" content={tituloFinal} />
     <meta property="og:description" content={descricao} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:alt" content={`Imóveis rurais com ${corretor.nome}`} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="theme-color" content="#f5f3ee" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    {!DADOS_DE_EXEMPLO && <link rel="sitemap" href="/sitemap-index.xml" />}
 
     {/* Só a display é pré-carregada: ela é a fonte do LCP. */}
     <link
@@ -132,8 +134,8 @@ const jsonLdBase = {
     {
       mostrarAvisoExemplo && (
         <p class="aviso-exemplo">
-          <strong>Dados de exemplo.</strong> Nome, CRECI, telefone, imóveis,
-          fotos e números ainda são fictícios. Ver <code>src/data/site.ts</code>{' '}
+          <strong>Dados de exemplo.</strong> Imóveis, fotos e números de operação
+          ainda são fictícios. Ver <code>src/data/site.ts</code>{' '}
           e README §“Antes de publicar”.
         </p>
       )
@@ -152,7 +154,7 @@ const jsonLdBase = {
       /* Revelação ao entrar na viewport + desenho do croqui.
          Um observer só, para tudo. Se o navegador não suportar, o conteúdo
          simplesmente já está visível (as classes nunca são removidas do CSS
-         base — ver componentes.css). */
+         base, ver componentes.css). */
       const alvos = document.querySelectorAll('.revelar, .croqui--desenhar');
 
       if ('IntersectionObserver' in window && alvos.length) {

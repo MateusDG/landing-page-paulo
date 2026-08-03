@@ -12,7 +12,7 @@ resumo: >-
   agroturismo, a vinte minutos do centro.
 agua: 'Duas nascentes · córrego intermitente na divisa norte'
 energia: 'Monofásica na casa · trifásica passa a 300 m'
-sinal: 'Sinal instável — funciona na varanda, cai dentro de casa'
+sinal: 'Sinal instável, funciona na varanda, cai dentro de casa'
 solo: 'Encosta com afloramento rochoso em parte da área'
 benfeitorias:
   - 'Casa de pedra de 1954, 165 m², restaurada em 2019'
@@ -38,7 +38,7 @@ preco: 1180000
 oQueFalta:
   - 'Não tem georreferenciamento. Vai precisar ser feito para a transmissão. Levantei com dois profissionais da região e o orçamento ficou entre R$ 14 e 19 mil, com prazo de dois a três meses. Isso atrasa a escritura.'
   - 'O sinal de celular é ruim dentro da casa. Paredes de pedra de 60 cm. Resolve com repetidor, mas não é resolvido hoje.'
-  - 'Metade da área é mata nativa em encosta. É bonito e é reserva — não é área utilizável. Você está comprando 6 ha de uso, não 12,6.'
+  - 'Metade da área é mata nativa em encosta. É bonito e é reserva, não é área utilizável. Você está comprando 6 ha de uso, não 12,6.'
 status: 'ativa'
 rascunho: true
 publicadoEm: 2026-03-27
@@ -50,7 +50,7 @@ restaurada em 2019 sem descaracterizar nada. É o tipo de construção que não 
 faz mais e que, sinceramente, é o motivo pelo qual essa área tem esse preço.
 
 Andei o perímetro em março com o filho do dono. Metade da área é mata nativa
-em encosta íngreme — não é área de uso, é paisagem e é reserva. Falo isso
+em encosta íngreme, não é área de uso, é paisagem e é reserva. Falo isso
 porque a conta de "R$ 93 mil por hectare" que alguém vai fazer não descreve o
 negócio: o uso real são uns 6 hectares.
 
@@ -58,7 +58,7 @@ O café são três hectares de arábica em terraço, bem conduzidos, mas com
 colheita manual obrigatória pela declividade. Rende, não escala.
 
 A pendência que pesa é o georreferenciamento, que nunca foi feito. Não é
-impeditivo, é prazo e custo — e está declarado ali em cima com número, não com
+impeditivo, é prazo e custo, e está declarado ali em cima com número, não com
 "pequena pendência documental".
 
 Para quem quer morar, receber gente ou tocar algo ligado ao agroturismo de

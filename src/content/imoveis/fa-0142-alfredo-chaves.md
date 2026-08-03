@@ -39,7 +39,7 @@ preco: 1450000
 oQueFalta:
   - 'A sede precisa de reforma: telhado, elétrica e dois banheiros. Orcei em R$ 120 mil com um pedreiro da região e já refleti isso no preço.'
   - 'O cafezal da gleba leste tem 19 anos e está no fim do ciclo. Cerca de 4 ha vão pedir renovação nos próximos dois anos.'
-  - 'A estrada é municipal, não estadual. Depende do trator da prefeitura — que passa, mas no ritmo dela.'
+  - 'A estrada é municipal, não estadual. Depende do trator da prefeitura, que passa, mas no ritmo dela.'
 status: 'ativa'
 destaque: true
 rascunho: true
@@ -48,7 +48,7 @@ atualizadoEm: 2026-07-29
 ---
 
 Andei essa área em 12 de maio, começando pela divisa baixa, onde corre o
-córrego. Subi até a parte alta em cerca de duas horas — dá para fazer a pé sem
+córrego. Subi até a parte alta em cerca de duas horas, dá para fazer a pé sem
 sofrimento, o que já diz bastante sobre a declividade.
 
 O café da gleba oeste, uns 10 ha, está bem tratado e em plena produção. O da
@@ -57,7 +57,7 @@ vendendo 14 ha de café produtivo: estou vendendo 10 ha bons e 4 ha que vão
 custar dinheiro antes de dar retorno. A conta muda, e é melhor você fazer ela
 agora.
 
-A sede tem posição excelente — vê o vale inteiro e pega sol da manhã —, mas
+A sede tem posição excelente, vê o vale inteiro e pega sol da manhã, mas
 está com o telhado no fim e a instalação elétrica antiga. É reforma, não
 demolição.
 

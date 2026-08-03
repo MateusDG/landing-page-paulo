@@ -6,8 +6,7 @@
  * Ele reaparece ao rolar para CIMA (comportamento útil, não decorativo) e
  * some ao descer. Sem JS, fica simplesmente no topo do documento.
  *
- * O CRECI aparece já aqui. É exigência legal em peça publicitária de corretor
- * e, de quebra, é sinal de credibilidade — aproveitamos as duas coisas.
+ * No celular, a navegação principal fica na barra fixa inferior.
  */
 import { corretor, navPrincipal } from '../data/site';
 import BotaoWhats from './BotaoWhats.astro';
@@ -25,9 +24,7 @@ const ativo = (href: string) => {
   <div class="env cab__int">
     <a class="cab__marca" href="/">
       <span class="cab__nome">{corretor.nome}</span>
-      <span class="rotulo rotulo--fraco cab__papel">
-        {corretor.papel} · CRECI-{corretor.uf} {corretor.creci}
-      </span>
+      <span class="rotulo rotulo--fraco cab__papel">{corretor.papel}</span>
     </a>
 
     <nav class="cab__nav" aria-label="Navegação principal">
@@ -48,12 +45,9 @@ const ativo = (href: string) => {
       </ul>
     </nav>
 
-    <BotaoWhats
-      origem="header"
-      variante="secundario"
-      rotulo="Falar comigo"
-      class="cab__cta"
-    />
+    <div class="cab__cta">
+      <BotaoWhats origem="header" variante="secundario" rotulo="Falar comigo" />
+    </div>
   </div>
 </header>
 
@@ -129,8 +123,7 @@ const ativo = (href: string) => {
     transform: translateY(-100%);
   }
 
-  /* No mobile a navegação vive na barra inferior fixa — o polegar está lá
-     embaixo, não no topo. O header vira só marca + CRECI. */
+  /* No mobile a navegação vive na barra inferior fixa. */
   @media (max-width: 900px) {
     .cab__nav,
     .cab__cta {

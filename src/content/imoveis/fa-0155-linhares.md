@@ -44,7 +44,7 @@ atualizadoEm: 2024-11-14
 ---
 
 Mantenho as áreas vendidas no site em vez de apagar. Elas mostram o que
-realmente passa pela minha carteira e em quanto tempo sai — informação que um
+realmente passa pela minha carteira e em quanto tempo sai, informação que um
 anúncio ativo não dá.
 
 Esta foi vendida em novembro de 2024 para um grupo de Minas Gerais que
@@ -58,7 +58,7 @@ análise. Três lagoas naturais dentro do perímetro e outorga vigente.
 O ponto de negociação foi o eucalipto: segundo corte, com produtividade
 abaixo do primeiro. Levantamos isso na visita técnica, o comprador trouxe o
 engenheiro florestal dele, e o preço foi ajustado. Fechou sem surpresa no
-cartório — que é sempre o objetivo.
+cartório, que é sempre o objetivo.
 
 Se você procura algo parecido, me diga: áreas dessa faixa raramente chegam a
 ficar anunciadas.

@@ -10,7 +10,7 @@ Fui ver uma área de 26 hectares em Vargem Alta. O anúncio do proprietário diz
 
 Os primeiros vinte quilômetros são asfalto. Os últimos três são leito de terra
 em descida, e tinha chovido dois dias antes. Passei de caminhonete sem
-dificuldade. De carro comum, em julho, não passaria — pelo menos não sem raspar
+dificuldade. De carro comum, em julho, não passaria, pelo menos não sem raspar
 e sem susto.
 
 Isso não desqualifica a área. Desqualifica a expressão "fácil acesso", que não

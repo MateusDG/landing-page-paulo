@@ -10,7 +10,7 @@ procuravam: >-
   que não dependesse de tração.
 oQueTravou: >-
   A área que eles escolheram sozinhos, antes de me procurar, tinha o único
-  acesso passando por dentro do vizinho — sem servidão registrada na
+  acesso passando por dentro do vizinho, sem servidão registrada na
   matrícula. O vendedor dizia que "sempre foi assim". Sempre foi, mas não
   estava escrito em lugar nenhum.
 oQueFizemos: >-
@@ -42,7 +42,7 @@ A matrícula mostrava um imóvel sem confrontação com via pública. O acesso, 
 prática, entrava pela porteira do vizinho e cruzava a propriedade dele por
 cerca de 800 metros. Não havia servidão constituída, nem registrada.
 
-Isso não é irregularidade do vendedor — é uma situação comum na região, criada
+Isso não é irregularidade do vendedor, é uma situação comum na região, criada
 por décadas de partilha familiar. O problema é que ela vira litígio no dia em
 que o vizinho vende a propriedade dele para alguém que não tem a mesma
 disposição.

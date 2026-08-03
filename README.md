@@ -1,7 +1,7 @@
-# Corretor rural — Espírito Santo
+# Corretor rural no Espírito Santo
 
 Site de um corretor de imóveis rurais no ES: fazendas, chácaras, sítios e
-terrenos. Astro 5, estático, sem framework de UI, sem dependência de terceiros
+terrenos. Astro 7, estático, sem framework de UI, sem dependência de terceiros
 em runtime.
 
 A estratégia, a direção de arte e as decisões por trás de cada seção estão em
@@ -55,8 +55,9 @@ produção**, de propósito.
 
 Tudo em [`src/data/site.ts`](src/data/site.ts), marcado com `// PREENCHER`:
 
-- [ ] `nome`, `creci`, `cidadeBase`, `desde`, `email`
-- [ ] `whatsapp` (formato `55` + DDD + número, só dígitos) e `whatsappVisivel`
+- [x] `nome`: Valdecir Francisco
+- [x] `whatsapp`: `5527999309535`
+- [ ] `cidadeBase` e `desde`
 - [ ] `sla` — **só prometa o que você cumpre.** Prometer resposta e falhar é
       pior que não prometer.
 - [ ] `emCampo` — os seis números da ficha "Em campo". Precisam ser
@@ -73,9 +74,7 @@ cp .env.example .env
 
 - [ ] `PUBLIC_SITE_URL` — domínio final, sem barra no fim
 - [ ] `PUBLIC_WHATSAPP`
-- [ ] `PUBLIC_LEAD_WEBHOOK` (opcional) — recebe o briefing em JSON antes de o
-      WhatsApp abrir. Se vazio, nada se perde: o WhatsApp abre do mesmo jeito.
-- [ ] Atualizar o domínio em [`public/robots.txt`](public/robots.txt)
+- [ ] Atualizar `PUBLIC_SITE_URL` no ambiente de produção
 
 ### 3. Conteúdo real
 
@@ -97,9 +96,6 @@ cp .env.example .env
 - [ ] **Revisão por advogado** de `/privacidade`, `/termos`, dos guias e do
       glossário. O que está escrito descreve a prática corrente, mas prazos e
       obrigatoriedades mudam.
-- [ ] Confirmar o CRECI exibido no header e no rodapé (exigência de Lei
-      6.530/78 e resoluções do COFECI para publicidade imobiliária). Se atuar
-      por PJ, exibir também o CRECI-J.
 - [ ] Autorização por escrito dos proprietários para publicar foto e
       localização de cada área.
 - [ ] Autorização por escrito para publicar depoimento com nome.
@@ -203,7 +199,7 @@ src/
 ├─ components/         14 componentes, todos com escopo de estilo próprio
 ├─ layouts/            Base (SEO, fontes, scripts globais) · Editorial
 └─ pages/
-   ├─ index.astro                     a home, 10 seções
+   ├─ index.astro                     a home simplificada
    ├─ imoveis/                        carteira com filtros no cliente
    ├─ imovel/[slug].astro             ficha completa
    ├─ regiao/[slug].astro             4 páginas de território
@@ -251,12 +247,12 @@ Estado atual do build:
 |---|---|---|
 | `astro check` | 0 erros · 0 avisos · 0 hints | 0 erros |
 | Páginas geradas | 29 | — |
-| Links internos quebrados | 0 de 746 | 0 |
+| Links internos quebrados | 0 nas 29 páginas | 0 |
 | Âncoras inexistentes | 0 | 0 |
 | JSON-LD inválido | 0 de 29 | 0 |
-| HTML da home | 125 KB · **26 KB** gzip | — |
-| CSS | 15 KB · **2,8 KB** gzip (arquivo em cache) | 18 KB |
-| JS total | 8 KB · **3,6 KB** gzip | 35 KB |
+| HTML da home | 100 KB · **20 KB** gzip | — |
+| CSS da home | 28,3 KB · **6,7 KB** gzip | — |
+| JS total | 8,6 KB · **3,9 KB** gzip | 35 KB |
 | Fontes (3 variáveis, subsetadas) | 107 KB | — |
 | Requisições na primeira visita | 6 | 25 |
 | Contraste WCAG | 18 de 18 pares em AA ou AAA | AA |
@@ -271,9 +267,9 @@ O que **não** foi verificado e precisa ser antes do lançamento:
 
 ### Testes funcionais executados
 
-Briefing completo (18 asserções), filtros da carteira, alternador
-hectare/alqueire e navegação por teclado no mapa. Os scripts estão descritos
-em §Scripts; foram rodados via CDP contra o servidor de dev.
+Briefing passo a passo, validação obrigatória do prazo, filtro de vendidas,
+links de WhatsApp e inspeção de console. A auditoria estática também verifica
+links, âncoras, JSON-LD, proteção de indexação e conteúdo removido.
 
 ---
 
@@ -297,9 +293,9 @@ Pages**:
 - Diretório de saída: `dist`
 - Variáveis: as do `.env.example`
 
-Cabeçalhos recomendados: `public/fonts/*` e `/_astro/*` com
-`Cache-Control: public, max-age=31536000, immutable` (os nomes já têm hash ou
-são estáveis).
+Os cabeçalhos básicos estão em `public/_headers`. Fontes e imagens OG usam
+cache de um dia porque seus nomes são estáveis; os assets com hash podem ser
+configurados com cache imutável na plataforma de hospedagem.
 
 ### Analytics
 

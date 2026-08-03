@@ -1,23 +1,22 @@
 ---
 import Editorial from '../layouts/Editorial.astro';
 import { corretor } from '../data/site';
+import { linkWhats } from '../lib/whatsapp';
 ---
 
 <Editorial
   titulo="Termos de uso"
-  descricao="O que as informações publicadas aqui são — e o que elas não são."
+  descricao="O que as informações publicadas aqui são, e o que elas não são."
   kicker="Legal"
   meta={[
     { rotulo: 'Vigente desde', valor: '01.ago.2026' },
-    { rotulo: 'CRECI', valor: `${corretor.uf} ${corretor.creci}` },
   ]}
   semFecho
   aviso="Documento em revisão jurídica. Substitua por versão revisada por advogado antes de publicar."
 >
   <h2>Sobre este site</h2>
   <p>
-    Este site é a vitrine profissional de {corretor.nome}, corretor de imóveis
-    inscrito no CRECI-{corretor.uf} sob o número {corretor.creci}, atuando na
+    Este site é a vitrine profissional de {corretor.nome}, que atua na
     intermediação de imóveis rurais no Espírito Santo.
   </p>
 
@@ -28,7 +27,7 @@ import { corretor } from '../data/site';
     indicada na própria ficha.
   </p>
   <p>
-    Essas informações podem mudar sem aviso — inclusive preço, disponibilidade
+    Essas informações podem mudar sem aviso, inclusive preço, disponibilidade
     e situação documental. <strong>Nenhuma publicação aqui constitui oferta
     vinculante nem proposta de contrato.</strong>
   </p>
@@ -72,6 +71,6 @@ import { corretor } from '../data/site';
 
   <h2>Contato</h2>
   <p>
-    Dúvidas sobre estes termos: <a href={`mailto:${corretor.email}`}>{corretor.email}</a>.
+    Dúvidas sobre estes termos: <a href={linkWhats({ origem: 'termos' })}>fale pelo WhatsApp</a>.
   </p>
 </Editorial>

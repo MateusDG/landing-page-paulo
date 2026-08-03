@@ -1,6 +1,6 @@
 ---
 /**
- * LAYOUT EDITORIAL — guias, diário e páginas de texto longo.
+ * LAYOUT EDITORIAL, guias, diário e páginas de texto longo.
  * Coluna única de 34em, com uma ficha de metadados à esquerda no desktop.
  */
 import Base from './Base.astro';
@@ -34,7 +34,7 @@ const {
 } = Astro.props;
 ---
 
-<Base titulo={tituloSeo ?? titulo} descricao={descricao} jsonLd={jsonLd}>
+<Base titulo={tituloSeo ?? titulo} descricao={descricao} jsonLd={jsonLd} ogTipo="article">
   <article class="ed">
     <div class="env">
       {
@@ -89,7 +89,7 @@ const {
             !semFecho && (
               <div class="ed__fecho">
                 <p class="ed__fecho-texto">
-                  Ficou com dúvida sobre alguma área específica? Me chame — é
+                  Ficou com dúvida sobre alguma área específica? Me chame, é
                   mais rápido que ler outro guia. {corretor.sla}
                 </p>
                 <BotaoWhats

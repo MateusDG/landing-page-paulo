@@ -1,9 +1,9 @@
 /* ==========================================================================
-   BRIEFING — a conversão principal do site.
+   BRIEFING, a conversão principal do site.
 
    Substitui o formulário de contato. Uma pergunta por tela, resposta por
    clique, digitação só no último passo. As respostas viram uma mensagem
-   estruturada no WhatsApp — o corretor recebe um lead qualificado e
+   estruturada no WhatsApp, o corretor recebe um lead qualificado e
    rastreável em vez de "oi, tem chácara?".
 
    As cinco finalidades espelham as cinco personas do plano. É o que permite
@@ -15,7 +15,7 @@ export type Finalidade = 'produzir' | 'morar' | 'lazer' | 'investir' | 'turismo'
 export interface Opcao {
   valor: string;
   rotulo: string;
-  /** Linha de apoio — desambigua sem virar texto de ajuda. */
+  /** Linha de apoio, desambigua sem virar texto de ajuda. */
   detalhe?: string;
 }
 
@@ -48,7 +48,7 @@ export const passos: Passo[] = [
     id: 'regiao',
     numero: 2,
     pergunta: 'Onde faz sentido pra você?',
-    nota: 'Pode marcar mais de uma. Se não souber, marque a última — eu sugiro.',
+    nota: 'Pode marcar mais de uma. Se não souber, marque a última, eu sugiro.',
     tipo: 'multipla',
     opcoes: [
       { valor: 'montanhas-capixabas', rotulo: 'Montanhas Capixabas', detalhe: 'Domingos Martins, Venda Nova, Santa Teresa' },
@@ -62,7 +62,7 @@ export const passos: Passo[] = [
     id: 'area',
     numero: 3,
     pergunta: 'Que tamanho você tem em mente?',
-    nota: 'Em hectare. 1 ha = 10.000 m² — mais ou menos um campo de futebol e meio.',
+    nota: 'Em hectare. 1 ha = 10.000 m², mais ou menos um campo de futebol e meio.',
     tipo: 'unica',
     opcoes: [
       { valor: 'ate-5', rotulo: 'Até 5 ha' },

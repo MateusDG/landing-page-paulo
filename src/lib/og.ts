@@ -1,16 +1,16 @@
 /* ==========================================================================
-   IMAGEM OG — gerada no build, uma por imóvel e uma por região.
+   IMAGEM OG, gerada no build, uma por imóvel e uma por região.
 
    Por que isso importa mais que quase todo o resto de SEO neste negócio: o
    link vai circular no WhatsApp, colado no grupo da família e no grupo de
-   produtores. O cartão que aparece ali é a primeira impressão — e o padrão
+   produtores. O cartão que aparece ali é a primeira impressão, e o padrão
    ("print da página") é sempre ilegível.
 
    Decisão de projeto: a arte é GEOMETRIA, não tipografia. O rasterizador do
    sharp/libvips usa fontes do sistema e ignora @font-face embutido (testado),
    então depender do Fraunces daria resultado diferente em cada máquina de
    build. Em vez disso, quem carrega a identidade é o croqui do perímetro, a
-   paleta e os filetes — que são vetor puro e saem idênticos em qualquer
+   paleta e os filetes, que são vetor puro e saem idênticos em qualquer
    lugar. O texto usa pilhas genéricas que existem no macOS e no Linux.
    ========================================================================== */
 
@@ -79,7 +79,6 @@ interface BaseOg {
   croquiViewBox?: string;
   /** Faixa diagonal de VENDIDA. */
   carimbo?: string;
-  creci: string;
 }
 
 export function svgOg(o: BaseOg): string {
@@ -139,8 +138,6 @@ export function svgOg(o: BaseOg): string {
         `<text x="${M + i * 250}" y="${OG_ALTURA - M - 20}" font-family="${MONO}" font-size="17" letter-spacing="1.6" fill="${COR.grafite40}">${esc(m.rotulo.toUpperCase())}  <tspan fill="${COR.grafite}">${esc(m.valor)}</tspan></text>`,
     )
     .join('\n  ')}
-  <text x="${OG_LARGURA - M}" y="${OG_ALTURA - M - 20}" text-anchor="end" font-family="${MONO}" font-size="17" letter-spacing="1.6" fill="${COR.grafite40}">${esc(o.creci.toUpperCase())}</text>
-
   ${
     o.carimbo
       ? `<g transform="translate(${OG_LARGURA - 300} 150) rotate(-8)">

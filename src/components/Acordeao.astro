@@ -4,7 +4,7 @@
  *
  * Usa <details>/<summary> nativos: semântica correta, funciona sem JS,
  * pesquisável pelo Ctrl+F do navegador em navegadores modernos.
- * Sem ícone de "+" girando — só filete e mudança de peso tipográfico.
+ * Sem ícone de "+" girando, só filete e mudança de peso tipográfico.
  */
 interface Item {
   pergunta: string;
@@ -15,7 +15,7 @@ interface Item {
 
 interface Props {
   itens: readonly Item[];
-  /** Abre o primeiro por padrão — dá a pista de que é expansível. */
+  /** Abre o primeiro por padrão, dá a pista de que é expansível. */
   abrirPrimeiro?: boolean;
 }
 

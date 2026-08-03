@@ -23,7 +23,7 @@ benfeitorias:
 acesso:
   asfaltoKm: 18
   terraKm: 6
-  nota: 'Seis quilômetros de terra em bom estado no seco. Em janeiro, com chuva forte, pede tração — não é intransitável, mas é desconfortável.'
+  nota: 'Seis quilômetros de terra em bom estado no seco. Em janeiro, com chuva forte, pede tração, não é intransitável, mas é desconfortável.'
 documentos:
   matricula: true
   car: true
@@ -31,13 +31,13 @@ documentos:
   ccir: true
   itr: false
   outorga: 'sim'
-  nota: 'ITR com pendência de exercícios anteriores — em levantamento junto ao contador do proprietário. Ver observação no texto.'
+  nota: 'ITR com pendência de exercícios anteriores, em levantamento junto ao contador do proprietário. Ver observação no texto.'
 tempoDeVitoria: '3h10'
 distanciaVitoriaKm: 196
 coordenada: '20°45′S 41°32′W'
 preco: null
 oQueFalta:
-  - 'Há pendência de ITR de exercícios anteriores. O valor está sendo levantado pelo contador do proprietário. Enquanto não fechar, eu não passo preço — e essa é a razão de a área estar como "sob consulta".'
+  - 'Há pendência de ITR de exercícios anteriores. O valor está sendo levantado pelo contador do proprietário. Enquanto não fechar, eu não passo preço, e essa é a razão de a área estar como "sob consulta".'
   - 'A sede é de 1948 e está em pé, mas a instalação elétrica e a hidráulica são originais. Habitável, sim; pronta, não.'
   - 'Duas casas de colono estão ocupadas por famílias que trabalham na fazenda há mais de dez anos. Isso precisa ser tratado formalmente na negociação, não no boca a boca.'
 status: 'ativa'
@@ -55,7 +55,7 @@ sobra. O tipo de propriedade que se vende sozinha no Caparaó.
 
 O que segura é o ITR. Ao puxar os documentos encontrei pendência de exercícios
 anteriores e o valor ainda está em levantamento com o contador do
-proprietário. Dívida de ITR acompanha o imóvel, não o antigo dono — então o
+proprietário. Dívida de ITR acompanha o imóvel, não o antigo dono, então o
 número final muda o preço real do negócio. Passar um valor agora seria passar
 um valor errado.
 
@@ -64,7 +64,7 @@ que resolve limite e resolve água. As três nascentes estão dentro do CAR e a
 outorga está vigente.
 
 As duas casas de colono estão ocupadas por famílias antigas na propriedade.
-Isso não é impedimento, mas é assunto de contrato e de advogado — e tem que
+Isso não é impedimento, mas é assunto de contrato e de advogado, e tem que
 entrar na conversa no começo, não no fim.
 
 Quando o levantamento do ITR fechar, publico o preço aqui e aviso quem estiver

@@ -11,27 +11,24 @@
 export const DADOS_DE_EXEMPLO = true; // PREENCHER: virar false ao publicar
 
 export const corretor = {
-  nome: 'Nome do Corretor', // PREENCHER
-  nomeCurto: 'Nome do Corretor', // PREENCHER
+  nome: 'Valdecir Francisco',
+  nomeCurto: 'Valdecir Francisco',
   papel: 'Corretor de imóveis rurais',
-  creci: '00000-F', // PREENCHER — obrigatório em toda peça publicitária (Lei 6.530/78)
   cidadeBase: 'Venda Nova do Imigrante', // PREENCHER
   uf: 'ES',
   desde: 2011, // PREENCHER
-  email: 'contato@exemplo.com.br', // PREENCHER
   /* Formato internacional, só dígitos: 55 + DDD + número.
      Sobrescrito por PUBLIC_WHATSAPP no .env. */
-  whatsapp: '5527999999999', // PREENCHER
-  whatsappVisivel: '(27) 99999-9999', // PREENCHER
-  /* SLA declarado no site. Só prometa o que você cumpre —
-     prometer resposta e falhar é pior que não prometer. */
+  whatsapp: '5527999309535',
+  /* SLA declarado no site. Só prometa o que você cumpre.
+     Prometer resposta e falhar é pior que não prometer. */
   sla: 'Respondo até as 20h do mesmo dia.',
 } as const;
 
 /* Números da ficha "Em campo".
    Estes são o ativo de credibilidade da página inteira: precisam ser
    VERDADEIROS e verificáveis pelo próprio corretor. Números redondos
-   ("500+ clientes") não convencem ninguém — números contados, sim.
+   ("500+ clientes") não convencem ninguém, números contados, sim.
    A linha "recusadas" é a mais valiosa da página. Não remova. */
 export const emCampo = [
   { rotulo: 'Desde', valor: '2011' }, // PREENCHER
@@ -45,7 +42,6 @@ export const emCampo = [
 export const navPrincipal = [
   { rotulo: 'Carteira', href: '/imoveis/' },
   { rotulo: 'Regiões', href: '/#regioes' },
-  { rotulo: 'Método', href: '/#metodo' },
   { rotulo: 'Guias', href: '/guia/' },
   { rotulo: 'Quero vender', href: '/quero-vender/' },
 ] as const;
@@ -74,12 +70,12 @@ export const navRodape = {
   ],
 } as const;
 
-/* Coordenada exibida no topo do hero — o "tell" cartográfico do sistema.
+/* Coordenada exibida no topo do hero, o "tell" cartográfico do sistema.
    Vale usar a do escritório ou a da cidade-base. */
 export const coordenadaBase = { texto: '20°19′S 40°20′W', local: 'Vitória, ES' };
 
 export const meta = {
-  titulo: `${corretor.nome} — corretor de imóveis rurais no Espírito Santo`,
+  titulo: `${corretor.nome}, corretor de imóveis rurais no Espírito Santo`,
   descricao:
     'Fazendas, chácaras, sítios e terrenos rurais no Espírito Santo. ' +
     'Ando a área, leio a matrícula e confiro o CAR antes de anunciar. ' +

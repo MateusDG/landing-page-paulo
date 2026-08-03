@@ -9,14 +9,14 @@ atualizadoEm: 2026-07-30
 revisadoPorAdvogado: false
 perguntas:
   - pergunta: 'Preciso de outorga para usar água na minha propriedade?'
-    resposta: 'Usos considerados insignificantes, como consumo doméstico e dessedentação de poucos animais, em geral são dispensados de outorga, mas podem exigir cadastro. Captação para irrigação, aquicultura ou uso industrial normalmente exige outorga do órgão gestor competente — estadual, quando o corpo hídrico é de domínio do estado.'
+    resposta: 'Usos considerados insignificantes, como consumo doméstico e dessedentação de poucos animais, em geral são dispensados de outorga, mas podem exigir cadastro. Captação para irrigação, aquicultura ou uso industrial normalmente exige outorga do órgão gestor competente, estadual, quando o corpo hídrico é de domínio do estado.'
   - pergunta: 'Comprei uma área com captação sem outorga. O que acontece?'
-    resposta: 'A situação é regularizável na maior parte dos casos, mas passa por processo administrativo, análise de disponibilidade hídrica e prazo. Enquanto não houver outorga, o uso está irregular e há exposição a autuação — além do risco de a disponibilidade não comportar o volume que a lavoura já usa.'
+    resposta: 'A situação é regularizável na maior parte dos casos, mas passa por processo administrativo, análise de disponibilidade hídrica e prazo. Enquanto não houver outorga, o uso está irregular e há exposição a autuação, além do risco de a disponibilidade não comportar o volume que a lavoura já usa.'
   - pergunta: 'Como saber se uma nascente seca no verão?'
     resposta: 'Vendo em setembro, não em março. E perguntando a dois vizinhos. Não existe documento que responda isso.'
 ---
 
-Em imóvel rural, água não é item de checklist — é a variável que mais mexe no
+Em imóvel rural, água não é item de checklist, é a variável que mais mexe no
 preço. No Norte do Espírito Santo, duas áreas vizinhas do mesmo tamanho podem
 ter dezenas de pontos percentuais de diferença de valor por causa disso.
 
@@ -33,8 +33,8 @@ restrição ao mesmo tempo.
 **Poço.** Raso ou tubular, vazão medida, se tem outorga e se a bomba é
 compatível. Poço perfurado sem laudo de vazão é uma promessa, não uma fonte.
 
-**Barragem ou represa.** Volume, se tem outorga e — a pergunta que quase
-ninguém faz — como ela se comporta num ano seco. Ver em setembro, não em
+**Barragem ou represa.** Volume, se tem outorga e, a pergunta que quase
+ninguém faz, como ela se comporta num ano seco. Ver em setembro, não em
 fevereiro.
 
 ## O que é outorga
@@ -47,7 +47,7 @@ concedida pelo órgão gestor estadual de recursos hídricos. Em corpos de domí
 da União, a competência é federal.
 
 **O ponto prático:** área com irrigação instalada e sem outorga é passivo, não
-formalidade. E não é raro — é justamente onde a água vale mais que aparece com
+formalidade. E não é raro, é justamente onde a água vale mais que aparece com
 mais frequência.
 
 ## Como isso entra na avaliação de uma área
@@ -57,7 +57,7 @@ Eu trato água em três perguntas, nesta ordem:
 1. **Existe?** Fonte identificada, vista em campo, no fim da seca.
 2. **É legal?** Outorga vigente, ou situação claramente regularizável, com
    estimativa de prazo.
-3. **É suficiente?** Vazão compatível com o uso que você pretende — não com o
+3. **É suficiente?** Vazão compatível com o uso que você pretende, não com o
    uso atual.
 
 A terceira pergunta é a mais esquecida. Uma área com outorga para 20 hectares
@@ -73,4 +73,4 @@ dizer se tem outorga, considere que não tem.
 
 *Conteúdo informativo, escrito para orientar a conversa. Não substitui consulta
 a advogado, engenheiro agrônomo, cartório e órgãos competentes. Regras de
-outorga e dispensa mudam — confirme sempre a norma vigente no órgão gestor.*
+outorga e dispensa mudam, confirme sempre a norma vigente no órgão gestor.*

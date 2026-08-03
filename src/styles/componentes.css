@@ -5,7 +5,7 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Seção — o ritmo vertical da página.
+   Seção, o ritmo vertical da página.
    As larguras variam de propósito (7 / 5 / 9 / 12 colunas). Se todas as
    seções tiverem a mesma largura, a página vira template.
    -------------------------------------------------------------------------- */
@@ -28,7 +28,7 @@
 }
 
 /* Cabeçalho de seção: rótulo mono numerado + título. O número da seção é
-   parte da linguagem de documento — não é decoração. */
+   parte da linguagem de documento, não é decoração. */
 .cabecalho-secao {
   display: grid;
   gap: var(--s-4);
@@ -50,7 +50,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Botões — três variantes, nenhuma sombra, raio 2px.
+   Botões, três variantes, nenhuma sombra, raio 2px.
    -------------------------------------------------------------------------- */
 
 .botao {
@@ -111,7 +111,7 @@
   pointer-events: none;
 }
 
-/* Link de texto com seta — o CTA terciário do sistema. */
+/* Link de texto com seta, o CTA terciário do sistema. */
 .link-seta {
   display: inline-flex;
   align-items: center;
@@ -138,7 +138,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Chip de filtro — usado na carteira. Alvo de toque ≥ 44px.
+   Chip de filtro, usado na carteira. Alvo de toque ≥ 44px.
    -------------------------------------------------------------------------- */
 
 .chip {
@@ -172,7 +172,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Carimbo VENDIDA — rotacionado, sem sombra, sem brilho.
+   Carimbo VENDIDA, rotacionado, sem sombra, sem brilho.
    -------------------------------------------------------------------------- */
 
 .carimbo {
@@ -192,8 +192,8 @@
 
 /* --------------------------------------------------------------------------
    Revelação ao entrar na viewport.
-   Sem JS a classe nunca é adicionada e o conteúdo aparece normalmente —
-   nada de opacity:0 preso no CSS.
+   Sem JS a classe nunca é adicionada e o conteúdo aparece normalmente.
+   Nada de opacity:0 preso no CSS.
    -------------------------------------------------------------------------- */
 
 .js .revelar {
@@ -217,7 +217,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Filete horizontal com rótulo — divisor com informação, não decoração.
+   Filete horizontal com rótulo, divisor com informação, não decoração.
    -------------------------------------------------------------------------- */
 
 .filete-rotulado {

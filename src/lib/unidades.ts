@@ -19,7 +19,7 @@
 
 export const HECTARE_M2 = 10_000;
 
-/** Alqueire mineiro — 48.400 m². Predominante no sul capixaba. */
+/** Alqueire mineiro, 48.400 m². Predominante no sul capixaba. */
 export const ALQUEIRE_HA = 4.84;
 
 export type Unidade = 'ha' | 'alq';

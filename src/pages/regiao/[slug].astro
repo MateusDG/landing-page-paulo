@@ -27,7 +27,7 @@ const daRegiao = todos
   });
 const ativas = daRegiao.filter((i) => i.data.status === 'ativa');
 
-const areasHa = daRegiao.map((i) => i.data.areaHa);
+const areasHa = ativas.map((i) => i.data.areaHa);
 const media = areasHa.length
   ? areasHa.reduce((s, n) => s + n, 0) / areasHa.length
   : 0;
@@ -63,7 +63,7 @@ const jsonLd = [
       name: t.nome,
       containedInPlace: { '@type': 'State', name: 'Espírito Santo' },
     },
-    numberOfItems: daRegiao.length,
+    numberOfItems: ativas.length,
     inLanguage: 'pt-BR',
   },
   {
@@ -78,7 +78,7 @@ const jsonLd = [
 ---
 
 <Base
-  titulo={`Fazendas e chácaras em ${t.nome} — ES`}
+  titulo={`Fazendas e chácaras em ${t.nome}, ES`}
   descricao={`${t.resumo} ${fmtAreas(ativas.length)} em carteira, em ${fmtMunicipios(t.municipios.length)}.`}
   og={`/og/regiao-${t.slug}.png`}
   jsonLd={jsonLd}

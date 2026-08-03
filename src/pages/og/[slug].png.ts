@@ -3,13 +3,12 @@ import { getCollection } from 'astro:content';
 import sharp from 'sharp';
 
 import { svgOg } from '../../lib/og';
-import { corretor } from '../../data/site';
 import { territorios, CONTORNO_ES, VIEWBOX_ES, rotuloTerritorio } from '../../data/territorios';
 import { formatarArea } from '../../lib/unidades';
 import { preco, mesAno, areas as fmtAreas } from '../../lib/format';
 
 /* Uma rota, três famílias de imagem: a padrão do site, uma por imóvel e uma
-   por região. Todas rasterizadas no build — nenhuma requisição em runtime. */
+   por região. Todas rasterizadas no build, nenhuma requisição em runtime. */
 
 interface Params {
   kicker: string;
@@ -24,13 +23,11 @@ interface Params {
 
 export async function getStaticPaths() {
   const imoveis = await getCollection('imoveis');
-  const creci = `CRECI-${corretor.uf} ${corretor.creci}`;
 
-  const rotas: { params: { slug: string }; props: Params & { creci: string } }[] = [
+  const rotas: { params: { slug: string }; props: Params }[] = [
     {
       params: { slug: 'padrao' },
       props: {
-        creci,
         kicker: 'Corretor de imóveis rurais · Espírito Santo',
         titulo: 'Terra no Espírito Santo se compra com a matrícula na mão.',
         croqui: CONTORNO_ES,
@@ -48,7 +45,6 @@ export async function getStaticPaths() {
     rotas.push({
       params: { slug: `imovel-${i.id}` },
       props: {
-        creci,
         kicker: `${d.municipio} · ${rotuloTerritorio(d.regiao)}`,
         referencia: d.codigo,
         titulo: d.titulo,
@@ -76,7 +72,6 @@ export async function getStaticPaths() {
     rotas.push({
       params: { slug: `regiao-${t.slug}` },
       props: {
-        creci,
         kicker: 'Região de atuação · Espírito Santo',
         titulo: t.nome,
         croqui: t.path,
@@ -93,13 +88,13 @@ export async function getStaticPaths() {
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const svg = svgOg(props as Params & { creci: string });
+  const svg = svgOg(props as Params);
   const png = await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toBuffer();
 
   return new Response(new Uint8Array(png), {
     headers: {
       'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Cache-Control': 'public, max-age=86400',
     },
   });
 };

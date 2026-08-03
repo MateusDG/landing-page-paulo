@@ -47,7 +47,7 @@ const jsonLd = {
 ---
 
 <Base
-  titulo="Carteira — fazendas, chácaras e terrenos rurais no ES"
+  titulo="Carteira, fazendas, chácaras e terrenos rurais no ES"
   descricao={`${ativas.length} áreas rurais em carteira no Espírito Santo: fazendas, chácaras, sítios e terrenos, com ficha técnica, situação documental e croqui do perímetro.`}
   jsonLd={jsonLd}
 >
@@ -131,16 +131,16 @@ const jsonLd = {
                 data-valor="sim"
                 aria-pressed="false"
               >
-                Só com documentação completa
+                Só com 5 documentos conferidos
               </button>
               <button
                 type="button"
                 class="chip"
                 data-filtro="status"
-                data-valor="ativa"
+                data-valor="nao-vendida"
                 aria-pressed="false"
               >
-                Esconder vendidas
+                Ocultar vendidas
               </button>
             </div>
           </fieldset>
@@ -168,12 +168,12 @@ const jsonLd = {
 
       <p class="ct__vazio" data-vazio hidden>
         Nenhuma área da carteira bate com esses filtros hoje. Me diga o que
-        você procura — boa parte sai antes de eu anunciar.
+        você procura, boa parte sai antes de eu anunciar.
       </p>
 
       <div class="ct__rodape">
         <p class="peq secundario">
-          Carteira atualizada em {ultima ? dataCurta(ultima) : '—'}.
+          Carteira atualizada em {ultima ? dataCurta(ultima) : 'data pendente'}.
         </p>
         <BotaoWhats
           origem="carteira-rodape"
@@ -271,7 +271,7 @@ const jsonLd = {
 
 <script>
   /* Filtros no cliente: a carteira inteira já veio no HTML, então filtrar é
-     esconder — sem requisição, sem estado de carregamento, funciona offline.
+     esconder, sem requisição, sem estado de carregamento, funciona offline.
      Com 200+ imóveis isso mudaria; até lá, é a solução mais simples que
      resolve. */
   function iniciar(
@@ -310,7 +310,7 @@ const jsonLd = {
           (!finalidade?.size ||
             ficha.dataset.finalidade!.split(' ').some((f) => finalidade.has(f))) &&
           (!doc?.size || ficha.dataset.docCompleta === 'sim') &&
-          (!status?.size || ficha.dataset.status === 'ativa') &&
+          (!status?.has('nao-vendida') || ficha.dataset.status !== 'vendida') &&
           faixaBate(Number(ficha.dataset.area));
 
         ficha.hidden = !ok;

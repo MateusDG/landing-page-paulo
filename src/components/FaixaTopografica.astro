@@ -1,6 +1,6 @@
 ---
 /**
- * FAIXA TOPOGRÁFICA — curvas de nível geradas no build.
+ * FAIXA TOPOGRÁFICA, curvas de nível geradas no build.
  *
  * Ocupa o lugar da fotografia 21:9 do hero enquanto o acervo autoral não
  * existe. É uma decisão de projeto, não um improviso: a alternativa seria
@@ -8,7 +8,7 @@
  * dez fotos amadoras somam.
  *
  * Quando o corretor tiver a foto de abertura (ver README §Fotografia),
- * troque este componente por <Image> — o resto do hero não muda.
+ * troque este componente por <Image>, o resto do hero não muda.
  *
  * Determinístico: soma de senos com fase fixa. Mesmo desenho em todo build.
  */
@@ -23,13 +23,13 @@ const { linhas = 15, altura = 300, class: classe = '' } = Astro.props;
 const L = 1400;
 /* 56 passos, x inteiro e y com uma casa: o traço continua liso porque o SVG
    é esticado com preserveAspectRatio="none", e o markup cai de ~28 KB para
-   ~9 KB — era o maior peso isolado do HTML da home. */
+   ~9 KB, era o maior peso isolado do HTML da home. */
 const passos = 56;
 
 /**
  * Relevo: dois vales e duas cristas assimétricas. `nivel` (0 = cota mais
  * alta) desloca ligeiramente a fase, porque curva de nível real não é a
- * mesma linha repetida — ela se fecha em torno do cume conforme sobe.
+ * mesma linha repetida, ela se fecha em torno do cume conforme sobe.
  */
 function elevacao(x: number, nivel: number): number {
   const t = x / L;
@@ -86,7 +86,7 @@ const curvas = Array.from({ length: linhas }, (_, i) => {
     }
   </svg>
   <p class="rotulo rotulo--fraco top__legenda">
-    Curvas de nível · desenho de projeto — aqui entra a fotografia de abertura
+    Curvas de nível · desenho de projeto, aqui entra a fotografia de abertura
   </p>
 </div>
 

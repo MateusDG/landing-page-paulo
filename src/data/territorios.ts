@@ -9,7 +9,7 @@
    uma projeção linear simples:
        x = (lon + 42.0) / 2.35 * 420        lon −42.0 … −39.65
        y = (−17.85 − lat) / 3.50 * 660      lat −17.85 … −21.35
-   É uma silhueta de projeto — reconhecível e leve (~4 KB) — não uma base
+   É uma silhueta de projeto, reconhecível e leve (~4 KB), não uma base
    cartográfica. Se um dia precisar de precisão de limite municipal, troque
    por um TopoJSON do IBGE e recalcule os `path`.
    ========================================================================== */
@@ -35,7 +35,7 @@ export interface Territorio {
   acesso: string[];
   relevo: string;
   resumo: string;
-  /** Quem compra aqui — alimenta o filtro do briefing. */
+  /** Quem compra aqui, alimenta o filtro do briefing. */
   perfis: string[];
   /** Nota de campo do corretor. Primeira pessoa. É o que nenhum portal tem. */
   notaDeCampo: string;
@@ -103,14 +103,14 @@ export const territorios: Territorio[] = [
     resumo:
       'Colonização italiana, alemã e pomerana, agroturismo consolidado e ' +
       'clima ameno o ano todo. Propriedades menores e muito parceladas por ' +
-      'herança familiar — o que faz a documentação exigir mais atenção que ' +
+      'herança familiar, o que faz a documentação exigir mais atenção que ' +
       'a média.',
     perfis: ['morar', 'lazer', 'turismo'],
     notaDeCampo:
       'Muita área boa aqui vem de partilha de família e nunca foi ' +
       'desmembrada formalmente. Você compra "a parte de cima do sítio" e ' +
       'descobre que a matrícula é uma só, com seis herdeiros. Dá para ' +
-      'resolver, mas tem que entrar sabendo — e o prazo muda.',
+      'resolver, mas tem que entrar sabendo, e o prazo muda.',
   },
   {
     slug: 'sul-e-caparao',
@@ -167,7 +167,7 @@ export const territorios: Territorio[] = [
     notaDeCampo:
       'É a região onde eu mais recuso área. Muita coisa é vendida como ' +
       '"rural" mas já está dentro do perímetro urbano do município, com ' +
-      'IPTU e não ITR — o que muda o imposto, a possibilidade de ' +
+      'IPTU e não ITR, o que muda o imposto, a possibilidade de ' +
       'desmembramento e o crédito. Confiro isso na prefeitura antes de ' +
       'qualquer conversa de preço.',
   },

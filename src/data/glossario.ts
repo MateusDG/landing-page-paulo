@@ -16,7 +16,7 @@ export interface Verbete {
   termo: string;
   sigla?: string;
   resumo: string;
-  /** Por que o comprador deveria se importar — não é definição, é consequência. */
+  /** Por que o comprador deveria se importar, não é definição, é consequência. */
   porQueImporta: string;
   destaqueNaHome?: boolean;
 }
@@ -49,12 +49,12 @@ export const glossario: Verbete[] = [
     termo: 'Reserva legal e APP',
     resumo:
       'Reserva legal é o percentual da propriedade que deve ser mantido com ' +
-      'vegetação nativa. APP é a área de preservação permanente — margem de ' +
+      'vegetação nativa. APP é a área de preservação permanente, margem de ' +
       'curso d’água, topo de morro, nascente.',
     porQueImporta:
       'Juntas, definem quanto da área você pode efetivamente usar. Uma área ' +
       'de 40 ha com 20% de reserva e 6 ha de APP não é uma área de 40 ha ' +
-      'produtivos — e o preço por hectare tem que refletir isso.',
+      'produtivos, e o preço por hectare tem que refletir isso.',
     destaqueNaHome: true,
   },
   {
@@ -65,7 +65,7 @@ export const glossario: Verbete[] = [
     porQueImporta:
       'É exigência para registrar a transmissão em boa parte dos casos, com ' +
       'prazos escalonados por faixa de área. Comprar área sem ' +
-      'georreferenciamento significa assumir esse custo e esse prazo — e ' +
+      'georreferenciamento significa assumir esse custo e esse prazo, e ' +
       'descobrir divergência de área no meio do processo.',
     destaqueNaHome: true,
   },
@@ -88,7 +88,7 @@ export const glossario: Verbete[] = [
       'proprietário.',
     porQueImporta:
       'A dívida acompanha o imóvel. Se o vendedor deve sete exercícios, quem ' +
-      'compra herda o problema — a menos que isso seja levantado e abatido ' +
+      'compra herda o problema, a menos que isso seja levantado e abatido ' +
       'na negociação.',
     destaqueNaHome: true,
   },
@@ -112,7 +112,7 @@ export const glossario: Verbete[] = [
       'órgão gestor de recursos hídricos do estado.',
     porQueImporta:
       'Área produtiva sem outorga é passivo, não detalhe burocrático. E é o ' +
-      'item que mais aparece pendente nas fazendas do Norte — justamente ' +
+      'item que mais aparece pendente nas fazendas do Norte, justamente ' +
       'onde a água define o preço.',
     destaqueNaHome: true,
   },

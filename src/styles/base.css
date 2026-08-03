@@ -1,5 +1,5 @@
 /* ==========================================================================
-   BASE — reset enxuto, fontes, ritmo e utilitários de layout.
+   BASE, reset enxuto, fontes, ritmo e utilitários de layout.
    ========================================================================== */
 
 /* ---- Fontes auto-hospedadas ---------------------------------------------
@@ -70,7 +70,7 @@ body {
 
 /* O atributo `hidden` tem que vencer qualquer `display` de componente.
    Sem esta regra, todo elemento com `display: grid/flex` ignora o `hidden`
-   e aparece na tela — é a origem de metade dos bugs de "painel que não
+   e aparece na tela, é a origem de metade dos bugs de "painel que não
    some". */
 [hidden] {
   display: none !important;

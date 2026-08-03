@@ -15,7 +15,7 @@ export interface ContextoWhats {
   imovel?: string;
   areaHa?: number;
   municipio?: string;
-  /** De onde na página o clique veio — vira a ref rastreável. */
+  /** De onde na página o clique veio, vira a ref rastreável. */
   origem: string;
   /** Substitui o corpo padrão quando a mensagem precisa ser outra. */
   mensagem?: string;
@@ -33,7 +33,7 @@ function montarTexto(ctx: ContextoWhats): string {
     const local = [area, ctx.municipio].filter(Boolean).join(' em ');
     linhas.push(
       local
-        ? `Quero falar sobre a área ${ctx.imovel} — ${local}.`
+        ? `Quero falar sobre a área ${ctx.imovel}, ${local}.`
         : `Quero falar sobre a área ${ctx.imovel}.`,
     );
   } else {
@@ -48,6 +48,13 @@ export function linkWhats(ctx: ContextoWhats): string {
   return `https://wa.me/${NUMERO}?text=${encodeURIComponent(montarTexto(ctx))}`;
 }
 
-/** Base sem query — usada no fallback sem JavaScript do briefing. */
+export function formatarNumeroWhats(numero = NUMERO): string {
+  const nacional = numero.startsWith('55') ? numero.slice(2) : numero;
+  if (nacional.length !== 11) return numero;
+  return `(${nacional.slice(0, 2)}) ${nacional.slice(2, 7)}-${nacional.slice(7)}`;
+}
+
+/** Base sem query, usada no fallback sem JavaScript do briefing. */
 export const baseWhats = `https://wa.me/${NUMERO}`;
 export const numeroWhats = NUMERO;
+export const numeroWhatsVisivel = formatarNumeroWhats();

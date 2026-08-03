@@ -1,22 +1,23 @@
 /* ==========================================================================
    GERA public/checklist-14-pontos.pdf a partir da página /checklist/.
 
-   Fluxo (documentado no README):
-     npm run build          → gera dist/ com a página /checklist/
-     npm run pdf            → serve dist/, imprime a página em A4, salva o PDF
-     npm run build          → o PDF de public/ entra no dist final
+   O script abre a página atual no servidor de desenvolvimento, imprime em
+   A4 e salva o PDF. Assim ele nunca reutiliza um dist/ desatualizado.
 
    O PDF é versionado no repositório, então o deploy normal não depende
    deste script. Rode-o de novo quando os 14 pontos mudarem.
    ========================================================================== */
 import { spawn } from 'node:child_process';
-import { readdirSync, existsSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
-import { join, dirname } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { readdirSync, existsSync, writeFileSync, readFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
+import { join, dirname, extname, normalize } from 'node:path';
+import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SAIDA = join(RAIZ, 'public', 'checklist-14-pontos.pdf');
+const ASTRO_CLI = join(RAIZ, 'node_modules', 'astro', 'bin', 'astro.mjs');
 const PORTA_SITE = 4399;
 
 function acharChrome() {
@@ -48,11 +49,42 @@ if (!bin) {
 
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// 1. servir o dist/
-const servidor = spawn('npx', ['astro', 'preview', '--port', String(PORTA_SITE)], {
+// 1. gerar o site atual em uma pasta temporária
+const distTemporario = mkdtempSync(join(tmpdir(), 'corretor-pdf-'));
+const build = spawnSync(process.execPath, [ASTRO_CLI, 'build', '--outDir', distTemporario], {
   cwd: RAIZ,
-  stdio: 'ignore',
+  stdio: 'inherit',
 });
+
+if (build.status !== 0) {
+  rmSync(distTemporario, { recursive: true, force: true });
+  process.exit(build.status ?? 1);
+}
+
+const tipos = {
+  '.css': 'text/css; charset=utf-8',
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.woff2': 'font/woff2',
+};
+
+const servidor = createServer((req, res) => {
+  const rota = decodeURIComponent(new URL(req.url ?? '/', `http://localhost:${PORTA_SITE}`).pathname);
+  const relativa = rota.endsWith('/') ? `${rota}index.html` : rota;
+  const alvo = normalize(join(distTemporario, relativa.replace(/^\/+/, '')));
+
+  if (!alvo.startsWith(distTemporario) || !existsSync(alvo)) {
+    res.writeHead(404).end('Não encontrado');
+    return;
+  }
+
+  res.writeHead(200, { 'Content-Type': tipos[extname(alvo)] ?? 'application/octet-stream' });
+  res.end(readFileSync(alvo));
+});
+
+await new Promise((resolve) => servidor.listen(PORTA_SITE, '127.0.0.1', resolve));
 
 async function siteNoAr() {
   for (let i = 0; i < 80; i++) {
@@ -68,8 +100,9 @@ async function siteNoAr() {
 }
 
 if (!(await siteNoAr())) {
-  console.error('O `astro preview` não respondeu. Rode `npm run build` antes.');
-  servidor.kill();
+  console.error('O servidor temporário não respondeu.');
+  servidor.close();
+  rmSync(distTemporario, { recursive: true, force: true });
   process.exit(1);
 }
 
@@ -140,5 +173,6 @@ console.log('Rode `npm run build` de novo para levá-lo ao dist/.');
 
 ws.close();
 chrome.kill();
-servidor.kill();
+await new Promise((resolve) => servidor.close(resolve));
+rmSync(distTemporario, { recursive: true, force: true });
 process.exit(0);

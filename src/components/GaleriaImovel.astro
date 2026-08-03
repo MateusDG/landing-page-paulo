@@ -3,7 +3,7 @@
  * GALERIA DO IMÓVEL
  *
  * Quando existem fotos, mostra a galeria. Quando ainda não existem, mostra
- * a SHOT LIST — as doze fotos que precisam ser feitas naquela área, com a
+ * a SHOT LIST, as doze fotos que precisam ser feitas naquela área, com a
  * razão de cada uma.
  *
  * Isso é deliberado. A alternativa seria banco de imagens, e uma foto de
@@ -15,6 +15,8 @@ interface Foto {
   src: string;
   alt: string;
   legenda?: string;
+  largura?: number;
+  altura?: number;
 }
 
 interface Props {
@@ -45,7 +47,16 @@ const shotList = [
     <div class="gal">
       {fotos.map((f, i) => (
         <figure class:list={['gal__item', i === 0 && 'gal__item--larga']}>
-          <img src={f.src} alt={f.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          <img
+            src={f.src}
+            alt={f.alt}
+            width={f.largura ?? 1600}
+            height={f.altura ?? 1067}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
+            decoding="async"
+            sizes={i === 0 ? '100vw' : '(max-width: 700px) 100vw, 50vw'}
+          />
           {f.legenda && <figcaption class="rotulo rotulo--fraco">{f.legenda}</figcaption>}
         </figure>
       ))}
@@ -55,8 +66,8 @@ const shotList = [
       <div class="shot__cab">
         <p class="rotulo rotulo--terra">Fotografia pendente</p>
         <p class="shot__intro">
-          Esta área ainda não foi fotografada. Quando for, entram estas doze —
-          e nenhuma imagem de banco. As fotos de {municipio} são feitas por mim,
+          Esta área ainda não foi fotografada. Quando for, entram estas doze
+          fotos e nenhuma imagem de banco. As fotos de {municipio} são feitas por mim,
           na área, no dia da vistoria.
         </p>
       </div>

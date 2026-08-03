@@ -1,19 +1,20 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 /* ==========================================================================
    SCHEMAS DE CONTEÚDO
 
-   O schema não está aqui só para tipar — está para IMPEDIR publicação
+   O schema não está aqui só para tipar, está para IMPEDIR publicação
    incompleta. Três regras são validadas no build e derrubam o `npm run
    build` se violadas:
 
      1. Todo imóvel precisa de `croqui` (o polígono do perímetro). É o que
         faz cada ficha ser única e a carteira não virar galeria de estoque.
      2. Todo imóvel precisa de pelo menos um item em `oQueFalta`. Anúncio
-        sem defeito é anúncio mentindo — e o comprador rural sente isso.
+        sem defeito é anúncio mentindo, e o comprador rural sente isso.
      3. Imóvel com `status: ativa` precisa de 6 fotos. Enquanto não houver,
-        marque `rascunho: true` — assim ele aparece no site com a ficha e o
+        marque `rascunho: true`, assim ele aparece no site com a ficha e o
         croqui, mas o sistema deixa claro que falta a foto.
 
    Qualidade forçada pelo sistema, não pela disciplina.
@@ -33,6 +34,8 @@ const foto = z.object({
   /* alt específico, não "fazenda". Ver README §Fotografia. */
   alt: z.string().min(12, 'alt precisa descrever a foto, não rotulá-la'),
   legenda: z.string().optional(),
+  largura: z.number().int().positive().optional(),
+  altura: z.number().int().positive().optional(),
 });
 
 const imoveis = defineCollection({
@@ -49,7 +52,7 @@ const imoveis = defineCollection({
 
       /* Perímetro real da área, simplificado para ~20 vértices.
          Origem: shapefile do CAR ou do SIGEF. Ver README §Croquis. */
-      croqui: z.string().min(20, 'croqui é obrigatório — ver README §Croquis'),
+      croqui: z.string().min(20, 'croqui é obrigatório, ver README §Croquis'),
       croquiViewBox: z.string().default('0 0 100 100'),
 
       finalidade: z.array(z.enum(FINALIDADES)).min(1),
@@ -88,7 +91,7 @@ const imoveis = defineCollection({
          não passa no build. */
       oQueFalta: z
         .array(z.string())
-        .min(1, 'declare pelo menos um ponto fraco — ver README §Honestidade'),
+        .min(1, 'declare pelo menos um ponto fraco, ver README §Honestidade'),
 
       status: z.enum(['ativa', 'reservada', 'vendida']).default('ativa'),
       vendidaEm: z.coerce.date().optional(),
@@ -104,7 +107,7 @@ const imoveis = defineCollection({
     .superRefine((v, ctx) => {
       if (v.status === 'ativa' && !v.rascunho && v.fotos.length < 6) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           path: ['fotos'],
           message:
             `imóvel ativo precisa de 6 fotos (tem ${v.fotos.length}). ` +
@@ -113,9 +116,9 @@ const imoveis = defineCollection({
       }
       if (v.status === 'vendida' && !v.vendidaEm) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           path: ['vendidaEm'],
-          message: 'imóvel vendido precisa da data — o carimbo usa mês/ano.',
+          message: 'imóvel vendido precisa da data, o carimbo usa mês/ano.',
         });
       }
     }),
@@ -125,7 +128,7 @@ const guias = defineCollection({
   loader: glob({ base: './src/content/guias', pattern: '**/*.md' }),
   schema: z.object({
     titulo: z.string(),
-    /* Título de busca — costuma ser mais literal que o título editorial. */
+    /* Título de busca, costuma ser mais literal que o título editorial. */
     tituloSeo: z.string().optional(),
     descricao: z.string().min(70).max(180),
     resumo: z.string(),

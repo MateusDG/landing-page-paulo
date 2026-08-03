@@ -17,7 +17,7 @@ perguntas:
 ---
 
 Este guia descreve o caminho real de uma compra de área rural no Espírito
-Santo — não o caminho ideal de manual. A diferença está nos pontos em que o
+Santo, não o caminho ideal de manual. A diferença está nos pontos em que o
 processo trava.
 
 ## 1. Definir a finalidade antes da região
@@ -44,7 +44,7 @@ da terra.
 ## 4. Visitar com critério, não com entusiasmo
 
 Ver a área em época seca e em época de chuva muda a avaliação de acesso e de
-água. Se só der para ir uma vez, vá na pior época — não na melhor.
+água. Se só der para ir uma vez, vá na pior época, não na melhor.
 
 ## 5. Pedir a matrícula antes da proposta
 
@@ -61,7 +61,7 @@ resolvida por retificação.
 ## 7. Puxar CAR, CCIR e ITR
 
 CAR ativo, CCIR emitido, ITR em dia. E, no CAR, olhar onde a reserva legal foi
-proposta — não apenas se ela existe.
+proposta, não apenas se ela existe.
 
 ## 8. Verificar água e outorga
 
@@ -73,7 +73,7 @@ no Norte do estado.
 
 A certificação do perímetro junto ao INCRA é exigida para a transmissão em boa
 parte dos casos, com prazos escalonados por faixa de área. Área sem
-georreferenciamento não é impedimento absoluto, mas é custo e prazo — e precisa
+georreferenciamento não é impedimento absoluto, mas é custo e prazo, e precisa
 entrar na negociação, não na surpresa.
 
 ## 10. Negociar com os problemas na mesa
@@ -85,7 +85,7 @@ aparecem depois do sinal pago.
 ## 11. Escriturar
 
 Escritura pública no tabelionato e registro na matrícula. A compra só se
-completa no registro — escritura assinada e não registrada não transfere a
+completa no registro, escritura assinada e não registrada não transfere a
 propriedade.
 
 ---

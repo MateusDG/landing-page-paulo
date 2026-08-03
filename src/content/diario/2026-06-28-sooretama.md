@@ -11,7 +11,7 @@ tamanho e com o mesmo tipo de solo, tinham quase 40% de diferença de preço.
 A resposta cabia em uma linha da matrícula e uma consulta ao órgão estadual:
 uma tem outorga vigente para irrigação, a outra não.
 
-No Norte capixaba, água outorgada não é um detalhe de regularização — é o
+No Norte capixaba, água outorgada não é um detalhe de regularização, é o
 ativo. Sem ela, você compra uma área que depende de chuva num lugar onde a
 chuva já não é o que era em 1990. Com ela, você compra previsibilidade.
 

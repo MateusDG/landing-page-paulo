@@ -3,7 +3,7 @@
    Três papéis, três famílias, nenhuma sobreposição:
      display → Fraunces   (títulos, números-chave)
      texto   → Inter Tight (corpo, UI)
-     dados   → JetBrains Mono (rótulos, fichas, cotas) — o "tell" documental
+     dados   → JetBrains Mono (rótulos, fichas, cotas), o "tell" documental
    ========================================================================== */
 
 .display,
@@ -62,7 +62,7 @@ p {
 }
 
 /* --------------------------------------------------------------------------
-   RÓTULO — o elemento mais repetido do sistema.
+   RÓTULO, o elemento mais repetido do sistema.
    Mono, caixa alta, tracking largo. É ele que transforma metadado em
    "documento" em vez de "card de site".
    Tamanho mínimo 12px: abaixo disso o contraste de --grafite-40 falha AA.
@@ -80,7 +80,7 @@ p {
 }
 
 .rotulo--fraco {
-  /* --grafite-40 é calibrado para 4.5:1 mesmo em 12px — ver tokens.css.
+  /* --grafite-40 é calibrado para 4.5:1 mesmo em 12px, ver tokens.css.
      Não clareie sem recalcular o contraste contra --papel-2. */
   color: var(--grafite-40);
 }
@@ -164,7 +164,7 @@ p {
 }
 
 .prosa ul li::before {
-  content: '—';
+  content: '•';
   position: absolute;
   left: calc(var(--s-5) * -1);
   color: var(--terra);

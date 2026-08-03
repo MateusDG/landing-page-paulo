@@ -1,9 +1,10 @@
 ---
 import Editorial from '../layouts/Editorial.astro';
 import { corretor } from '../data/site';
+import { linkWhats } from '../lib/whatsapp';
 
 /* ▸ REVISAR com advogado antes de publicar. O texto abaixo descreve o que o
-   site EFETIVAMENTE faz — que é pouco, de propósito: não há cookie de
+   site EFETIVAMENTE faz, que é pouco, de propósito: não há cookie de
    rastreio, não há pixel de rede social e o único dado coletado é o que o
    visitante digita no briefing. Se você adicionar GA4, remarketing ou
    qualquer pixel, esta página precisa mudar E um banner de consentimento
@@ -23,9 +24,8 @@ import { corretor } from '../data/site';
 >
   <h2>Quem é o responsável</h2>
   <p>
-    {corretor.nome}, corretor de imóveis inscrito no CRECI-{corretor.uf}{' '}
-    {corretor.creci}, com base em {corretor.cidadeBase}/{corretor.uf}. Contato
-    para assuntos de dados pessoais: <a href={`mailto:${corretor.email}`}>{corretor.email}</a>.
+    {corretor.nome}, com base em {corretor.cidadeBase}/{corretor.uf}. Para
+    assuntos de dados pessoais, <a href={linkWhats({ origem: 'privacidade' })}>fale pelo WhatsApp</a>.
   </p>
 
   <h2>Que dados este site coleta</h2>
@@ -88,9 +88,8 @@ import { corretor } from '../data/site';
   <p>
     Você pode pedir, a qualquer momento e sem justificar: confirmação de que
     trato seus dados, acesso ao que está registrado, correção, exclusão,
-    portabilidade e revogação do consentimento. Basta escrever para{' '}
-    <a href={`mailto:${corretor.email}`}>{corretor.email}</a> ou mandar uma
-    mensagem no WhatsApp pedindo. Respondo em até 15 dias.
+    portabilidade e revogação do consentimento. Basta mandar uma mensagem no
+    WhatsApp pedindo. Respondo em até 15 dias.
   </p>
 
   <h2>Segurança</h2>
@@ -101,7 +100,7 @@ import { corretor } from '../data/site';
 
   <h2>Mudanças nesta política</h2>
   <p>
-    Se algo mudar — por exemplo, se eu passar a usar alguma ferramenta de
-    publicidade —, atualizo esta página e a data de vigência no topo.
+    Se algo mudar, por exemplo, se eu passar a usar alguma ferramenta de
+    publicidade, atualizo esta página e a data de vigência no topo.
   </p>
 </Editorial>

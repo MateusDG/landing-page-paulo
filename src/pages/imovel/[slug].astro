@@ -26,7 +26,7 @@ const { Content } = await render(imovel);
 const vendida = d.status === 'vendida';
 
 /* Sugestões: mesma região primeiro, depois faixa de área parecida.
-   Imóvel vendido nunca vira beco sem saída — sempre aponta para similares. */
+   Imóvel vendido nunca vira beco sem saída, sempre aponta para similares. */
 const todos = await getCollection('imoveis');
 const similares = todos
   .filter((i) => i.id !== imovel.id && i.data.status !== 'vendida')
@@ -82,7 +82,7 @@ const rotuloFinalidade: Record<string, string> = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
-  name: `${d.titulo} — ${formatarArea(d.areaHa)} ha em ${d.municipio}/ES`,
+  name: `${d.titulo}, ${formatarArea(d.areaHa)} ha em ${d.municipio}/ES`,
   sku: d.codigo,
   description: d.resumo,
   category: 'Imóvel rural',
@@ -100,7 +100,7 @@ const jsonLd = {
       availability: vendida
         ? 'https://schema.org/SoldOut'
         : d.status === 'reservada'
-          ? 'https://schema.org/PreOrder'
+          ? 'https://schema.org/LimitedAvailability'
           : 'https://schema.org/InStock',
       url: new URL(Astro.url.pathname, Astro.site).href,
     },
@@ -127,6 +127,7 @@ const breadcrumb = {
   titulo={`${d.titulo} · ${formatarArea(d.areaHa)} ha em ${d.municipio}/ES`}
   descricao={d.resumo}
   og={`/og/imovel-${imovel.id}.png`}
+  ogTipo="product"
   jsonLd={[jsonLd, breadcrumb]}
 >
   <article class="im">
@@ -354,7 +355,7 @@ const breadcrumb = {
               <h2 class="im__fecho-titulo">Esta área já foi vendida.</h2>
               <p class="lead">
                 Mantenho a ficha no ar porque ela mostra o que passa pela minha
-                carteira. Se procura algo parecido, me diga — áreas assim
+                carteira. Se procura algo parecido, me diga, áreas assim
                 raramente ficam anunciadas.
               </p>
               <BotaoWhats

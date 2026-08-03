@@ -9,11 +9,11 @@ atualizadoEm: 2026-07-30
 revisadoPorAdvogado: false
 perguntas:
   - pergunta: 'Escritura e matrícula são a mesma coisa?'
-    resposta: 'Não. A escritura é o ato lavrado em cartório de notas; a matrícula é o registro do imóvel no cartório de registro de imóveis. A propriedade só se transfere com o registro na matrícula — escritura assinada e não registrada não basta.'
+    resposta: 'Não. A escritura é o ato lavrado em cartório de notas; a matrícula é o registro do imóvel no cartório de registro de imóveis. A propriedade só se transfere com o registro na matrícula, escritura assinada e não registrada não basta.'
   - pergunta: 'O que acontece se o imóvel não tiver CAR?'
-    resposta: 'O imóvel fica travado para crédito rural e para processos de regularização ambiental. A inscrição no SICAR é declaratória e pode ser feita, mas o conteúdo declarado — sobretudo a localização da reserva legal — tem consequência prática de longo prazo.'
+    resposta: 'O imóvel fica travado para crédito rural e para processos de regularização ambiental. A inscrição no SICAR é declaratória e pode ser feita, mas o conteúdo declarado, sobretudo a localização da reserva legal, tem consequência prática de longo prazo.'
   - pergunta: 'Dívida de ITR do antigo dono passa para o comprador?'
-    resposta: 'O débito é vinculado ao imóvel. Por isso a checagem de ITR entra antes da proposta, não depois — e eventual pendência costuma ser negociada como abatimento no preço.'
+    resposta: 'O débito é vinculado ao imóvel. Por isso a checagem de ITR entra antes da proposta, não depois, e eventual pendência costuma ser negociada como abatimento no preço.'
 ---
 
 Compra de terra raramente dá errado no preço. Dá errado no documento. Este
@@ -41,7 +41,7 @@ legal, áreas de preservação permanente e uso consolidado.
 **Não prova:** que a declaração está correta.
 **Quando falta:** trava crédito rural e regularização.
 
-O erro mais caro aqui não é a ausência do CAR — é a reserva legal proposta em
+O erro mais caro aqui não é a ausência do CAR, é a reserva legal proposta em
 cima da melhor parte da lavoura. Realocar depois é possível em certos casos,
 mas é processo.
 
@@ -51,7 +51,7 @@ Emitido pelo INCRA, comprova a inscrição do imóvel no cadastro rural.
 
 **Exigido para:** escritura, desmembramento, arrendamento, hipoteca.
 **Quando está desatualizado:** costuma indicar que ninguém mexeu na
-regularização do imóvel há anos — vale olhar o resto com mais atenção.
+regularização do imóvel há anos, vale olhar o resto com mais atenção.
 
 ## Imposto Territorial Rural (ITR)
 
@@ -59,7 +59,7 @@ Imposto federal anual, declarado pelo próprio proprietário.
 
 **Ponto crítico:** o débito acompanha o imóvel. Peça os comprovantes dos
 últimos exercícios e a certidão negativa. Se houver pendência, ela vira item de
-negociação, com valor levantado — não vira "detalhezinho a resolver depois".
+negociação, com valor levantado, não vira "detalhezinho a resolver depois".
 
 ## Georreferenciamento
 
@@ -68,7 +68,7 @@ INCRA, no sistema SIGEF.
 
 **Prova:** onde exatamente o imóvel começa e termina.
 **Quando falta:** a transmissão pode travar no cartório, conforme a faixa de
-área e o prazo vigente. Fazer custa dinheiro e leva meses — e é quando
+área e o prazo vigente. Fazer custa dinheiro e leva meses, e é quando
 divergências de área aparecem.
 
 Confirme sempre a regra em vigor para a faixa de área do imóvel: os prazos

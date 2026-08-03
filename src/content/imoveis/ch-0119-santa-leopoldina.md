@@ -37,7 +37,7 @@ coordenada: '20°06′S 40°32′W'
 preco: 620000
 oQueFalta:
   - 'A APP de margem do rio ocupa cerca de 1,1 ha da área. Não pode ser usada nem construída. Sobram 5,7 ha de uso efetivo.'
-  - 'A parte baixa alaga em cheia grande. O rancho tem marca de água de 2020 na parede — pedi para o dono não pintar por cima, e ele deixou. Você vai ver quando visitar.'
+  - 'A parte baixa alaga em cheia grande. O rancho tem marca de água de 2020 na parede, pedi para o dono não pintar por cima, e ele deixou. Você vai ver quando visitar.'
   - 'Georreferenciamento não feito.'
 status: 'ativa'
 rascunho: true
@@ -51,7 +51,7 @@ difícil achar coisa melhor nessa distância.
 
 Andei a área em junho e a primeira coisa que fiz foi procurar marca de cheia.
 Achei: uma linha de água na parede do rancho, de 2020, na altura do joelho.
-Perguntei ao dono e ele confirmou sem hesitar — o que, para mim, conta a favor
+Perguntei ao dono e ele confirmou sem hesitar, o que, para mim, conta a favor
 dele.
 
 Isso não desqualifica a área. Chácara de beira de rio alaga na parte baixa, é

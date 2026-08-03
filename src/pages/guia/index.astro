@@ -8,7 +8,7 @@ import { glossario } from '../../data/glossario';
 
 const guias = (await getCollection('guias')).sort((a, b) => a.data.ordem - b.data.ordem);
 
-/* Duas páginas do hub são geradas por dados, não por markdown — entram na
+/* Duas páginas do hub são geradas por dados, não por markdown, entram na
    lista à mão para o índice ficar completo. */
 const extras = [
   {
@@ -32,7 +32,7 @@ const jsonLd = {
 ---
 
 <Base
-  titulo="Guias — comprar imóvel rural no Espírito Santo"
+  titulo="Guias, comprar imóvel rural no Espírito Santo"
   descricao="Documentos, água e outorga, custo de manutenção, glossário e o índice de deslocamento. O que eu explicaria numa conversa, escrito."
   jsonLd={jsonLd}
 >

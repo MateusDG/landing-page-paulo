@@ -7,7 +7,7 @@ data: 2026-05-30
 
 Fui chamado para avaliar "a parte de cima do sítio da família". Cheguei lá e
 era exatamente isso: uma parte de cima, com cerca, com café plantado, com
-casa — e sem matrícula própria.
+casa, e sem matrícula própria.
 
 A matrícula é uma só, do sítio inteiro, com seis herdeiros. A divisão que
 existe é de fato, feita entre irmãos há vinte anos, respeitada por todos e

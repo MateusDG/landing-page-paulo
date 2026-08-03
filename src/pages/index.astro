@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 import Base from '../layouts/Base.astro';
 import CabecalhoSecao from '../components/CabecalhoSecao.astro';
@@ -7,33 +7,30 @@ import FaixaTerritorios from '../components/FaixaTerritorios.astro';
 import FaixaTopografica from '../components/FaixaTopografica.astro';
 import FichaImovel from '../components/FichaImovel.astro';
 import FichaTecnica from '../components/FichaTecnica.astro';
-import ListaNumerada from '../components/ListaNumerada.astro';
 import MapaTerritorios from '../components/MapaTerritorios.astro';
-import Acordeao from '../components/Acordeao.astro';
 import Briefing from '../components/Briefing.astro';
 import ToggleUnidade from '../components/ToggleUnidade.astro';
 import BotaoWhats from '../components/BotaoWhats.astro';
-import CotaDimensional from '../components/CotaDimensional.astro';
 import Croqui from '../components/Croqui.astro';
 
 import { corretor, emCampo, coordenadaBase, meta } from '../data/site';
-import { protocoloDocumental, protocoloFisico, notaProtocolo } from '../data/protocolo';
-import { glossario } from '../data/glossario';
 import { deslocamento, notaDeslocamento } from '../data/deslocamento';
 import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
 import { dataCurta, numero, areas as fmtAreas } from '../lib/format';
 import { formatarArea } from '../lib/unidades';
 
-const imoveis = await getCollection('imoveis');
+const imoveis = (await getCollection('imoveis')).sort(
+  (a, b) => b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime(),
+);
 /* `naCarteira` = tudo que ainda não foi vendido (inclui reservadas, que
    continuam visíveis com o selo). `ativas` = efetivamente disponíveis.
    Os dois números aparecem no site e precisam significar a mesma coisa em
-   todo lugar — ver também o rodapé. */
+   todo lugar, ver também o rodapé. */
 const naCarteira = imoveis.filter((i) => i.data.status !== 'vendida');
 const ativas = imoveis.filter((i) => i.data.status === 'ativa');
 const vendidos = imoveis.filter((i) => i.data.status === 'vendida');
 
-/* A vitrine mostra os destaques primeiro, depois o resto — e sempre inclui
+/* A vitrine mostra os destaques primeiro, depois o resto, e sempre inclui
    uma vendida no fim. Imóvel vendido é prova social real. */
 const vitrine = [
   ...naCarteira.filter((i) => i.data.destaque),
@@ -42,7 +39,7 @@ const vitrine = [
 const vitrineFinal = [...vitrine, ...vendidos.slice(0, 1)];
 
 /* Números do painel do hero: verdadeiros, vindos do conteúdo, mudam sozinhos. */
-const municipios = new Set(imoveis.map((i) => i.data.municipio)).size;
+const municipios = new Set(naCarteira.map((i) => i.data.municipio)).size;
 const areas = naCarteira.map((i) => i.data.areaHa);
 const ultimaAtualizacao = imoveis
   .map((i) => i.data.atualizadoEm)
@@ -52,8 +49,12 @@ const painelHero = [
   { rotulo: 'Áreas ativas', valor: String(ativas.length), destaque: true },
   { rotulo: 'Reservadas', valor: String(naCarteira.length - ativas.length) },
   { rotulo: 'Municípios', valor: String(municipios) },
-  { rotulo: 'Menor área', valor: `${formatarArea(Math.min(...areas))} ha` },
-  { rotulo: 'Maior área', valor: `${formatarArea(Math.max(...areas))} ha` },
+  ...(areas.length
+    ? [
+        { rotulo: 'Menor área', valor: `${formatarArea(Math.min(...areas))} ha` },
+        { rotulo: 'Maior área', valor: `${formatarArea(Math.max(...areas))} ha` },
+      ]
+    : []),
   { rotulo: 'Regiões', valor: `${territorios.length} de 4` },
 ];
 
@@ -61,46 +62,15 @@ const contagemPorRegiao = Object.fromEntries(
   territorios.map((t) => [t.slug, ativas.filter((i) => i.data.regiao === t.slug).length]),
 );
 
-const caso = (await getCollection('casos')).find((c) => c.data.destaque);
-const CasoConteudo = caso ? (await render(caso)).Content : null;
-
-/* Os seis problemas. Cada um é um caso real que eu já vi travar negócio. */
-const problemas = [
-  { titulo: 'A área tem 40 ha na conversa e 31,4 ha na matrícula.' },
-  {
-    titulo:
-      'O CAR está inscrito, mas com a reserva legal proposta em cima da melhor parte da lavoura.',
-  },
-  { titulo: 'A nascente que abastece tudo não tem outorga.' },
-  {
-    titulo:
-      'O acesso passa por dentro do vizinho e não existe servidão registrada na matrícula.',
-  },
-  { titulo: 'O vendedor tem dívida de ITR de sete exercícios — e ela acompanha o imóvel.' },
-  { titulo: 'O georreferenciamento nunca foi feito e a venda trava no cartório.' },
-];
-
-const verbetesHome = glossario.filter((v) => v.destaqueNaHome);
 const deslocamentoPreview = deslocamento.slice(0, 8);
 
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: corretor.nome,
-    url: Astro.site?.href,
-    inLanguage: 'pt-BR',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: verbetesHome.map((v) => ({
-      '@type': 'Question',
-      name: `${v.termo}${v.sigla ? ` (${v.sigla})` : ''}`,
-      acceptedAnswer: { '@type': 'Answer', text: `${v.resumo} ${v.porQueImporta}` },
-    })),
-  },
-];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: corretor.nome,
+  url: Astro.site?.href,
+  inLanguage: 'pt-BR',
+};
 ---
 
 <Base descricao={meta.descricao} jsonLd={jsonLd}>
@@ -123,8 +93,8 @@ const jsonLd = [
 
           <div class="hero__acoes">
             <a class="botao botao--primario" href="#carteira">Ver o que tenho hoje</a>
-            <a class="link-seta" href="#metodo">
-              Como eu verifico uma área
+            <a class="link-seta" href="/sobre/">
+              Conheça meu trabalho
               <span class="link-seta__seta" aria-hidden="true">→</span>
             </a>
           </div>
@@ -140,87 +110,19 @@ const jsonLd = [
       </div>
     </div>
 
-    <FaixaTopografica class="hero__faixa" />
+    <div class="hero__faixa">
+      <FaixaTopografica />
+    </div>
   </section>
 
   {/* ============================================ 02 · TERRITÓRIOS ======= */}
   <FaixaTerritorios />
-
-  {/* =============================================== 03 · O PROBLEMA ===== */}
-  <section class="secao" aria-labelledby="problema-titulo">
-    <div class="env">
-      <div class="bloco-7">
-        <CabecalhoSecao
-          n={1}
-          kicker="O que costuma dar errado"
-          titulo="Compra de terra raramente dá errado no preço."
-          subtitulo="Dá errado no documento. Estes seis casos eu já vi travarem negócio depois do sinal pago."
-        />
-        <ListaNumerada itens={problemas} />
-        <p class="fecho">
-          Nenhum desses problemas aparece na foto do drone. Todos aparecem no
-          cartório — e aí você já pagou o sinal.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  {/* ================================================== 04 · O MÉTODO ==== */}
-  <section class="secao secao--papel2 secao--filete" id="metodo" aria-labelledby="metodo-titulo">
-    <div class="env">
-      <div class="metodo__cab">
-        <CabecalhoSecao
-          n={2}
-          kicker={`Protocolo de campo · v.${new Date().getFullYear()}`}
-          titulo="O que eu checo antes de te mostrar uma área"
-          subtitulo="Quatorze pontos. Sete no papel, sete no chão. Se algum não fecha, você fica sabendo antes de gastar um sábado dirigindo."
-        />
-        <div class="metodo__cota">
-          <CotaDimensional valor="14 pontos" orientacao="horizontal" />
-        </div>
-      </div>
-
-      <div class="metodo__colunas">
-        <div>
-          <p class="rotulo metodo__grupo">Documental</p>
-          <ListaNumerada itens={protocoloDocumental} ritmo="denso" inicio={1} />
-        </div>
-        <div>
-          <p class="rotulo metodo__grupo">Físico</p>
-          <ListaNumerada itens={protocoloFisico} ritmo="denso" inicio={8} />
-        </div>
-      </div>
-
-      <blockquote class="metodo__nota">
-        <p>{notaProtocolo}</p>
-      </blockquote>
-
-      <div class="metodo__isca">
-        <div>
-          <p class="rotulo rotulo--terra">Leve o checklist</p>
-          <p class="metodo__isca-texto">
-            Baixe os 14 pontos em uma página e use com qualquer corretor —
-            inclusive comigo.
-          </p>
-        </div>
-        <a
-          class="botao botao--escuro"
-          href="/checklist-14-pontos.pdf"
-          download
-          data-evento="checklist_download"
-        >
-          Baixar o checklist
-        </a>
-      </div>
-    </div>
-  </section>
 
   {/* ================================================= 05 · A CARTEIRA === */}
   <section class="secao" id="carteira" aria-labelledby="carteira-titulo">
     <div class="env">
       <div class="carteira__cab">
         <CabecalhoSecao
-          n={3}
           kicker="A carteira"
           titulo="O que eu tenho hoje"
           subtitulo="Atualizo essa lista toda semana. Quando sai, marco como vendida em vez de apagar."
@@ -248,7 +150,6 @@ const jsonLd = [
   <section class="secao secao--filete" id="regioes" aria-labelledby="regioes-titulo">
     <div class="env">
       <CabecalhoSecao
-        n={4}
         kicker="Onde eu ando"
         titulo="Quatro regiões, quatro lógicas de compra"
         subtitulo="Cada uma tem cultura, relevo, faixa de preço e tipo de problema documental próprios. Clique para ver."
@@ -256,7 +157,7 @@ const jsonLd = [
 
       <MapaTerritorios contagem={contagemPorRegiao} />
 
-      {/* Índice de deslocamento — conteúdo que só existe porque foi medido */}
+      {/* Índice de deslocamento, conteúdo que só existe porque foi medido */}
       <div class="desloc">
         <div class="desloc__cab">
           <div>
@@ -312,17 +213,13 @@ const jsonLd = [
         {/* Placeholder do retrato: enquanto não há foto autoral, um croqui
             grande sustenta o bloco sem recorrer a banco de imagens. */}
         <div class="sobre__moldura">
-          <Croqui
-            path={CONTORNO_ES}
-            viewBox={VIEWBOX_ES}
-            tamanho={200}
-            desenhar
-            class="sobre__croqui"
-          />
+          <div class="sobre__croqui">
+            <Croqui path={CONTORNO_ES} viewBox={VIEWBOX_ES} tamanho={200} desenhar />
+          </div>
           <div class="sobre__moldura-legenda">
             <p class="rotulo rotulo--fraco">Espaço reservado</p>
             <p class="peq secundario">
-              Aqui entra o retrato em campo — botina suja, não terno em
+              Aqui entra o retrato em campo, botina suja, não terno em
               estúdio. Ver README §Fotografia.
             </p>
           </div>
@@ -330,16 +227,15 @@ const jsonLd = [
       </div>
 
       <div class="sobre__texto">
-        <CabecalhoSecao n={5} kicker="Quem fala com você" titulo="Uma pessoa só, do primeiro WhatsApp até a escritura" as="h2" />
+        <CabecalhoSecao kicker="Quem fala com você" titulo="Uma pessoa só, do primeiro WhatsApp até a escritura" as="h2" />
 
         <div class="prosa sobre__prosa">
           <p>
-            Sou {corretor.nome}, corretor com CRECI-{corretor.uf} {corretor.creci}.
-            Trabalho com imóvel rural desde {corretor.desde} e minha base é
+            Sou {corretor.nome}. Trabalho com imóvel rural desde {corretor.desde} e minha base é
             {' '}{corretor.cidadeBase}.
           </p>
           <p>
-            Não sou imobiliária. Sou uma pessoa só — o que significa que você
+            Não sou imobiliária. Sou uma pessoa só, o que significa que você
             fala comigo do primeiro contato até a escritura, e também que eu
             não consigo atender todo mundo ao mesmo tempo. Prefiro assim.
           </p>
@@ -358,85 +254,18 @@ const jsonLd = [
     </div>
   </section>
 
-  {/* ================================================ 08 · ESTUDO DE CASO */}
-  {
-    caso && (
-      <section class="secao" aria-labelledby="caso-titulo">
-        <div class="env">
-          <div class="bloco-9">
-            <CabecalhoSecao
-              n={6}
-              kicker={caso.data.referencia}
-              titulo="Um caso, contado inteiro"
-              subtitulo="Prefiro um caso com números a seis depoimentos de duas linhas."
-            />
-
-            <div class="caso">
-              <dl class="caso__ficha">
-                <div>
-                  <dt class="rotulo rotulo--fraco">O comprador</dt>
-                  <dd>{caso.data.comprador}</dd>
-                </div>
-                <div>
-                  <dt class="rotulo rotulo--fraco">O que procuravam</dt>
-                  <dd>{caso.data.procuravam}</dd>
-                </div>
-                <div>
-                  <dt class="rotulo rotulo--fraco">O que travou</dt>
-                  <dd>{caso.data.oQueTravou}</dd>
-                </div>
-                <div>
-                  <dt class="rotulo rotulo--fraco">O que fizemos</dt>
-                  <dd>{caso.data.oQueFizemos}</dd>
-                </div>
-                <div>
-                  <dt class="rotulo rotulo--fraco">O resultado</dt>
-                  <dd>{caso.data.resultado}</dd>
-                </div>
-              </dl>
-
-              <div class="caso__lado">
-                <FichaTecnica
-                  linhas={[
-                    { rotulo: 'Município', valor: caso.data.municipio },
-                    { rotulo: 'Área', valor: `${formatarArea(caso.data.areaHa)} ha` },
-                    { rotulo: 'Fechado em', valor: dataCurta(caso.data.fechadoEm) },
-                  ]}
-                />
-
-                <blockquote class="caso__depo">
-                  <p>{caso.data.depoimento.texto}</p>
-                  <footer class="rotulo rotulo--fraco">
-                    — {caso.data.depoimento.autor}, {caso.data.depoimento.cidade}
-                  </footer>
-                </blockquote>
-              </div>
-            </div>
-
-            {CasoConteudo && (
-              <div class="prosa caso__prosa">
-                <CasoConteudo />
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
   {/* =================================================== 09 · BRIEFING === */}
   <section class="secao secao--filete" id="briefing" aria-labelledby="briefing-titulo">
     <div class="env briefing-secao">
       <div class="briefing-secao__texto">
         <CabecalhoSecao
-          n={7}
           kicker="Conversa"
           titulo="Me diga o que você procura em cinco cliques"
           subtitulo="Sem formulário longo, sem e-mail obrigatório. No fim abre o WhatsApp com o seu briefing já escrito."
         />
 
         <ul class="briefing-secao__lista">
-          <li>Você responde clicando — digita só nome e telefone, no fim.</li>
+          <li>Você responde clicando, digita só nome e telefone, no fim.</li>
           <li>Eu recebo o resumo estruturado, com região, área e prazo.</li>
           <li>{corretor.sla}</li>
         </ul>
@@ -453,51 +282,9 @@ const jsonLd = [
     </div>
   </section>
 
-  {/* =================================================== 10 · GLOSSÁRIO == */}
-  <section class="secao secao--papel2 secao--filete" id="duvidas" aria-labelledby="duvidas-titulo">
-    <div class="env">
-      <div class="bloco-9">
-        <CabecalhoSecao
-          n={8}
-          kicker="Dúvidas de quem nunca comprou terra"
-          titulo="Os termos que aparecem na hora errada"
-          subtitulo="São os oito que mais travam conversa. O glossário completo tem doze."
-        />
-
-        <Acordeao
-          itens={verbetesHome.map((v) => ({
-            pergunta: v.sigla ? `${v.termo} (${v.sigla})` : v.termo,
-            resposta: `${v.resumo} ${v.porQueImporta}`,
-          }))}
-        />
-
-        <div class="glossario__rodape">
-          <a class="link-seta" href="/guia/glossario-do-comprador-rural/">
-            Ver o glossário completo
-            <span class="link-seta__seta" aria-hidden="true">→</span>
-          </a>
-          <a class="link-seta" href="/guia/">
-            Todos os guias
-            <span class="link-seta__seta" aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
 </Base>
 
 <style>
-  /* ---- Composição -------------------------------------------------------
-     Nenhum bloco usa as 12 colunas. As larguras alternam de propósito — é o
-     que faz a página parecer desenhada em vez de gerada. */
-  .bloco-7 {
-    max-width: 62ch;
-  }
-
-  .bloco-9 {
-    max-width: 82ch;
-  }
-
   /* ---- 01 Hero ---------------------------------------------------------- */
   .hero__int {
     padding-top: clamp(var(--s-7), 7vw, var(--s-9));
@@ -533,7 +320,7 @@ const jsonLd = [
   }
 
   .hero__painel {
-    /* empurra a ficha para baixo da primeira linha do título — assimetria
+    /* empurra a ficha para baixo da primeira linha do título, assimetria
        deliberada, não alinhamento automático */
     padding-top: var(--s-6);
   }
@@ -551,77 +338,6 @@ const jsonLd = [
     .hero__painel {
       padding-top: 0;
       max-width: 420px;
-    }
-  }
-
-  /* ---- 03 Problema ------------------------------------------------------ */
-  .fecho {
-    margin-top: var(--s-6);
-    font-family: var(--f-display);
-    font-size: var(--t-h3);
-    line-height: 1.45;
-    max-width: 44ch;
-  }
-
-  /* ---- 04 Método -------------------------------------------------------- */
-  .metodo__cab {
-    display: grid;
-    grid-template-columns: minmax(0, 8fr) minmax(0, 3fr);
-    gap: var(--s-7);
-    align-items: end;
-  }
-
-  .metodo__cota {
-    padding-bottom: var(--s-8);
-  }
-
-  .metodo__colunas {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-8);
-  }
-
-  .metodo__grupo {
-    color: var(--grafite);
-    padding-bottom: var(--s-3);
-    border-bottom: 1px solid var(--grafite);
-  }
-
-  .metodo__nota {
-    margin-top: var(--s-7);
-    padding-left: var(--s-5);
-    border-left: var(--borda-2);
-    font-family: var(--f-display);
-    font-size: var(--t-lead);
-    line-height: 1.5;
-    max-width: 56ch;
-  }
-
-  .metodo__isca {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--s-6);
-    flex-wrap: wrap;
-    margin-top: var(--s-8);
-    padding-top: var(--s-6);
-    border-top: var(--borda);
-  }
-
-  .metodo__isca-texto {
-    margin-top: var(--s-2);
-    max-width: 44ch;
-  }
-
-  @media (max-width: 900px) {
-    .metodo__cab,
-    .metodo__colunas {
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--s-6);
-    }
-
-    .metodo__cota {
-      display: none;
     }
   }
 
@@ -773,73 +489,6 @@ const jsonLd = [
     }
   }
 
-  /* ---- 08 Caso ---------------------------------------------------------- */
-  .caso {
-    display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-    gap: var(--s-8);
-    align-items: start;
-  }
-
-  .caso__ficha {
-    border-top: var(--borda);
-    margin: 0;
-  }
-
-  .caso__ficha > div {
-    display: grid;
-    grid-template-columns: 10rem minmax(0, 1fr);
-    gap: var(--s-4);
-    padding-block: var(--s-4);
-    border-bottom: var(--borda-f);
-    align-items: baseline;
-  }
-
-  .caso__ficha dd {
-    margin: 0;
-    font-size: var(--t-peq);
-    line-height: 1.6;
-    max-width: 52ch;
-  }
-
-  .caso__lado {
-    display: grid;
-    gap: var(--s-6);
-  }
-
-  .caso__depo {
-    border-left: var(--borda-2);
-    padding-left: var(--s-5);
-  }
-
-  .caso__depo p {
-    font-family: var(--f-display);
-    font-size: var(--t-lead);
-    line-height: 1.5;
-  }
-
-  .caso__depo footer {
-    margin-top: var(--s-4);
-  }
-
-  .caso__prosa {
-    margin-top: var(--s-8);
-    padding-top: var(--s-6);
-    border-top: var(--borda);
-  }
-
-  @media (max-width: 900px) {
-    .caso {
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--s-6);
-    }
-
-    .caso__ficha > div {
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--s-2);
-    }
-  }
-
   /* ---- 09 Briefing ------------------------------------------------------ */
   .briefing-secao {
     display: grid;
@@ -863,7 +512,7 @@ const jsonLd = [
   }
 
   .briefing-secao__lista li::before {
-    content: '—';
+    content: '•';
     position: absolute;
     left: 0;
     color: var(--terra);
@@ -884,11 +533,4 @@ const jsonLd = [
     }
   }
 
-  /* ---- 10 Glossário ----------------------------------------------------- */
-  .glossario__rodape {
-    display: flex;
-    gap: var(--s-6);
-    flex-wrap: wrap;
-    margin-top: var(--s-6);
-  }
 </style>
