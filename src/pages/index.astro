@@ -40,7 +40,9 @@ const vitrineFinal = [...vitrine, ...vendidos.slice(0, 1)];
 
 /* Números do painel do hero: verdadeiros, vindos do conteúdo, mudam sozinhos. */
 const municipios = new Set(naCarteira.map((i) => i.data.municipio)).size;
-const areas = naCarteira.map((i) => i.data.areaHa);
+const areas = naCarteira
+  .map((i) => i.data.areaHa)
+  .filter((area): area is number => area != null);
 const ultimaAtualizacao = imoveis
   .map((i) => i.data.atualizadoEm)
   .sort((a, b) => b.getTime() - a.getTime())[0];

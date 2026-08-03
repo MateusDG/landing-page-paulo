@@ -27,9 +27,10 @@ interface Props {
       titulo: string;
       municipio: string;
       regiao: string;
-      areaHa: number;
+      areaHa?: number | null;
       croqui: string;
       croquiViewBox: string;
+      croquiVerificado?: boolean;
       finalidade: string[];
       agua: string;
       acesso: { asfaltoKm: number; terraKm: number; nota: string };
@@ -58,6 +59,7 @@ const { imovel, unidade = 'ha', nivel = 3 } = Astro.props;
 const Titulo = nivel === 2 ? 'h2' : 'h3';
 const d = imovel.data;
 const href = `/imovel/${imovel.id}/`;
+const areaHa = d.areaHa;
 
 /* Estado resumido dos cinco documentos básicos exibidos na ficha. */
 const registrais = [d.documentos.matricula, d.documentos.car, d.documentos.geo, d.documentos.ccir, d.documentos.itr];
@@ -90,7 +92,7 @@ function rotuloFinalidade(f: string) {
   class:list={['fi', d.status !== 'ativa' && `fi--${d.status}`]}
   data-regiao={d.regiao}
   data-finalidade={d.finalidade.join(' ')}
-  data-area={d.areaHa}
+  data-area={d.areaHa ?? ''}
   data-doc-completa={docCompleta ? 'sim' : 'nao'}
   data-status={d.status}
 >
@@ -112,10 +114,8 @@ function rotuloFinalidade(f: string) {
   </header>
 
   <p class="fi__area numero-chave">
-    <span data-area-numero>{formatarArea(d.areaHa, unidade)}</span><span
-      class="fi__unidade"
-      data-area-sufixo>{sufixoUnidade[unidade]}</span
-    >
+    <span data-area-numero>{areaHa != null ? formatarArea(areaHa, unidade) : 'Sob consulta'}</span>
+    {areaHa != null && <span class="fi__unidade" data-area-sufixo>{sufixoUnidade[unidade]}</span>}
   </p>
 
   <Titulo class="fi__titulo">

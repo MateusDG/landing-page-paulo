@@ -13,7 +13,8 @@
     "sync": "astro sync",
     "pdf": "node scripts/gerar-pdf.mjs",
     "shot": "node scripts/shot.mjs",
-    "fonts": "./scripts/build-fonts.sh"
+    "fonts": "./scripts/build-fonts.sh",
+    "images": "node scripts/preparar-imagens.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

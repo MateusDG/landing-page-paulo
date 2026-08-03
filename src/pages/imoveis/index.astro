@@ -289,9 +289,10 @@ const jsonLd = {
 
     const plural = (n: number) => `${n} ${n === 1 ? 'área' : 'áreas'}`;
 
-    const faixaBate = (area: number): boolean => {
+    const faixaBate = (area: number | null): boolean => {
       const sel = ativos.get('faixa');
       if (!sel?.size) return true;
+      if (area == null) return false;
       return botoesFaixa
         .filter((b) => sel.has(b.dataset.valor!))
         .some((b) => area > Number(b.dataset.min) && area <= Number(b.dataset.max));
@@ -311,7 +312,7 @@ const jsonLd = {
             ficha.dataset.finalidade!.split(' ').some((f) => finalidade.has(f))) &&
           (!doc?.size || ficha.dataset.docCompleta === 'sim') &&
           (!status?.has('nao-vendida') || ficha.dataset.status !== 'vendida') &&
-          faixaBate(Number(ficha.dataset.area));
+          faixaBate(ficha.dataset.area ? Number(ficha.dataset.area) : null);
 
         ficha.hidden = !ok;
         if (ok) visiveis++;

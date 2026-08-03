@@ -48,12 +48,14 @@ const imoveis = defineCollection({
       titulo: z.string().min(8),
       municipio: z.string(),
       regiao: z.enum(REGIOES),
-      areaHa: z.number().positive(),
+      /* null = área total ainda não informada pelo proprietário. */
+      areaHa: z.number().positive().nullable().default(null),
 
       /* Perímetro real da área, simplificado para ~20 vértices.
          Origem: shapefile do CAR ou do SIGEF. Ver README §Croquis. */
       croqui: z.string().min(20, 'croqui é obrigatório, ver README §Croquis'),
       croquiViewBox: z.string().default('0 0 100 100'),
+      croquiVerificado: z.boolean().default(false),
 
       finalidade: z.array(z.enum(FINALIDADES)).min(1),
       resumo: z.string().min(60).max(400),

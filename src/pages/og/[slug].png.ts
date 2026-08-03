@@ -48,7 +48,9 @@ export async function getStaticPaths() {
         kicker: `${d.municipio} · ${rotuloTerritorio(d.regiao)}`,
         referencia: d.codigo,
         titulo: d.titulo,
-        destaque: { valor: formatarArea(d.areaHa), unidade: 'ha' },
+        ...(d.areaHa != null
+          ? { destaque: { valor: formatarArea(d.areaHa), unidade: 'ha' } }
+          : {}),
         croqui: d.croqui,
         croquiViewBox: d.croquiViewBox,
         carimbo:

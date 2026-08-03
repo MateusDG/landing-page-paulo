@@ -36,6 +36,7 @@ npm run dev
 | `npm run check` | Tipagem TypeScript + diagnóstico Astro |
 | `npm run fonts` | Regenera as fontes subsetadas em `public/fonts/` |
 | `npm run pdf` | Regenera `public/checklist-14-pontos.pdf` |
+| `npm run images` | Redimensiona as fotos de `img/` e prepara cópias para publicação |
 | `npm run shot -- <url> <saida.png> [--w=] [--h=] [--full] [--y=]` | Captura de tela para QA visual |
 
 > **Nota do ambiente de desenvolvimento:** com `trailingSlash: 'always'`, o
@@ -64,8 +65,7 @@ Não aponte a Hostinger para a branch `main`. Isso colocaria o código-fonte em
 ## Antes de publicar
 
 Checklist de bloqueio. Enquanto o primeiro item não for feito, o site mostra
-uma faixa laranja avisando que os dados são fictícios — **inclusive em
-produção**, de propósito.
+uma faixa laranja avisando que os dados ainda estão em revisão.
 
 ### 1. Trocar os dados de exemplo
 
@@ -94,7 +94,7 @@ cp .env.example .env
 
 ### 3. Conteúdo real
 
-- [ ] Substituir os 9 imóveis de exemplo em `src/content/imoveis/`
+- [ ] Conferir e completar os 4 imóveis cadastrados em `src/content/imoveis/`
 - [ ] Preencher [`src/data/deslocamento.ts`](src/data/deslocamento.ts) com
       tempos **medidos por você**
 - [ ] Revisar os 14 pontos em [`src/data/protocolo.ts`](src/data/protocolo.ts)
@@ -262,10 +262,10 @@ Estado atual do build:
 | Métrica | Valor | Teto do projeto |
 |---|---|---|
 | `astro check` | 0 erros · 0 avisos · 0 hints | 0 erros |
-| Páginas geradas | 29 | — |
-| Links internos quebrados | 0 nas 29 páginas | 0 |
+| Páginas geradas | 24 | — |
+| Links internos quebrados | 0 nas 24 páginas | 0 |
 | Âncoras inexistentes | 0 | 0 |
-| JSON-LD inválido | 0 de 29 | 0 |
+| JSON-LD inválido | 0 de 24 | 0 |
 | HTML da home | 100 KB · **20 KB** gzip | — |
 | CSS da home | 28,3 KB · **6,7 KB** gzip | — |
 | JS total | 8,6 KB · **3,9 KB** gzip | 35 KB |

@@ -91,7 +91,7 @@ export const territorios: Territorio[] = [
     municipios: [
       'Domingos Martins', 'Marechal Floriano', 'Venda Nova do Imigrante',
       'Santa Teresa', 'Santa Maria de Jetibá', 'Afonso Cláudio',
-      'Conceição do Castelo', 'Castelo', 'Alfredo Chaves', 'Brejetuba',
+      'Conceição do Castelo', 'Castelo', 'Alfredo Chaves', 'Brejetuba', 'Ibiraçu',
     ],
     municipioReferencia: 'Domingos Martins',
     producao: [
@@ -150,7 +150,7 @@ export const territorios: Territorio[] = [
     municipios: [
       'Guarapari', 'Anchieta', 'Piúma', 'Iconha', 'Rio Novo do Sul',
       'Itapemirim', 'Marataízes', 'Presidente Kennedy', 'Viana',
-      'Santa Leopoldina',
+      'Santa Leopoldina', 'Fundão',
     ],
     municipioReferencia: 'Guarapari',
     producao: [

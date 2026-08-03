@@ -27,7 +27,9 @@ const daRegiao = todos
   });
 const ativas = daRegiao.filter((i) => i.data.status === 'ativa');
 
-const areasHa = ativas.map((i) => i.data.areaHa);
+const areasHa = ativas
+  .map((i) => i.data.areaHa)
+  .filter((area): area is number => area != null);
 const media = areasHa.length
   ? areasHa.reduce((s, n) => s + n, 0) / areasHa.length
   : 0;
