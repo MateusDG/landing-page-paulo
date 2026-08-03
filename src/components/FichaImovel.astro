@@ -14,7 +14,6 @@
  * área.
  */
 import Croqui from './Croqui.astro';
-import SeloVerificacao from './SeloVerificacao.astro';
 import { formatarArea, sufixoUnidade, type Unidade } from '../lib/unidades';
 import { preco as fmtPreco, mesAno, descreverAcesso } from '../lib/format';
 import { rotuloTerritorio } from '../data/territorios';
@@ -61,14 +60,6 @@ const d = imovel.data;
 const href = `/imovel/${imovel.id}/`;
 const areaHa = d.areaHa;
 
-/* Estado resumido dos cinco documentos básicos exibidos na ficha. */
-const registrais = [d.documentos.matricula, d.documentos.car, d.documentos.geo, d.documentos.ccir, d.documentos.itr];
-const okCount = registrais.filter(Boolean).length;
-const docCompleta = okCount === registrais.length;
-const docTexto = docCompleta
-  ? '5 documentos conferidos'
-  : `${okCount} de ${registrais.length} documentos`;
-
 const linhas = [
   { rotulo: 'Finalidade', valor: d.finalidade.map((f) => rotuloFinalidade(f)).join(' · ') },
   { rotulo: 'Água', valor: d.agua },
@@ -93,7 +84,6 @@ function rotuloFinalidade(f: string) {
   data-regiao={d.regiao}
   data-finalidade={d.finalidade.join(' ')}
   data-area={d.areaHa ?? ''}
-  data-doc-completa={docCompleta ? 'sim' : 'nao'}
   data-status={d.status}
 >
   <header class="fi__topo">
@@ -131,17 +121,6 @@ function rotuloFinalidade(f: string) {
         </div>
       ))
     }
-    <div class="fi__linha">
-      <dt class="rotulo rotulo--fraco">Documentos</dt>
-      <dd class="fi__valor fi__valor--doc">
-        <SeloVerificacao
-          estado={docCompleta ? 'ok' : 'pendente'}
-          rotulo="Documentos básicos"
-          tamanho={15}
-        />
-        {docTexto}
-      </dd>
-    </div>
   </dl>
 
   <footer class="fi__rodape">
@@ -281,12 +260,6 @@ function rotuloFinalidade(f: string) {
     font-size: var(--t-peq);
     line-height: 1.4;
     color: var(--grafite);
-  }
-
-  .fi__valor--doc {
-    display: flex;
-    align-items: center;
-    gap: var(--s-2);
   }
 
   .fi__rodape {

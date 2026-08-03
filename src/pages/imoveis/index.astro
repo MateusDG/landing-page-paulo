@@ -48,7 +48,7 @@ const jsonLd = {
 
 <Base
   titulo="Carteira, fazendas, chácaras e terrenos rurais no ES"
-  descricao={`${ativas.length} áreas rurais em carteira no Espírito Santo: fazendas, chácaras, sítios e terrenos, com ficha técnica, situação documental e croqui do perímetro.`}
+  descricao={`${ativas.length} áreas rurais em carteira no Espírito Santo: fazendas, chácaras, sítios e terrenos, com ficha técnica, dados de campo e croqui do perímetro.`}
   jsonLd={jsonLd}
 >
   <section class="secao--compacta ct__cab-env">
@@ -124,15 +124,6 @@ const jsonLd = {
           <fieldset class="ct__grupo">
             <legend class="rotulo rotulo--fraco">Situação</legend>
             <div class="ct__chips">
-              <button
-                type="button"
-                class="chip"
-                data-filtro="doc"
-                data-valor="sim"
-                aria-pressed="false"
-              >
-                Só com 5 documentos conferidos
-              </button>
               <button
                 type="button"
                 class="chip"
@@ -301,7 +292,6 @@ const jsonLd = {
     const aplicar = () => {
       const regiao = ativos.get('regiao');
       const finalidade = ativos.get('finalidade');
-      const doc = ativos.get('doc');
       const status = ativos.get('status');
       let visiveis = 0;
 
@@ -310,7 +300,6 @@ const jsonLd = {
           (!regiao?.size || regiao.has(ficha.dataset.regiao!)) &&
           (!finalidade?.size ||
             ficha.dataset.finalidade!.split(' ').some((f) => finalidade.has(f))) &&
-          (!doc?.size || ficha.dataset.docCompleta === 'sim') &&
           (!status?.has('nao-vendida') || ficha.dataset.status !== 'vendida') &&
           faixaBate(ficha.dataset.area ? Number(ficha.dataset.area) : null);
 

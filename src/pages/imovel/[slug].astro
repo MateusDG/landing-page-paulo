@@ -4,7 +4,6 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Croqui from '../../components/Croqui.astro';
 import FichaTecnica from '../../components/FichaTecnica.astro';
-import SeloVerificacao from '../../components/SeloVerificacao.astro';
 import BotaoWhats from '../../components/BotaoWhats.astro';
 import GaleriaImovel from '../../components/GaleriaImovel.astro';
 import FichaImovel from '../../components/FichaImovel.astro';
@@ -38,14 +37,6 @@ const similares = todos
     return Math.abs((a.data.areaHa ?? 0) - (areaHa ?? 0)) - Math.abs((b.data.areaHa ?? 0) - (areaHa ?? 0));
   })
   .slice(0, 3);
-
-const documentos = [
-  { chave: 'Matrícula atualizada', ok: d.documentos.matricula },
-  { chave: 'CAR ativo', ok: d.documentos.car },
-  { chave: 'Georreferenciamento', ok: d.documentos.geo },
-  { chave: 'CCIR', ok: d.documentos.ccir },
-  { chave: 'ITR em dia', ok: d.documentos.itr },
-];
 
 const linhasFicha = [
   { rotulo: 'Código', valor: d.codigo },
@@ -236,55 +227,18 @@ const breadcrumb = {
               linhas={linhasFicha}
               nota={`Conferido em campo · atualizado em ${dataCurta(d.atualizadoEm)}`}
             />
-
-            <div class="im__docs">
-              <p class="rotulo im__docs-titulo">Situação documental</p>
-              <ul class="im__docs-lista">
-                {
-                  documentos.map((doc) => (
-                    <li class="im__doc">
-                      <SeloVerificacao
-                        estado={doc.ok ? 'ok' : 'pendente'}
-                        rotulo={doc.chave}
-                        tamanho={16}
-                      />
-                      <span class:list={['im__doc-nome', !doc.ok && 'im__doc-nome--pendente']}>
-                        {doc.chave}
-                      </span>
-                    </li>
-                  ))
-                }
-                <li class="im__doc">
-                  <SeloVerificacao
-                    estado={
-                      d.documentos.outorga === 'sim'
-                        ? 'ok'
-                        : d.documentos.outorga === 'nao'
-                          ? 'pendente'
-                          : 'na'
-                    }
-                    rotulo="Outorga de uso da água"
-                    tamanho={16}
-                  />
-                  <span
-                    class:list={[
-                      'im__doc-nome',
-                      d.documentos.outorga === 'nao' && 'im__doc-nome--pendente',
-                    ]}
-                  >
-                    Outorga de água
-                    {d.documentos.outorga === 'na' && (
-                      <span class="rotulo rotulo--fraco im__doc-na"> não se aplica</span>
-                    )}
-                  </span>
-                </li>
-              </ul>
-              {d.documentos.nota && <p class="im__docs-nota">{d.documentos.nota}</p>}
-            </div>
           </aside>
         </div>
       </div>
     </header>
+
+    {/* --- Fotografia: contexto visual antes dos detalhes ---------------- */}
+    <section class="secao--compacta" aria-labelledby="fotos-titulo">
+      <div class="env">
+        <h2 class="im__h2" id="fotos-titulo">Fotografia</h2>
+        <GaleriaImovel fotos={[...d.fotos]} municipio={d.municipio} />
+      </div>
+    </section>
 
     {/* --- O que falta: a seção que nenhum concorrente publica ------------ */}
     <section class="secao--compacta im__falta-env" aria-labelledby="falta-titulo">
@@ -349,14 +303,6 @@ const breadcrumb = {
             <Content />
           </div>
         </div>
-      </div>
-    </section>
-
-    {/* --- Fotografia ----------------------------------------------------- */}
-    <section class="secao--compacta" aria-labelledby="fotos-titulo">
-      <div class="env">
-        <h2 class="im__h2" id="fotos-titulo">Fotografia</h2>
-        <GaleriaImovel fotos={[...d.fotos]} municipio={d.municipio} />
       </div>
     </section>
 
@@ -563,50 +509,6 @@ const breadcrumb = {
     gap: var(--s-6);
     position: sticky;
     top: var(--s-6);
-  }
-
-  .im__docs {
-    border: var(--borda);
-    background: var(--marmore);
-    padding: var(--s-5);
-  }
-
-  .im__docs-titulo {
-    color: var(--grafite);
-    padding-bottom: var(--s-3);
-    border-bottom: 1px solid var(--grafite);
-  }
-
-  .im__docs-lista {
-    display: grid;
-    gap: var(--s-3);
-    margin-top: var(--s-4);
-  }
-
-  .im__doc {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: var(--s-3);
-    align-items: center;
-    font-size: var(--t-peq);
-  }
-
-  .im__doc-nome--pendente {
-    color: var(--terra);
-  }
-
-  .im__doc-na {
-    text-transform: none;
-    letter-spacing: 0;
-  }
-
-  .im__docs-nota {
-    margin-top: var(--s-4);
-    padding-top: var(--s-3);
-    border-top: var(--borda-f);
-    font-size: var(--t-micro);
-    line-height: 1.55;
-    color: var(--grafite-70);
   }
 
   /* --- O que falta ------------------------------------------------------ */
