@@ -1,0 +1,104 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CabecalhoSecao from '../../components/CabecalhoSecao.astro';
+import { dataCurta, iso } from '../../lib/format';
+import { rotuloTerritorio } from '../../data/territorios';
+
+const posts = (await getCollection('diario')).sort(
+  (a, b) => b.data.data.getTime() - a.data.data.getTime(),
+);
+
+const renderizados = await Promise.all(
+  posts.map(async (p) => ({ post: p, Conteudo: (await render(p)).Content })),
+);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Diário de campo',
+  description: 'Anotações curtas de visitas a áreas rurais no Espírito Santo.',
+  inLanguage: 'pt-BR',
+};
+---
+
+<Base
+  titulo="Diário de campo"
+  descricao="Anotações curtas e datadas das visitas a áreas rurais no Espírito Santo: estradas, água, documentos e o que se descobre indo."
+  jsonLd={jsonLd}
+>
+  <section class="secao--compacta dr__cab-env">
+    <div class="env">
+      <CabecalhoSecao
+        kicker="Diário de campo"
+        titulo="Anotações de quem esteve lá"
+        subtitulo="Posts curtos, datados, do que eu encontro nas visitas. É a parte do site que mais se parece com o trabalho de verdade."
+        as="h1"
+      />
+    </div>
+  </section>
+
+  <section class="secao--compacta">
+    <div class="env">
+      <div class="dr__lista">
+        {
+          renderizados.map(({ post, Conteudo }) => (
+            <article class="dr__post" id={post.id}>
+              <header class="dr__cab">
+                <time class="rotulo rotulo--terra" datetime={iso(post.data.data)}>
+                  {dataCurta(post.data.data)}
+                </time>
+                <h2 class="dr__titulo">{post.data.titulo}</h2>
+                <p class="rotulo rotulo--fraco">
+                  {post.data.local}
+                  {post.data.regiao && ` · ${rotuloTerritorio(post.data.regiao)}`}
+                </p>
+              </header>
+              <div class="prosa dr__corpo">
+                <Conteudo />
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .dr__cab-env {
+    padding-top: var(--s-7);
+    border-bottom: var(--borda);
+  }
+
+  .dr__lista {
+    display: grid;
+    gap: var(--s-9);
+    max-width: 68ch;
+  }
+
+  .dr__post {
+    display: grid;
+    gap: var(--s-5);
+    scroll-margin-top: var(--s-7);
+  }
+
+  .dr__post + .dr__post {
+    padding-top: var(--s-9);
+    border-top: var(--borda);
+  }
+
+  .dr__cab {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .dr__titulo {
+    font-size: var(--t-h2);
+    max-width: 22ch;
+  }
+
+  .dr__corpo {
+    max-width: 56ch;
+  }
+</style>

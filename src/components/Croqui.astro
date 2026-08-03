@@ -1,0 +1,100 @@
+---
+/**
+ * CROQUI — o polígono do perímetro real da área.
+ *
+ * É o elemento que faz cada imóvel parecer único e a carteira parecer
+ * artesanal em vez de estoque. Traço fino, sem preenchimento, sem sombra —
+ * desenho técnico, não ilustração.
+ *
+ * `desenhar` liga a única animação com graça do site: o contorno se desenha
+ * uma vez ao entrar na viewport. Reservado para a ficha completa do imóvel.
+ * Uma animação bem colocada vale mais que vinte.
+ */
+interface Props {
+  path: string;
+  viewBox?: string;
+  /** Lado do quadrado em px. O SVG é fluido; isto é o tamanho de referência. */
+  tamanho?: number;
+  traco?: number;
+  desenhar?: boolean;
+  /** Marca o norte com um pequeno tique. Só na ficha completa. */
+  norte?: boolean;
+  rotulo?: string;
+  class?: string;
+}
+
+const {
+  path,
+  viewBox = '0 0 100 100',
+  tamanho = 96,
+  traco = 1,
+  desenhar = false,
+  norte = false,
+  rotulo,
+  class: classe = '',
+} = Astro.props;
+---
+
+<svg
+  class:list={['croqui', desenhar && 'croqui--desenhar', classe]}
+  viewBox={viewBox}
+  width={tamanho}
+  height={tamanho}
+  role={rotulo ? 'img' : 'presentation'}
+  aria-label={rotulo}
+  aria-hidden={rotulo ? undefined : 'true'}
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    class="croqui__perimetro"
+    d={path}
+    pathLength="1"
+    stroke="currentColor"
+    stroke-width={traco}
+    stroke-linejoin="round"
+    vector-effect="non-scaling-stroke"
+  />
+  {
+    norte && (
+      <g class="croqui__norte" aria-hidden="true">
+        <path
+          d="M92 16 L92 6 M92 6 L89.4 9.4 M92 6 L94.6 9.4"
+          stroke="currentColor"
+          stroke-width="0.9"
+          vector-effect="non-scaling-stroke"
+        />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .croqui {
+    display: block;
+    color: var(--grafite);
+    overflow: visible;
+  }
+
+  .croqui__norte {
+    color: var(--grafite-40);
+  }
+
+  /* Sem JS, ou com movimento reduzido, o croqui simplesmente já está lá. */
+  :global(.js) .croqui--desenhar .croqui__perimetro {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  :global(.js) .croqui--desenhar.desenhado .croqui__perimetro {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 900ms var(--ease);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .croqui--desenhar .croqui__perimetro {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

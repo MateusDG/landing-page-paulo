@@ -1,0 +1,299 @@
+---
+/**
+ * MAPA DOS TERRITÓRIOS
+ *
+ * SVG inline, ~4 KB. Sem Leaflet, sem Mapbox, sem tiles, sem chave de API.
+ * Um mapa de tiles aqui custaria 150 KB de JS e uma requisição a terceiros
+ * para mostrar quatro áreas que não mudam nunca.
+ *
+ * Acessibilidade: cada território é um botão real, navegável por Tab e por
+ * setas, com rótulo que inclui a contagem de áreas. Quem não vê o mapa recebe
+ * a mesma informação pela lista ao lado, que não é um fallback — é o conteúdo.
+ */
+import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
+import { areas as fmtAreas } from '../lib/format';
+
+interface Props {
+  /** Contagem de imóveis por território, para o rótulo acessível. */
+  contagem: Record<string, number>;
+  inicial?: string;
+}
+
+const { contagem, inicial = territorios[0].slug } = Astro.props;
+---
+
+<div class="mapa" data-mapa>
+  <div class="mapa__desenho">
+    <svg
+      viewBox={VIEWBOX_ES}
+      class="mapa__svg"
+      role="group"
+      aria-label="Mapa do Espírito Santo dividido em quatro regiões de atuação"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath id="recorte-es">
+          <path d={CONTORNO_ES}></path>
+        </clipPath>
+      </defs>
+
+      <g clip-path="url(#recorte-es)">
+        {
+          territorios.map((t) => (
+            <path
+              class="mapa__area"
+              d={t.path}
+              data-territorio={t.slug}
+              role="button"
+              tabindex="0"
+              aria-pressed={t.slug === inicial ? 'true' : 'false'}
+              aria-label={`${t.nome}, ${fmtAreas(contagem[t.slug] ?? 0)} em carteira`}
+            />
+          ))
+        }
+        {/* Filetes internos de divisa, por cima das áreas */}
+        {
+          territorios.map((t) => (
+            <path class="mapa__divisa" d={t.path} aria-hidden="true" />
+          ))
+        }
+      </g>
+
+      <path class="mapa__contorno" d={CONTORNO_ES} aria-hidden="true"></path>
+
+      {
+        territorios.map((t) => (
+          <text
+            class="mapa__rotulo"
+            x={t.rotulo.x}
+            y={t.rotulo.y}
+            data-rotulo={t.slug}
+            aria-hidden="true"
+          >
+            {t.nomeCurto.toUpperCase()}
+          </text>
+        ))
+      }
+    </svg>
+  </div>
+
+  <div class="mapa__painel">
+    {
+      territorios.map((t) => (
+        <section
+          class="mapa__ficha"
+          data-painel={t.slug}
+          hidden={t.slug !== inicial}
+          aria-live="polite"
+        >
+          <p class="rotulo rotulo--terra">{t.nome}</p>
+          <h3 class="mapa__titulo">{t.resumo}</h3>
+
+          <dl class="mapa__dados">
+            <div>
+              <dt class="rotulo rotulo--fraco">Municípios</dt>
+              <dd>{t.municipios.slice(0, 6).join(' · ')}{t.municipios.length > 6 && ` · +${t.municipios.length - 6}`}</dd>
+            </div>
+            <div>
+              <dt class="rotulo rotulo--fraco">Produção</dt>
+              <dd>{t.producao.join(' · ')}</dd>
+            </div>
+            <div>
+              <dt class="rotulo rotulo--fraco">Relevo</dt>
+              <dd>{t.relevo}</dd>
+            </div>
+            <div>
+              <dt class="rotulo rotulo--fraco">Acesso</dt>
+              <dd>{t.acesso.join(' · ')}</dd>
+            </div>
+            <div>
+              <dt class="rotulo rotulo--fraco">Em carteira</dt>
+              <dd class="mono">{fmtAreas(contagem[t.slug] ?? 0)}</dd>
+            </div>
+          </dl>
+
+          <blockquote class="mapa__nota">
+            <p>{t.notaDeCampo}</p>
+          </blockquote>
+
+          <a class="link-seta" href={`/regiao/${t.slug}/`}>
+            Ver {t.nome} <span class="link-seta__seta" aria-hidden="true">→</span>
+          </a>
+        </section>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .mapa {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .mapa__desenho {
+    position: sticky;
+    top: var(--s-8);
+  }
+
+  .mapa__svg {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+  }
+
+  .mapa__area {
+    fill: transparent;
+    cursor: pointer;
+    transition: fill var(--dur-rapida) var(--ease);
+  }
+
+  .mapa__area:hover {
+    fill: var(--terra-fraco);
+  }
+
+  .mapa__area[aria-pressed='true'] {
+    fill: color-mix(in srgb, var(--terra) 16%, transparent);
+  }
+
+  .mapa__area:focus-visible {
+    outline: 2px solid var(--foco);
+    outline-offset: 2px;
+  }
+
+  .mapa__divisa {
+    fill: none;
+    stroke: var(--filete);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+  }
+
+  .mapa__contorno {
+    fill: none;
+    stroke: var(--grafite);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+  }
+
+  .mapa__rotulo {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    fill: var(--grafite-40);
+    text-anchor: middle;
+    pointer-events: none;
+    transition: fill var(--dur-rapida) var(--ease);
+  }
+
+  .mapa__rotulo[data-ativo='true'] {
+    fill: var(--terra);
+    font-weight: 600;
+  }
+
+  .mapa__titulo {
+    font-size: var(--t-h3);
+    font-weight: 400;
+    line-height: 1.4;
+    margin-top: var(--s-3);
+    max-width: 46ch;
+  }
+
+  .mapa__dados {
+    margin-top: var(--s-6);
+    border-top: var(--borda);
+  }
+
+  .mapa__dados > div {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: var(--s-4);
+    padding-block: var(--s-3);
+    border-bottom: var(--borda-f);
+    align-items: baseline;
+  }
+
+  .mapa__dados dd {
+    margin: 0;
+    font-size: var(--t-peq);
+  }
+
+  .mapa__nota {
+    margin-top: var(--s-6);
+    padding-left: var(--s-5);
+    border-left: var(--borda-2);
+    font-size: var(--t-peq);
+    line-height: 1.6;
+    color: var(--grafite-70);
+    max-width: 52ch;
+  }
+
+  .mapa__ficha .link-seta {
+    margin-top: var(--s-6);
+  }
+
+  @media (max-width: 900px) {
+    .mapa {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-6);
+    }
+
+    .mapa__desenho {
+      position: static;
+      max-width: 280px;
+      margin-inline: auto;
+    }
+
+    .mapa__dados > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-1);
+    }
+  }
+</style>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>('[data-mapa]');
+  if (raiz) {
+    const areas = [...raiz.querySelectorAll<SVGPathElement>('[data-territorio]')];
+
+    const selecionar = (slug: string) => {
+      for (const a of areas) {
+        a.setAttribute('aria-pressed', String(a.dataset.territorio === slug));
+      }
+      raiz.querySelectorAll<HTMLElement>('[data-painel]').forEach((p) => {
+        p.hidden = p.dataset.painel !== slug;
+      });
+      raiz.querySelectorAll<SVGTextElement>('[data-rotulo]').forEach((r) => {
+        r.dataset.ativo = String(r.dataset.rotulo === slug);
+      });
+    };
+
+    // Estado inicial dos rótulos
+    const inicial = areas.find((a) => a.getAttribute('aria-pressed') === 'true');
+    if (inicial?.dataset.territorio) selecionar(inicial.dataset.territorio);
+
+    areas.forEach((area, i) => {
+      const slug = area.dataset.territorio!;
+      area.addEventListener('click', () => selecionar(slug));
+      area.addEventListener('mouseenter', () => selecionar(slug));
+      area.addEventListener('focus', () => selecionar(slug));
+      area.addEventListener('keydown', (ev) => {
+        const k = ev.key;
+        if (k === 'Enter' || k === ' ') {
+          ev.preventDefault();
+          selecionar(slug);
+          return;
+        }
+        const passo = k === 'ArrowRight' || k === 'ArrowDown' ? 1 : k === 'ArrowLeft' || k === 'ArrowUp' ? -1 : 0;
+        if (!passo) return;
+        ev.preventDefault();
+        const prox = areas[(i + passo + areas.length) % areas.length];
+        prox.focus();
+      });
+    });
+  }
+</script>

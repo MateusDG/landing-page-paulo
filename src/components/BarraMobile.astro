@@ -1,0 +1,78 @@
+---
+/**
+ * BARRA MOBILE
+ *
+ * Fixa no rodapé abaixo de 900px, porque o polegar está embaixo — não no topo.
+ * Duas ações só: ver a carteira e falar. Terceira opção aqui vira ruído.
+ */
+import { linkWhats } from '../lib/whatsapp';
+
+const href = linkWhats({ origem: 'barra-mobile' });
+---
+
+<div class="bm">
+  <a class="bm__item" href="/imoveis/">
+    <span class="rotulo">Ver carteira</span>
+  </a>
+  <a
+    class="bm__item bm__item--whats"
+    href={href}
+    target="_blank"
+    rel="noopener"
+    data-evento="whats_clique"
+    data-origem="barra-mobile"
+  >
+    <span class="rotulo">WhatsApp</span>
+  </a>
+</div>
+
+<style>
+  .bm {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .bm {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: fixed;
+      inset-inline: 0;
+      bottom: 0;
+      z-index: var(--z-barra-mobile);
+      background: var(--papel);
+      border-top: var(--borda-2);
+      /* respeita a área segura do iPhone */
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    .bm__item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
+      text-decoration: none;
+      color: var(--grafite);
+    }
+
+    /* .rotulo traz cor própria; aqui ela precisa herdar do item, senão o
+       texto sobre o fundo terra cai para um contraste insuficiente. */
+    .bm__item .rotulo {
+      color: inherit;
+    }
+
+    .bm__item + .bm__item {
+      border-left: var(--borda);
+    }
+
+    .bm__item--whats {
+      background: var(--terra);
+      color: var(--papel);
+      border-left-color: var(--terra);
+    }
+
+    /* Impede que a barra cubra o fim do conteúdo. */
+    :global(body) {
+      padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+</style>

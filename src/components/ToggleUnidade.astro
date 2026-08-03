@@ -1,0 +1,90 @@
+---
+/**
+ * ALTERNADOR HECTARE ↔ ALQUEIRE
+ *
+ * Detalhe pequeno que grita "quem fez isso entende do assunto". No sul
+ * capixaba e no Caparaó boa parte das negociações é falada em alqueire; no
+ * Norte, em hectare. O site fala as duas línguas — e mostra o fator de
+ * conversão, para não repetir o mal-entendido que trava negócio.
+ *
+ * A preferência é lembrada em localStorage e aplicada antes da primeira
+ * pintura no restante da sessão.
+ */
+import { notaConversao, ALQUEIRE_HA } from '../lib/unidades';
+---
+
+<div class="tu" data-toggle-unidade data-fator={ALQUEIRE_HA}>
+  <div class="tu__botoes" role="group" aria-label="Unidade de área">
+    <button type="button" class="chip" data-unidade="ha" aria-pressed="true">
+      Hectare
+    </button>
+    <button type="button" class="chip" data-unidade="alq" aria-pressed="false">
+      Alqueire
+    </button>
+  </div>
+  <p class="rotulo rotulo--fraco tu__nota">{notaConversao}</p>
+</div>
+
+<style>
+  .tu {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  .tu__botoes {
+    display: flex;
+  }
+
+  .tu__botoes .chip:first-child {
+    border-right-width: 0;
+  }
+
+  .tu__nota {
+    max-width: 34ch;
+    line-height: 1.5;
+  }
+</style>
+
+<script>
+  import { formatarArea, sufixoUnidade, type Unidade } from '../lib/unidades';
+
+  const raiz = document.querySelector<HTMLElement>('[data-toggle-unidade]');
+  const CHAVE = 'unidade-area';
+
+  function aplicar(u: Unidade) {
+    document.querySelectorAll<HTMLElement>('[data-area]').forEach((el) => {
+      const ha = Number(el.dataset.area);
+      if (!Number.isFinite(ha)) return;
+      const numero = el.querySelector<HTMLElement>('[data-area-numero]');
+      const sufixo = el.querySelector<HTMLElement>('[data-area-sufixo]');
+      if (numero) numero.textContent = formatarArea(ha, u);
+      if (sufixo) sufixo.textContent = sufixoUnidade[u];
+    });
+
+    raiz?.querySelectorAll<HTMLButtonElement>('[data-unidade]').forEach((b) => {
+      b.setAttribute('aria-pressed', String(b.dataset.unidade === u));
+    });
+
+    try {
+      localStorage.setItem(CHAVE, u);
+    } catch {
+      /* modo privado: a preferência simplesmente não persiste */
+    }
+  }
+
+  if (raiz) {
+    raiz.addEventListener('click', (ev) => {
+      const b = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-unidade]');
+      if (b?.dataset.unidade) aplicar(b.dataset.unidade as Unidade);
+    });
+  }
+
+  try {
+    const salvo = localStorage.getItem(CHAVE) as Unidade | null;
+    if (salvo === 'alq') aplicar(salvo);
+  } catch {
+    /* idem */
+  }
+</script>

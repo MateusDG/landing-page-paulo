@@ -1,0 +1,272 @@
+---
+/**
+ * CHECKLIST DOS 14 PONTOS
+ *
+ * Página desenhada para caber em uma folha A4 impressa. É a origem do
+ * arquivo public/checklist-14-pontos.pdf, gerado por scripts/gerar-pdf.mjs.
+ *
+ * A oferta é deliberadamente generosa: "use com qualquer corretor, inclusive
+ * comigo". Uma isca que serve mesmo ao comprador é a que circula em grupo de
+ * WhatsApp — e circular é o objetivo.
+ */
+import Base from '../layouts/Base.astro';
+import { protocoloDocumental, protocoloFisico, notaProtocolo } from '../data/protocolo';
+import { corretor } from '../data/site';
+import { CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
+---
+
+<Base
+  titulo="Checklist: 14 pontos antes de comprar uma área rural"
+  descricao="Os 14 pontos de verificação documental e física antes de comprar fazenda, chácara ou terreno rural. Uma página, para imprimir e levar na visita."
+  class="pagina-checklist"
+>
+  <article class="ck">
+    <header class="ck__cab">
+      <div class="ck__marca">
+        <p class="rotulo rotulo--terra">Protocolo de campo</p>
+        <h1 class="ck__titulo">14 pontos antes de comprar uma área rural</h1>
+        <p class="ck__sub">
+          Sete no papel, sete no chão. Imprima, leve na visita e use com
+          qualquer corretor — inclusive comigo.
+        </p>
+      </div>
+      <svg class="ck__mapa" viewBox={VIEWBOX_ES} aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <path d={CONTORNO_ES} fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"></path>
+      </svg>
+    </header>
+
+    <div class="ck__colunas">
+      <section>
+        <h2 class="ck__grupo">Documental</h2>
+        <ul class="ck__lista">
+          {
+            protocoloDocumental.map((p) => (
+              <li class="ck__item">
+                <span class="ck__caixa" aria-hidden="true" />
+                <span class="mono ck__n">{String(p.n).padStart(2, '0')}</span>
+                <span class="ck__texto">
+                  <strong>{p.titulo}</strong>
+                  <span>{p.detalhe}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="ck__grupo">Físico</h2>
+        <ul class="ck__lista">
+          {
+            protocoloFisico.map((p) => (
+              <li class="ck__item">
+                <span class="ck__caixa" aria-hidden="true" />
+                <span class="mono ck__n">{String(p.n).padStart(2, '0')}</span>
+                <span class="ck__texto">
+                  <strong>{p.titulo}</strong>
+                  <span>{p.detalhe}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+
+    <footer class="ck__rodape">
+      <p class="ck__nota">{notaProtocolo}</p>
+      <div class="ck__assinatura">
+        <p class="rotulo">{corretor.nome}</p>
+        <p class="rotulo rotulo--fraco">
+          {corretor.papel} · CRECI-{corretor.uf} {corretor.creci} ·{' '}
+          {corretor.whatsappVisivel}
+        </p>
+      </div>
+      <p class="ck__aviso">
+        Material informativo. Não substitui consulta a advogado, engenheiro
+        agrônomo, cartório e órgãos competentes.
+      </p>
+    </footer>
+
+    <div class="ck__acoes">
+      <a class="botao botao--primario" href="/checklist-14-pontos.pdf" download data-evento="checklist_download">
+        Baixar em PDF
+      </a>
+      <button class="botao botao--secundario" type="button" data-imprimir>Imprimir</button>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .ck {
+    max-width: 1080px;
+    margin-inline: auto;
+    padding: var(--s-8) var(--margem) var(--secao-y);
+  }
+
+  .ck__cab {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--s-6);
+    align-items: start;
+    padding-bottom: var(--s-5);
+    border-bottom: var(--borda-2);
+  }
+
+  .ck__titulo {
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    margin-top: var(--s-3);
+    max-width: 20ch;
+  }
+
+  .ck__sub {
+    margin-top: var(--s-4);
+    font-size: var(--t-peq);
+    color: var(--grafite-70);
+    max-width: 54ch;
+  }
+
+  .ck__mapa {
+    width: 58px;
+    height: auto;
+    color: var(--filete);
+    flex: none;
+  }
+
+  .ck__colunas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-7);
+    margin-top: var(--s-6);
+  }
+
+  .ck__grupo {
+    font-size: var(--t-micro);
+    font-family: var(--f-mono);
+    font-weight: 500;
+    letter-spacing: var(--tracking-rotulo);
+    text-transform: uppercase;
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--grafite);
+  }
+
+  .ck__item {
+    display: grid;
+    grid-template-columns: 15px 1.9rem minmax(0, 1fr);
+    gap: var(--s-3);
+    align-items: start;
+    padding-block: var(--s-3);
+    border-bottom: var(--borda-f);
+  }
+
+  .ck__caixa {
+    width: 13px;
+    height: 13px;
+    border: 1px solid var(--grafite);
+    margin-top: 0.22em;
+  }
+
+  .ck__n {
+    font-size: var(--t-micro);
+    color: var(--terra);
+    letter-spacing: var(--tracking-rotulo);
+    padding-top: 0.28em;
+  }
+
+  .ck__texto {
+    display: grid;
+    gap: 2px;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .ck__texto strong {
+    font-weight: 600;
+  }
+
+  .ck__texto span {
+    color: var(--grafite-70);
+  }
+
+  .ck__rodape {
+    margin-top: var(--s-6);
+    padding-top: var(--s-4);
+    border-top: var(--borda-2);
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .ck__nota {
+    font-family: var(--f-display);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    max-width: 70ch;
+  }
+
+  .ck__aviso {
+    font-size: var(--t-micro);
+    color: var(--grafite-40);
+    line-height: 1.45;
+  }
+
+  .ck__acoes {
+    display: flex;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    margin-top: var(--s-7);
+  }
+
+  @media (max-width: 760px) {
+    .ck__colunas {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-6);
+    }
+  }
+
+  /* --- Impressão / geração do PDF ---------------------------------------
+     Uma folha A4. O header, o rodapé do site, a barra mobile e os botões
+     saem; sobra o documento. */
+  @media print {
+    .ck {
+      padding: 0;
+      max-width: none;
+    }
+
+    .ck__acoes {
+      display: none;
+    }
+
+    .ck__colunas {
+      gap: 14mm;
+      margin-top: 5mm;
+    }
+
+    .ck__item {
+      padding-block: 1.6mm;
+      break-inside: avoid;
+    }
+
+    .ck__texto {
+      font-size: 7.6pt;
+      line-height: 1.32;
+    }
+
+    .ck__titulo {
+      font-size: 20pt;
+    }
+
+    .ck__sub {
+      font-size: 8pt;
+    }
+
+    .ck__nota {
+      font-size: 8.5pt;
+    }
+  }
+</style>
+
+<script>
+  document
+    .querySelector<HTMLButtonElement>('[data-imprimir]')
+    ?.addEventListener('click', () => window.print());
+</script>

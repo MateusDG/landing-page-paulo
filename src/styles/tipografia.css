@@ -1,0 +1,240 @@
+/* ==========================================================================
+   TIPOGRAFIA
+   Três papéis, três famílias, nenhuma sobreposição:
+     display → Fraunces   (títulos, números-chave)
+     texto   → Inter Tight (corpo, UI)
+     dados   → JetBrains Mono (rótulos, fichas, cotas) — o "tell" documental
+   ========================================================================== */
+
+.display,
+h1,
+h2,
+h3 {
+  font-family: var(--f-display);
+  font-weight: 500;
+  line-height: var(--lh-titulo);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  hyphens: none;
+}
+
+.display {
+  font-size: var(--t-display);
+  line-height: var(--lh-display);
+  letter-spacing: -0.032em;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: var(--t-h1);
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  font-size: var(--t-h2);
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-size: var(--t-h3);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.lead {
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: var(--grafite-70);
+  text-wrap: pretty;
+}
+
+.peq {
+  font-size: var(--t-peq);
+  line-height: 1.5;
+}
+
+.secundario {
+  color: var(--grafite-70);
+}
+
+/* --------------------------------------------------------------------------
+   RÓTULO — o elemento mais repetido do sistema.
+   Mono, caixa alta, tracking largo. É ele que transforma metadado em
+   "documento" em vez de "card de site".
+   Tamanho mínimo 12px: abaixo disso o contraste de --grafite-40 falha AA.
+   -------------------------------------------------------------------------- */
+
+.rotulo {
+  font-family: var(--f-mono);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-rotulo);
+  text-transform: uppercase;
+  color: var(--grafite-70);
+  line-height: 1.4;
+  hyphens: none;
+}
+
+.rotulo--fraco {
+  /* --grafite-40 é calibrado para 4.5:1 mesmo em 12px — ver tokens.css.
+     Não clareie sem recalcular o contraste contra --papel-2. */
+  color: var(--grafite-40);
+}
+
+.rotulo--terra {
+  color: var(--terra);
+}
+
+.mono {
+  font-family: var(--f-mono);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  hyphens: none;
+}
+
+/* Todo número em ficha, tabela ou preço usa numeral tabular.
+   Sem isso as colunas dançam e a página perde o ar de documento. */
+.num {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+
+/* Número-chave: a área em hectares, o preço, a contagem.
+   Fraunces em opsz alto, apertado. */
+.numero-chave {
+  font-family: var(--f-display);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums lining-nums;
+  hyphens: none;
+}
+
+/* --------------------------------------------------------------------------
+   Conteúdo editorial (guias, diário, textos longos)
+   -------------------------------------------------------------------------- */
+
+.prosa {
+  max-width: var(--medida);
+}
+
+.prosa > * + * {
+  margin-top: var(--s-5);
+}
+
+.prosa h2 {
+  margin-top: var(--s-8);
+  margin-bottom: calc(var(--s-5) * -1 + var(--s-3));
+  padding-top: var(--s-5);
+  border-top: var(--borda);
+}
+
+.prosa h3 {
+  margin-top: var(--s-6);
+  margin-bottom: calc(var(--s-5) * -1 + var(--s-2));
+}
+
+.prosa a {
+  color: var(--terra);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--terra) 40%, transparent);
+  transition: text-decoration-color var(--dur-rapida) var(--ease);
+}
+
+.prosa a:hover {
+  text-decoration-color: var(--terra);
+}
+
+.prosa strong {
+  font-weight: 600;
+}
+
+.prosa ul,
+.prosa ol {
+  padding-left: var(--s-5);
+}
+
+.prosa ul li {
+  list-style: none;
+  position: relative;
+}
+
+.prosa ul li::before {
+  content: '—';
+  position: absolute;
+  left: calc(var(--s-5) * -1);
+  color: var(--terra);
+}
+
+.prosa ol {
+  counter-reset: prosa-ol;
+}
+
+.prosa ol li {
+  counter-increment: prosa-ol;
+  position: relative;
+  list-style: none;
+}
+
+.prosa ol li::before {
+  content: counter(prosa-ol, decimal-leading-zero);
+  position: absolute;
+  left: calc(var(--s-5) * -1 - 0.4em);
+  font-family: var(--f-mono);
+  font-size: var(--t-micro);
+  color: var(--terra);
+  top: 0.35em;
+}
+
+.prosa li + li {
+  margin-top: var(--s-3);
+}
+
+.prosa blockquote {
+  border-left: var(--borda-2);
+  padding-left: var(--s-5);
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: var(--grafite-70);
+}
+
+.prosa hr {
+  border: none;
+  border-top: var(--borda);
+  margin-block: var(--s-7);
+}
+
+.prosa code {
+  font-family: var(--f-mono);
+  font-size: 0.9em;
+  background: var(--papel-2);
+  padding: 0.1em 0.35em;
+}
+
+.prosa table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-peq);
+}
+
+.prosa th,
+.prosa td {
+  text-align: left;
+  padding: var(--s-3) var(--s-4) var(--s-3) 0;
+  border-bottom: var(--borda-f);
+  vertical-align: top;
+}
+
+.prosa th {
+  font-family: var(--f-mono);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-rotulo);
+  text-transform: uppercase;
+  color: var(--grafite-70);
+  border-bottom: var(--borda);
+}

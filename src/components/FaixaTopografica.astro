@@ -1,0 +1,122 @@
+---
+/**
+ * FAIXA TOPOGRÁFICA — curvas de nível geradas no build.
+ *
+ * Ocupa o lugar da fotografia 21:9 do hero enquanto o acervo autoral não
+ * existe. É uma decisão de projeto, não um improviso: a alternativa seria
+ * banco de imagens, e uma foto de stock destrói mais credibilidade do que
+ * dez fotos amadoras somam.
+ *
+ * Quando o corretor tiver a foto de abertura (ver README §Fotografia),
+ * troque este componente por <Image> — o resto do hero não muda.
+ *
+ * Determinístico: soma de senos com fase fixa. Mesmo desenho em todo build.
+ */
+interface Props {
+  linhas?: number;
+  altura?: number;
+  class?: string;
+}
+
+const { linhas = 15, altura = 300, class: classe = '' } = Astro.props;
+
+const L = 1400;
+/* 56 passos, x inteiro e y com uma casa: o traço continua liso porque o SVG
+   é esticado com preserveAspectRatio="none", e o markup cai de ~28 KB para
+   ~9 KB — era o maior peso isolado do HTML da home. */
+const passos = 56;
+
+/**
+ * Relevo: dois vales e duas cristas assimétricas. `nivel` (0 = cota mais
+ * alta) desloca ligeiramente a fase, porque curva de nível real não é a
+ * mesma linha repetida — ela se fecha em torno do cume conforme sobe.
+ */
+function elevacao(x: number, nivel: number): number {
+  const t = x / L;
+  const desvio = nivel * 0.34;
+  const ondas =
+    Math.sin((t + desvio * 0.05) * Math.PI * 2 * 0.9 + 0.5) * 0.5 +
+    Math.sin(t * Math.PI * 2 * 2.1 + 2.4) * 0.17 +
+    Math.sin(t * Math.PI * 2 * 4.3 + 4.1) * 0.06;
+  const cume = Math.exp(-Math.pow((t - 0.63 + desvio * 0.06) / 0.15, 2)) * 0.62;
+  const cumeMenor = Math.exp(-Math.pow((t - 0.21) / 0.1, 2)) * 0.3;
+  return ondas + cume + cumeMenor;
+}
+
+const curvas = Array.from({ length: linhas }, (_, i) => {
+  const nivel = i / (linhas - 1);
+  /* Espaçamento aberto no topo e apertado embaixo: é assim que a carta
+     topográfica mostra encosta íngreme virando várzea. */
+  const base = altura * (0.05 + Math.pow(nivel, 0.82) * 1.02);
+  const amp = 96 * Math.pow(1 - nivel, 1.35) + 6;
+  const d = Array.from({ length: passos + 1 }, (_, k) => {
+    const x = Math.round((k / passos) * L);
+    const y = base - elevacao(x, nivel) * amp;
+    return `${k === 0 ? 'M' : 'L'}${x} ${y.toFixed(1)}`;
+  }).join(' ');
+  return {
+    d,
+    opacidade: 0.2 + (1 - nivel) * 0.45,
+    /* Cota mestra a cada 5 linhas, como em carta topográfica. */
+    traco: i % 4 === 0 ? 1.6 : 1,
+    indice: i,
+  };
+});
+---
+
+<div class:list={['top', classe]} aria-hidden="true">
+  <svg
+    class="top__svg"
+    aria-hidden="true"
+    viewBox={`0 0 ${L} ${altura}`}
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+  >
+    {
+      curvas.map((c) => (
+        <path
+          d={c.d}
+          stroke="currentColor"
+          stroke-width={c.traco}
+          opacity={c.opacidade.toFixed(3)}
+          vector-effect="non-scaling-stroke"
+        />
+      ))
+    }
+  </svg>
+  <p class="rotulo rotulo--fraco top__legenda">
+    Curvas de nível · desenho de projeto — aqui entra a fotografia de abertura
+  </p>
+</div>
+
+<style>
+  .top {
+    position: relative;
+    background: var(--papel-2);
+    border-block: var(--borda);
+    color: var(--conilon);
+    overflow: hidden;
+  }
+
+  .top__svg {
+    display: block;
+    width: 100%;
+    height: clamp(180px, 26vw, 320px);
+  }
+
+  .top__legenda {
+    position: absolute;
+    right: var(--margem);
+    bottom: var(--s-4);
+    font-size: 0.6875rem;
+    max-width: 28ch;
+    text-align: right;
+  }
+
+  @media (max-width: 560px) {
+    .top__legenda {
+      display: none;
+    }
+  }
+</style>

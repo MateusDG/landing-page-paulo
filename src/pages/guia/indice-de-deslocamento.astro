@@ -1,0 +1,125 @@
+---
+import Editorial from '../../layouts/Editorial.astro';
+import { deslocamento, notaDeslocamento } from '../../data/deslocamento';
+import { numero, municipios as fmtMunicipios } from '../../lib/format';
+
+const porTerritorio = deslocamento.reduce<Record<string, typeof deslocamento>>(
+  (acc, l) => {
+    (acc[l.territorio] ??= []).push(l);
+    return acc;
+  },
+  {},
+);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: 'Índice de deslocamento — Vitória até os municípios rurais do Espírito Santo',
+  description:
+    'Tempo real porta a porta, distância, percentual de asfalto e condição de estrada, medidos em campo.',
+  inLanguage: 'pt-BR',
+  creator: { '@type': 'Person', name: 'Corretor rural' },
+};
+---
+
+<Editorial
+  titulo="Índice de deslocamento"
+  tituloSeo="Quanto tempo de Vitória até as cidades rurais do ES: tempo real medido em campo"
+  descricao={`Tempo real porta a porta de Vitória até ${fmtMunicipios(deslocamento.length)} do interior, com quilometragem, percentual de asfalto e a condição da estrada que eu encontrei.`}
+  kicker="Referência"
+  meta={[
+    { rotulo: 'Municípios', valor: String(deslocamento.length) },
+    { rotulo: 'Origem', valor: 'Centro de Vitória' },
+    { rotulo: 'Método', valor: 'Medido em campo' },
+  ]}
+  trilha={[{ rotulo: 'Guias', href: '/guia/' }]}
+  jsonLd={jsonLd}
+  aviso="Medições feitas em dia útil, fora de horário de pico, em condições normais de tempo. Chuva forte, obra e temporada alta mudam tudo — sobretudo no litoral em janeiro."
+>
+  <p>
+    "Excelente localização" não informa nada. O que informa é: uma hora e
+    quarenta, com cinco quilômetros de terra que passam carro comum o ano
+    todo. Este índice existe para isso.
+  </p>
+
+  <p>{notaDeslocamento}</p>
+
+  {
+    Object.entries(porTerritorio).map(([territorio, linhas]) => (
+      <section class="dl__bloco">
+        <h2>{territorio}</h2>
+        <div class="dl__env">
+          <table class="dl__tabela">
+            <thead>
+              <tr>
+                <th scope="col">Município</th>
+                <th scope="col">Tempo</th>
+                <th scope="col">Km</th>
+                <th scope="col">Asfalto</th>
+                <th scope="col">Observação de campo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {linhas.map((l) => (
+                <tr>
+                  <th scope="row">{l.municipio}</th>
+                  <td class="mono">{l.tempo}</td>
+                  <td class="mono">{numero(l.km)}</td>
+                  <td class="mono">{l.asfalto}%</td>
+                  <td class="dl__obs">{l.nota}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))
+  }
+</Editorial>
+
+<style>
+  .dl__bloco {
+    margin-top: var(--s-8);
+  }
+
+  .dl__bloco h2 {
+    margin-bottom: var(--s-4);
+  }
+
+  .dl__env {
+    overflow-x: auto;
+  }
+
+  .dl__tabela {
+    width: 100%;
+    min-width: 620px;
+    border-collapse: collapse;
+    font-size: var(--t-peq);
+  }
+
+  .dl__tabela th,
+  .dl__tabela td {
+    text-align: left;
+    padding: var(--s-3) var(--s-4) var(--s-3) 0;
+    border-bottom: var(--borda-f);
+    vertical-align: baseline;
+  }
+
+  .dl__tabela thead th {
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    font-weight: 500;
+    letter-spacing: var(--tracking-rotulo);
+    text-transform: uppercase;
+    color: var(--grafite-70);
+    border-bottom: 1px solid var(--grafite);
+  }
+
+  .dl__tabela tbody th {
+    font-weight: 500;
+  }
+
+  .dl__obs {
+    color: var(--grafite-70);
+  }
+</style>

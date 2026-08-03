@@ -1,0 +1,100 @@
+---
+/**
+ * FAIXA DE TERRITÓRIOS
+ * Barra fina de alta densidade logo abaixo do hero. Serve de respiro entre o
+ * hero e a primeira seção pesada, e prova cobertura geográfica sem gastar
+ * uma seção inteira para isso.
+ */
+import { territorios } from '../data/territorios';
+import { municipios as fmtMunicipios } from '../lib/format';
+---
+
+<nav class="ft" aria-label="Regiões de atuação">
+  <ul class="env ft__lista">
+    {
+      territorios.map((t) => (
+        <li class="ft__item">
+          <a class="ft__link" href={`/regiao/${t.slug}/`}>
+            <span class="rotulo ft__nome">{t.nome}</span>
+            <span class="rotulo rotulo--fraco ft__meta">
+              <span class="mono">{fmtMunicipios(t.municipios.length)}</span>
+            </span>
+            <span class="rotulo rotulo--fraco ft__ref">{t.municipioReferencia}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .ft {
+    border-block: var(--borda);
+    background: var(--papel-2);
+  }
+
+  .ft__lista {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .ft__item + .ft__item {
+    border-left: var(--borda);
+  }
+
+  .ft__link {
+    display: grid;
+    gap: 3px;
+    padding: var(--s-4) var(--s-4) var(--s-4) 0;
+    min-height: 76px;
+    text-decoration: none;
+    align-content: center;
+    transition: color var(--dur-rapida) var(--ease);
+  }
+
+  .ft__item + .ft__item .ft__link {
+    padding-left: var(--s-4);
+  }
+
+  .ft__nome {
+    color: var(--grafite);
+  }
+
+  .ft__ref {
+    /* aparece só no hover/foco — densidade sem ruído */
+    opacity: 0;
+    transform: translateY(-2px);
+    transition:
+      opacity var(--dur-rapida) var(--ease),
+      transform var(--dur-rapida) var(--ease);
+  }
+
+  .ft__link:hover .ft__nome,
+  .ft__link:focus-visible .ft__nome {
+    color: var(--terra);
+  }
+
+  .ft__link:hover .ft__ref,
+  .ft__link:focus-visible .ft__ref {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 900px) {
+    .ft__lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ft__item:nth-child(n + 3) {
+      border-top: var(--borda);
+    }
+
+    .ft__item:nth-child(odd) {
+      border-left: none;
+    }
+
+    .ft__ref {
+      display: none;
+    }
+  }
+</style>

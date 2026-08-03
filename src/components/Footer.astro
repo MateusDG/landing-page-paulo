@@ -1,0 +1,213 @@
+---
+/**
+ * RODAPÉ-FICHA
+ *
+ * O rodapé é a última ficha da página — mesma linguagem do resto, coerência
+ * até o fim. Traz CRECI, contato, a data de atualização real da carteira e os
+ * disclaimers que o negócio exige.
+ */
+import { corretor, navRodape } from '../data/site';
+import { dataCurta } from '../lib/format';
+import { getCollection } from 'astro:content';
+
+const imoveis = await getCollection('imoveis');
+const ativas = imoveis.filter((i) => i.data.status === 'ativa').length;
+const ultima = imoveis
+  .map((i) => i.data.atualizadoEm)
+  .sort((a, b) => b.getTime() - a.getTime())[0];
+const ano = new Date().getFullYear();
+---
+
+<footer class="rod">
+  <div class="env">
+    <div class="rod__grade">
+      <div class="rod__marca">
+        <p class="rod__nome">{corretor.nome}</p>
+        <p class="rotulo rotulo--fraco">{corretor.papel}</p>
+        <p class="rotulo rod__creci">CRECI-{corretor.uf} {corretor.creci}</p>
+
+        <dl class="rod__contato">
+          <div>
+            <dt class="rotulo rotulo--fraco">WhatsApp</dt>
+            <dd>
+              <a href={`https://wa.me/${corretor.whatsapp}`} rel="noopener" target="_blank">
+                {corretor.whatsappVisivel}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="rotulo rotulo--fraco">E-mail</dt>
+            <dd><a href={`mailto:${corretor.email}`}>{corretor.email}</a></dd>
+          </div>
+          <div>
+            <dt class="rotulo rotulo--fraco">Base</dt>
+            <dd>{corretor.cidadeBase}/{corretor.uf}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <nav class="rod__nav" aria-label="Carteira">
+        <p class="rotulo rod__titulo">Carteira</p>
+        <ul>
+          {
+            navRodape.carteira.map((l) => (
+              <li>
+                <a href={l.href}>{l.rotulo}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="rod__nav" aria-label="Guias">
+        <p class="rotulo rod__titulo">Guias</p>
+        <ul>
+          {
+            navRodape.guias.map((l) => (
+              <li>
+                <a href={l.href}>{l.rotulo}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="rod__nav" aria-label="Site">
+        <p class="rotulo rod__titulo">Site</p>
+        <ul>
+          {
+            navRodape.site.map((l) => (
+              <li>
+                <a href={l.href}>{l.rotulo}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <div class="rod__base">
+      <p class="rotulo rotulo--fraco rod__estado">
+        Carteira atualizada em {ultima ? dataCurta(ultima) : '—'} · {ativas} áreas
+        ativas
+      </p>
+      <p class="rod__aviso">
+        Informações fornecidas pelos proprietários e conferidas em campo e em
+        documento na data indicada em cada ficha. Podem sofrer alteração e não
+        constituem oferta vinculante. Nenhuma informação publicada aqui
+        substitui a análise documental completa antes da compra.
+      </p>
+      <p class="rotulo rotulo--fraco">
+        © {ano} {corretor.nome} · CRECI-{corretor.uf} {corretor.creci} · Fotos
+        autorais
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .rod {
+    border-top: var(--borda-2);
+    padding-top: var(--s-8);
+    padding-bottom: var(--s-7);
+    background: var(--papel);
+  }
+
+  .rod__grade {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+    gap: var(--s-7) var(--gutter);
+  }
+
+  .rod__nome {
+    font-family: var(--f-display);
+    font-size: var(--t-h3);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .rod__creci {
+    margin-top: var(--s-2);
+    color: var(--grafite);
+  }
+
+  .rod__contato {
+    margin-top: var(--s-6);
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  .rod__contato dd {
+    margin: 0;
+    font-size: var(--t-peq);
+  }
+
+  .rod__contato a {
+    text-decoration: none;
+    border-bottom: 1px solid var(--filete);
+    transition: border-color var(--dur-rapida) var(--ease);
+  }
+
+  .rod__contato a:hover {
+    border-bottom-color: var(--terra);
+    color: var(--terra);
+  }
+
+  .rod__titulo {
+    color: var(--grafite);
+    padding-bottom: var(--s-3);
+    border-bottom: var(--borda);
+    margin-bottom: var(--s-4);
+  }
+
+  .rod__nav ul {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .rod__nav a {
+    font-size: var(--t-peq);
+    color: var(--grafite-70);
+    text-decoration: none;
+    transition: color var(--dur-rapida) var(--ease);
+  }
+
+  .rod__nav a:hover {
+    color: var(--terra);
+  }
+
+  .rod__base {
+    margin-top: var(--s-8);
+    padding-top: var(--s-5);
+    border-top: var(--borda);
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  .rod__estado {
+    color: var(--grafite);
+  }
+
+  .rod__aviso {
+    font-size: var(--t-micro);
+    line-height: 1.55;
+    color: var(--grafite-70);
+    max-width: 62ch;
+  }
+
+  @media (max-width: 900px) {
+    .rod__grade {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .rod__marca {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .rod__grade {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

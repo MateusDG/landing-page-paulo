@@ -1,0 +1,104 @@
+---
+/**
+ * LISTA NUMERADA
+ *
+ * Substitui explicitamente o "três cards com ícone lado a lado", que é o
+ * clichê nº 1 de landing page. Aqui: numeral em display, filete entre itens,
+ * ritmo tipográfico. Nenhum ícone de biblioteca.
+ */
+import { indice } from '../lib/format';
+
+interface Item {
+  titulo: string;
+  detalhe?: string;
+}
+
+interface Props {
+  itens: readonly Item[];
+  /** Começa a numeração em outro ponto (usado nas duas colunas do protocolo). */
+  inicio?: number;
+  /** `solto` deixa o item com mais respiro; `denso` compacta. */
+  ritmo?: 'solto' | 'denso';
+}
+
+const { itens, inicio = 1, ritmo = 'solto' } = Astro.props;
+---
+
+<ol class:list={['ln', `ln--${ritmo}`]}>
+  {
+    itens.map((item, i) => (
+      <li class="ln__item">
+        <span class="ln__n numero-chave" aria-hidden="true">
+          {indice(inicio + i)}
+        </span>
+        <div class="ln__corpo">
+          <p class="ln__titulo">{item.titulo}</p>
+          {item.detalhe && <p class="ln__detalhe">{item.detalhe}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .ln {
+    border-top: var(--borda);
+  }
+
+  .ln__item {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: var(--s-5);
+    align-items: start;
+    padding-block: var(--s-5);
+    border-bottom: var(--borda-f);
+  }
+
+  .ln--denso .ln__item {
+    padding-block: var(--s-4);
+    gap: var(--s-4);
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+
+  .ln__n {
+    font-size: 1.5rem;
+    color: var(--terra);
+    line-height: 1.1;
+  }
+
+  .ln--denso .ln__n {
+    font-size: 1.125rem;
+  }
+
+  .ln__titulo {
+    font-size: var(--t-lead);
+    line-height: 1.45;
+    max-width: 48ch;
+  }
+
+  .ln--denso .ln__titulo {
+    font-size: var(--t-corpo);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .ln__detalhe {
+    margin-top: var(--s-2);
+    font-size: var(--t-peq);
+    line-height: 1.6;
+    color: var(--grafite-70);
+    max-width: 52ch;
+  }
+
+  @media (max-width: 560px) {
+    .ln__item {
+      grid-template-columns: 2.25rem minmax(0, 1fr);
+      gap: var(--s-4);
+    }
+
+    .ln__n {
+      font-size: 1.125rem;
+      padding-top: 0.15em;
+    }
+  }
+</style>

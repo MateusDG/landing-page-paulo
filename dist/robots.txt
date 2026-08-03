@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Páginas legais não precisam competir por indexação
+Disallow: /privacidade/
+Disallow: /termos/
+
+Sitemap: https://corretorrural.es.br/sitemap-index.xml

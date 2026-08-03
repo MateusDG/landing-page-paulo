@@ -1,0 +1,347 @@
+---
+/**
+ * FICHA DE IMÓVEL — o componente-assinatura da carteira.
+ *
+ * Decisão contra-intuitiva e deliberada: **não tem foto**. A ficha mostra
+ * croqui, área e dados. Motivos:
+ *   1. Foto vai para a ficha completa, onde há espaço para as 12 da shot list.
+ *   2. Sem foto a lista fica escaneável e densa — quem compra 40 ha compara
+ *      água, acesso e documento, não decoração.
+ *   3. É o que impede a carteira de virar galeria de estoque, que é o visual
+ *      de todo portal imobiliário.
+ *
+ * O croqui é obrigatório (validado no schema) e é o que dá identidade a cada
+ * área.
+ */
+import Croqui from './Croqui.astro';
+import SeloVerificacao from './SeloVerificacao.astro';
+import { formatarArea, sufixoUnidade, type Unidade } from '../lib/unidades';
+import { preco as fmtPreco, mesAno, descreverAcesso } from '../lib/format';
+import { rotuloTerritorio } from '../data/territorios';
+
+interface Props {
+  imovel: {
+    id: string;
+    data: {
+      codigo: string;
+      titulo: string;
+      municipio: string;
+      regiao: string;
+      areaHa: number;
+      croqui: string;
+      croquiViewBox: string;
+      finalidade: string[];
+      agua: string;
+      acesso: { asfaltoKm: number; terraKm: number; nota: string };
+      documentos: {
+        matricula: boolean;
+        car: boolean;
+        geo: boolean;
+        ccir: boolean;
+        itr: boolean;
+        outorga: 'sim' | 'nao' | 'na';
+      };
+      tempoDeVitoria: string;
+      preco: number | null;
+      status: 'ativa' | 'reservada' | 'vendida';
+      vendidaEm?: Date;
+    };
+  };
+  /** Unidade inicial. O alternador no cliente troca sem recarregar. */
+  unidade?: Unidade;
+  /** Nível do título da ficha. Depende do que vem antes dela na página:
+      sob um h2 de seção, use 3 (padrão); direto sob o h1, use 2. */
+  nivel?: 2 | 3;
+}
+
+const { imovel, unidade = 'ha', nivel = 3 } = Astro.props;
+const Titulo = nivel === 2 ? 'h2' : 'h3';
+const d = imovel.data;
+const href = `/imovel/${imovel.id}/`;
+
+/* Estado documental resumido: quantos dos cinco itens registrais estão ok.
+   "Documentação completa" é afirmação forte — só aparece quando é verdade. */
+const registrais = [d.documentos.matricula, d.documentos.car, d.documentos.geo, d.documentos.ccir, d.documentos.itr];
+const okCount = registrais.filter(Boolean).length;
+const docCompleta = okCount === registrais.length;
+const docTexto = docCompleta ? 'Completa' : `${okCount} de ${registrais.length} itens`;
+
+const linhas = [
+  { rotulo: 'Finalidade', valor: d.finalidade.map((f) => rotuloFinalidade(f)).join(' · ') },
+  { rotulo: 'Água', valor: d.agua },
+  { rotulo: 'Acesso', valor: descreverAcesso(d.acesso.asfaltoKm, d.acesso.terraKm) },
+  { rotulo: 'De Vitória', valor: d.tempoDeVitoria },
+];
+
+function rotuloFinalidade(f: string) {
+  const mapa: Record<string, string> = {
+    produzir: 'Produção',
+    morar: 'Moradia',
+    lazer: 'Lazer',
+    investir: 'Investimento',
+    turismo: 'Turismo',
+  };
+  return mapa[f] ?? f;
+}
+---
+
+<article
+  class:list={['fi', d.status !== 'ativa' && `fi--${d.status}`]}
+  data-regiao={d.regiao}
+  data-finalidade={d.finalidade.join(' ')}
+  data-area={d.areaHa}
+  data-doc-completa={docCompleta ? 'sim' : 'nao'}
+  data-status={d.status}
+>
+  <header class="fi__topo">
+    <Croqui path={d.croqui} viewBox={d.croquiViewBox} tamanho={78} class="fi__croqui" />
+    <div class="fi__id">
+      <p class="rotulo fi__codigo">{d.codigo}</p>
+      <p class="rotulo rotulo--fraco">{d.municipio}/ES</p>
+      <p class="rotulo rotulo--fraco fi__territorio">{rotuloTerritorio(d.regiao)}</p>
+    </div>
+    {
+      d.status === 'vendida' && d.vendidaEm && (
+        <p class="carimbo fi__carimbo">Vendida {mesAno(d.vendidaEm)}</p>
+      )
+    }
+    {d.status === 'reservada' && <p class="rotulo fi__reservada">Reservada</p>}
+  </header>
+
+  <p class="fi__area numero-chave">
+    <span data-area-numero>{formatarArea(d.areaHa, unidade)}</span><span
+      class="fi__unidade"
+      data-area-sufixo>{sufixoUnidade[unidade]}</span
+    >
+  </p>
+
+  <Titulo class="fi__titulo">
+    <a href={href} class="fi__link">{d.titulo}</a>
+  </Titulo>
+
+  <dl class="fi__dados">
+    {
+      linhas.map((l) => (
+        <div class="fi__linha">
+          <dt class="rotulo rotulo--fraco">{l.rotulo}</dt>
+          <dd class="fi__valor">{l.valor}</dd>
+        </div>
+      ))
+    }
+    <div class="fi__linha">
+      <dt class="rotulo rotulo--fraco">Documentos</dt>
+      <dd class="fi__valor fi__valor--doc">
+        <SeloVerificacao
+          estado={docCompleta ? 'ok' : 'pendente'}
+          rotulo="Situação documental"
+          tamanho={15}
+        />
+        {docTexto}
+      </dd>
+    </div>
+  </dl>
+
+  <footer class="fi__rodape">
+    <p class:list={['fi__preco', 'mono', d.preco === null && 'fi__preco--consulta']}>
+      {fmtPreco(d.preco)}
+    </p>
+    <span class="link-seta fi__cta">
+      Ver ficha <span class="link-seta__seta" aria-hidden="true">→</span>
+    </span>
+  </footer>
+</article>
+
+<style>
+  .fi {
+    display: flex;
+    flex-direction: column;
+    border: var(--borda);
+    background: var(--papel);
+    padding: var(--s-5);
+    position: relative;
+    transition:
+      background-color var(--dur-rapida) var(--ease),
+      border-color var(--dur-rapida) var(--ease);
+    /* sem transform, sem scale, sem sombra — decisão do sistema */
+  }
+
+  .fi:has(.fi__link:hover),
+  .fi:has(.fi__link:focus-visible) {
+    background: var(--marmore);
+    border-color: var(--grafite);
+  }
+
+  /* Card inteiro clicável, mantendo um único alvo real de foco/leitura. */
+  .fi__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .fi__link {
+    text-decoration: none;
+  }
+
+  .fi__topo {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--s-4);
+    align-items: start;
+    padding-bottom: var(--s-4);
+    border-bottom: var(--borda-f);
+  }
+
+  .fi__croqui {
+    flex: none;
+    color: var(--grafite);
+  }
+
+  .fi__id {
+    display: grid;
+    gap: 2px;
+    justify-items: end;
+    text-align: right;
+  }
+
+  .fi__codigo {
+    color: var(--grafite);
+    font-weight: 600;
+  }
+
+  .fi__territorio {
+    padding-top: var(--s-2);
+    margin-top: var(--s-1);
+    border-top: 1px solid var(--filete-fraco);
+  }
+
+  .fi__carimbo,
+  .fi__reservada {
+    position: absolute;
+    top: var(--s-5);
+    left: 50%;
+    transform: translateX(-50%) rotate(-8deg);
+  }
+
+  .fi__reservada {
+    transform: translateX(-50%);
+    border: 1px solid var(--terra);
+    color: var(--terra);
+    padding: var(--s-1) var(--s-3);
+    background: var(--papel);
+  }
+
+  .fi__area {
+    font-size: clamp(2.75rem, 5vw, 3.75rem);
+    margin-top: var(--s-5);
+    display: flex;
+    align-items: baseline;
+    gap: 0.12em;
+  }
+
+  .fi__unidade {
+    font-family: var(--f-mono);
+    font-size: 0.28em;
+    letter-spacing: var(--tracking-rotulo);
+    text-transform: uppercase;
+    color: var(--grafite-70);
+    transform: translateY(-0.15em);
+  }
+
+  .fi__titulo {
+    font-size: var(--t-h3);
+    font-weight: 500;
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-5);
+    max-width: 26ch;
+  }
+
+  .fi__dados {
+    margin: 0;
+    border-top: var(--borda-f);
+  }
+
+  .fi__linha {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: var(--s-3);
+    align-items: baseline;
+    padding-block: var(--s-3);
+    border-bottom: var(--borda-f);
+  }
+
+  .fi__linha dt {
+    margin: 0;
+  }
+
+  .fi__valor {
+    margin: 0;
+    font-size: var(--t-peq);
+    line-height: 1.4;
+    color: var(--grafite);
+  }
+
+  .fi__valor--doc {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+
+  .fi__rodape {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: var(--s-5);
+  }
+
+  .fi__preco {
+    font-size: var(--t-h3);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .fi__preco--consulta {
+    font-size: var(--t-peq);
+    font-weight: 500;
+    color: var(--grafite-70);
+    letter-spacing: 0;
+  }
+
+  .fi__cta {
+    border-bottom-color: transparent;
+  }
+
+  .fi:has(.fi__link:hover) .fi__cta {
+    color: var(--terra);
+    border-bottom-color: var(--terra);
+  }
+
+  .fi:has(.fi__link:hover) .fi__cta .link-seta__seta {
+    transform: translateX(3px);
+  }
+
+  /* Vendida: a ficha continua no site (prova social real), mas recua
+     visualmente e ganha o carimbo. Nunca apagar imóvel vendido. */
+  .fi--vendida {
+    background: var(--papel-2);
+    border-color: var(--filete-fraco);
+  }
+
+  .fi--vendida .fi__area,
+  .fi--vendida .fi__preco,
+  .fi--vendida .fi__croqui {
+    color: var(--grafite-40);
+  }
+
+  .fi--vendida .fi__titulo {
+    color: var(--grafite-70);
+  }
+
+  @media (max-width: 560px) {
+    .fi__linha {
+      grid-template-columns: 7rem minmax(0, 1fr);
+    }
+  }
+</style>

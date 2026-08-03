@@ -1,0 +1,424 @@
+---
+import { getCollection } from 'astro:content';
+
+import Base from '../../layouts/Base.astro';
+import FichaImovel from '../../components/FichaImovel.astro';
+import FichaTecnica from '../../components/FichaTecnica.astro';
+import BotaoWhats from '../../components/BotaoWhats.astro';
+import CabecalhoSecao from '../../components/CabecalhoSecao.astro';
+
+import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../../data/territorios';
+import { deslocamento, notaDeslocamento } from '../../data/deslocamento';
+import { formatarArea } from '../../lib/unidades';
+import { numero, areas as fmtAreas, municipios as fmtMunicipios } from '../../lib/format';
+
+export function getStaticPaths() {
+  return territorios.map((t) => ({ params: { slug: t.slug }, props: { t } }));
+}
+
+const { t } = Astro.props;
+
+const todos = await getCollection('imoveis');
+const daRegiao = todos
+  .filter((i) => i.data.regiao === t.slug)
+  .sort((a, b) => {
+    const ordem = { ativa: 0, reservada: 1, vendida: 2 } as const;
+    return ordem[a.data.status] - ordem[b.data.status];
+  });
+const ativas = daRegiao.filter((i) => i.data.status === 'ativa');
+
+const areasHa = daRegiao.map((i) => i.data.areaHa);
+const media = areasHa.length
+  ? areasHa.reduce((s, n) => s + n, 0) / areasHa.length
+  : 0;
+
+const linhas = [
+  { rotulo: 'Municípios', valor: String(t.municipios.length) },
+  { rotulo: 'Em carteira', valor: fmtAreas(ativas.length), destaque: true },
+  ...(areasHa.length
+    ? [
+        { rotulo: 'Área média', valor: `${formatarArea(media)} ha` },
+        { rotulo: 'Menor', valor: `${formatarArea(Math.min(...areasHa))} ha` },
+        { rotulo: 'Maior', valor: `${formatarArea(Math.max(...areasHa))} ha` },
+      ]
+    : []),
+  { rotulo: 'Relevo', valor: t.relevo },
+];
+
+const nomesCurtos: Record<string, string> = {
+  'montanhas-capixabas': 'Montanhas',
+  'norte-capixaba': 'Norte',
+  'sul-e-caparao': 'Sul e Caparaó',
+  'litoral-e-franja': 'Litoral',
+};
+const deslocRegiao = deslocamento.filter((l) => l.territorio === nomesCurtos[t.slug]);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `Imóveis rurais em ${t.nome}`,
+    about: {
+      '@type': 'Place',
+      name: t.nome,
+      containedInPlace: { '@type': 'State', name: 'Espírito Santo' },
+    },
+    numberOfItems: daRegiao.length,
+    inLanguage: 'pt-BR',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Carteira', item: new URL('/imoveis/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: t.nome },
+    ],
+  },
+];
+---
+
+<Base
+  titulo={`Fazendas e chácaras em ${t.nome} — ES`}
+  descricao={`${t.resumo} ${fmtAreas(ativas.length)} em carteira, em ${fmtMunicipios(t.municipios.length)}.`}
+  og={`/og/regiao-${t.slug}.png`}
+  jsonLd={jsonLd}
+>
+  <header class="rg__cab">
+    <div class="env">
+      <nav class="rg__trilha" aria-label="Você está em">
+        <a href="/imoveis/">Carteira</a>
+        <span aria-hidden="true">/</span>
+        <span class="rg__trilha-atual">{t.nome}</span>
+      </nav>
+
+      <div class="rg__topo">
+        <div>
+          <p class="rotulo rotulo--terra">Região de atuação</p>
+          <h1 class="rg__titulo">{t.nome}</h1>
+          <p class="lead rg__resumo">{t.resumo}</p>
+
+          <blockquote class="rg__nota">
+            <p class="rotulo rotulo--fraco">Nota de campo</p>
+            <p>{t.notaDeCampo}</p>
+          </blockquote>
+        </div>
+
+        <aside class="rg__lateral">
+          <div class="rg__mapa">
+            <svg
+              viewBox={VIEWBOX_ES}
+              class="rg__mapa-svg"
+              role="img"
+              aria-label={`Localização de ${t.nome} dentro do Espírito Santo`}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <clipPath id={`recorte-${t.slug}`}>
+                  <path d={CONTORNO_ES}></path>
+                </clipPath>
+              </defs>
+              <g clip-path={`url(#recorte-${t.slug})`}>
+                <path class="rg__destaque" d={t.path}></path>
+              </g>
+              <path class="rg__contorno" d={CONTORNO_ES}></path>
+            </svg>
+          </div>
+          <FichaTecnica linhas={linhas} />
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <section class="secao--compacta rg__dados-env" aria-labelledby="dados-titulo">
+    <div class="env rg__dados">
+      <div>
+        <h2 class="rg__h2" id="dados-titulo">O que se produz aqui</h2>
+        <ul class="rg__pilha">
+          {t.producao.map((p) => <li class="rg__pilha-item">{p}</li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="rg__h2">Municípios</h2>
+        <ul class="rg__pilha">
+          {t.municipios.map((m) => <li class="rg__pilha-item">{m}</li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="rg__h2">Como se chega</h2>
+        <ul class="rg__pilha">
+          {t.acesso.map((a) => <li class="rg__pilha-item">{a}</li>)}
+        </ul>
+
+        {
+          deslocRegiao.length > 0 && (
+            <table class="rg__tabela">
+              <caption class="rotulo rotulo--fraco rg__caption">
+                Tempo a partir de Vitória
+              </caption>
+              <tbody>
+                {deslocRegiao.map((l) => (
+                  <tr>
+                    <th scope="row">{l.municipio}</th>
+                    <td class="mono">{l.tempo}</td>
+                    <td class="mono">{numero(l.km)} km</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        }
+        <p class="rg__desloc-nota">{notaDeslocamento}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao--compacta" aria-labelledby="areas-titulo">
+    <div class="env">
+      <CabecalhoSecao
+        kicker={`${fmtAreas(daRegiao.length)} em ${t.nomeCurto}`}
+        titulo={daRegiao.length ? 'O que eu tenho nessa região' : 'Nada em carteira aqui hoje'}
+        subtitulo={
+          daRegiao.length
+            ? undefined
+            : 'Isso muda toda semana. Me diga o que procura e eu aviso quando entrar.'
+        }
+      />
+
+      {
+        daRegiao.length > 0 ? (
+          <div class="rg__grade">
+            {daRegiao.map((imovel) => (
+              <FichaImovel imovel={imovel} />
+            ))}
+          </div>
+        ) : (
+          <BotaoWhats
+            origem={`regiao-vazia:${t.slug}`}
+            mensagem={`Oi, procuro área em ${t.nome} e não vi nada na carteira hoje.`}
+            rotulo={`Quero saber quando entrar algo em ${t.nomeCurto}`}
+          />
+        )
+      }
+    </div>
+  </section>
+
+  <section class="secao--compacta rg__fecho-env">
+    <div class="env rg__fecho">
+      <div>
+        <h2 class="rg__h2">Procura algo específico em {t.nomeCurto}?</h2>
+        <p class="lead">
+          Conheço {fmtMunicipios(t.municipios.length)} nessa região e boa parte
+          do que está à venda nunca chega a ser anunciado.
+        </p>
+      </div>
+      <div class="rg__fecho-acoes">
+        <BotaoWhats
+          origem={`regiao:${t.slug}`}
+          mensagem={`Oi, procuro área em ${t.nome}.`}
+          rotulo="Falar sobre essa região"
+        />
+        <a class="botao botao--secundario" href="/#briefing">Fazer o briefing</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .rg__cab {
+    padding-block: var(--s-7) var(--secao-y-sm);
+    border-bottom: var(--borda);
+  }
+
+  .rg__trilha {
+    display: flex;
+    gap: var(--s-3);
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    letter-spacing: var(--tracking-rotulo);
+    text-transform: uppercase;
+    color: var(--grafite-40);
+    margin-bottom: var(--s-7);
+  }
+
+  .rg__trilha a {
+    text-decoration: none;
+    color: var(--grafite-70);
+  }
+
+  .rg__trilha a:hover {
+    color: var(--terra);
+  }
+
+  .rg__trilha-atual {
+    color: var(--grafite);
+  }
+
+  .rg__topo {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .rg__titulo {
+    font-size: var(--t-h1);
+    margin-top: var(--s-3);
+    max-width: 14ch;
+  }
+
+  .rg__resumo {
+    margin-top: var(--s-5);
+    max-width: 54ch;
+  }
+
+  .rg__nota {
+    margin-top: var(--s-7);
+    padding-left: var(--s-5);
+    border-left: var(--borda-2);
+    max-width: 56ch;
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .rg__nota p:last-child {
+    font-size: var(--t-peq);
+    line-height: 1.65;
+    color: var(--grafite-70);
+  }
+
+  .rg__lateral {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  .rg__mapa {
+    border: var(--borda);
+    background: var(--marmore);
+    padding: var(--s-5);
+    display: grid;
+    justify-items: center;
+  }
+
+  .rg__mapa-svg {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+  }
+
+  .rg__destaque {
+    fill: color-mix(in srgb, var(--terra) 18%, transparent);
+  }
+
+  .rg__contorno {
+    fill: none;
+    stroke: var(--grafite);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .rg__dados-env {
+    background: var(--papel-2);
+    border-bottom: var(--borda);
+  }
+
+  .rg__dados {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .rg__h2 {
+    font-size: var(--t-h3);
+    margin-bottom: var(--s-4);
+  }
+
+  .rg__pilha {
+    border-top: var(--borda);
+  }
+
+  .rg__pilha-item {
+    padding-block: var(--s-3);
+    border-bottom: var(--borda-f);
+    font-size: var(--t-peq);
+  }
+
+  .rg__tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--s-6);
+    font-size: var(--t-peq);
+  }
+
+  .rg__caption {
+    text-align: left;
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--grafite);
+  }
+
+  .rg__tabela th,
+  .rg__tabela td {
+    text-align: left;
+    padding: var(--s-3) var(--s-3) var(--s-3) 0;
+    border-bottom: var(--borda-f);
+    font-weight: 400;
+  }
+
+  .rg__tabela td {
+    text-align: right;
+  }
+
+  .rg__desloc-nota {
+    margin-top: var(--s-4);
+    font-size: var(--t-micro);
+    line-height: 1.55;
+    color: var(--grafite-70);
+  }
+
+  .rg__grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: var(--gutter);
+  }
+
+  .rg__fecho-env {
+    border-top: var(--borda);
+  }
+
+  .rg__fecho {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--s-7);
+    align-items: center;
+  }
+
+  .rg__fecho .lead {
+    margin-top: var(--s-3);
+    max-width: 46ch;
+  }
+
+  .rg__fecho-acoes {
+    display: flex;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 900px) {
+    .rg__topo,
+    .rg__fecho {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rg__lateral {
+      max-width: 420px;
+    }
+
+    .rg__fecho-acoes {
+      justify-content: flex-start;
+    }
+  }
+</style>

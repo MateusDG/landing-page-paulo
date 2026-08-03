@@ -1,0 +1,290 @@
+---
+import Base from '../layouts/Base.astro';
+import CabecalhoSecao from '../components/CabecalhoSecao.astro';
+import FichaTecnica from '../components/FichaTecnica.astro';
+import ListaNumerada from '../components/ListaNumerada.astro';
+import BotaoWhats from '../components/BotaoWhats.astro';
+import Croqui from '../components/Croqui.astro';
+import { corretor, emCampo } from '../data/site';
+import { protocoloDocumental, protocoloFisico, notaProtocolo } from '../data/protocolo';
+import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
+import { municipios as fmtMunicipios } from '../lib/format';
+
+const totalMunicipios = territorios.reduce((s, t) => s + t.municipios.length, 0);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  mainEntity: {
+    '@type': 'Person',
+    name: corretor.nome,
+    jobTitle: corretor.papel,
+    telephone: `+${corretor.whatsapp}`,
+    email: corretor.email,
+    knowsAbout: ['Imóvel rural', 'Café conilon', 'Café arábica', 'Georreferenciamento', 'CAR'],
+    identifier: {
+      '@type': 'PropertyValue',
+      name: 'CRECI',
+      value: `CRECI-${corretor.uf} ${corretor.creci}`,
+    },
+  },
+  inLanguage: 'pt-BR',
+};
+---
+
+<Base
+  titulo="Sobre"
+  descricao={`${corretor.nome}, corretor de imóveis rurais no Espírito Santo desde ${corretor.desde}. CRECI-${corretor.uf} ${corretor.creci}. Como eu trabalho e o que eu confiro antes de anunciar.`}
+  jsonLd={jsonLd}
+>
+  <section class="secao--compacta sb__cab-env">
+    <div class="env sb__topo">
+      <div class="sb__retrato">
+        <div class="sb__moldura">
+          <Croqui path={CONTORNO_ES} viewBox={VIEWBOX_ES} tamanho={190} desenhar />
+          <div class="sb__moldura-legenda">
+            <p class="rotulo rotulo--fraco">Espaço reservado</p>
+            <p class="peq secundario">
+              Retrato em campo. Ver README §Fotografia.
+            </p>
+          </div>
+        </div>
+        <FichaTecnica titulo="Em campo" linhas={emCampo} class="sb__ficha" />
+      </div>
+
+      <div class="sb__texto">
+        <CabecalhoSecao
+          kicker="Sobre"
+          titulo="Uma pessoa só, e isso é de propósito"
+          as="h1"
+        />
+
+        <div class="prosa">
+          <p>
+            Sou {corretor.nome}, corretor com CRECI-{corretor.uf} {corretor.creci}.
+            Trabalho com imóvel rural desde {corretor.desde} e minha base é{' '}
+            {corretor.cidadeBase}, no Espírito Santo.
+          </p>
+
+          <p>
+            Não sou imobiliária e não tenho equipe. Você fala comigo do primeiro
+            WhatsApp até a escritura. A contrapartida é que eu não consigo
+            atender todo mundo ao mesmo tempo — e prefiro assim, porque o
+            trabalho que eu faço não escala: envolve dirigir até a área, andar
+            o perímetro e conversar com vizinho.
+          </p>
+
+          <h2>Por que eu insisto tanto em documento</h2>
+
+          <p>
+            Porque compra de terra raramente dá errado no preço. Dá errado no
+            documento: área que não bate com a matrícula, reserva legal proposta
+            em cima da lavoura, nascente sem outorga, acesso pelo vizinho sem
+            servidão registrada, ITR atrasado que acompanha o imóvel.
+          </p>
+
+          <p>
+            Nenhuma dessas coisas aparece na foto. Todas aparecem no cartório —
+            e nessa altura o comprador já pagou sinal.
+          </p>
+
+          <h2>Onde eu ando</h2>
+
+          <p>
+            Atuo em {fmtMunicipios(totalMunicipios)} distribuídos em quatro
+            regiões, cada uma com lógica de compra própria: as{' '}
+            <a href="/regiao/montanhas-capixabas/">Montanhas Capixabas</a>, o{' '}
+            <a href="/regiao/norte-capixaba/">Norte</a>, o{' '}
+            <a href="/regiao/sul-e-caparao/">Sul e Caparaó</a> e o{' '}
+            <a href="/regiao/litoral-e-franja/">Litoral e a franja
+            metropolitana</a>.
+          </p>
+
+          <p>
+            Fora dessas regiões eu costumo indicar um colega em vez de aceitar
+            e atender mal.
+          </p>
+
+          <h2>O que eu não faço</h2>
+
+          <ul>
+            <li>Não anuncio área que eu não visitei.</li>
+            <li>Não publico foto de banco de imagens.</li>
+            <li>
+              Não escondo o ponto fraco da área até a visita — ele vai escrito
+              na ficha.
+            </li>
+            <li>
+              Não passo preço enquanto houver pendência de valor desconhecido,
+              como dívida de ITR em levantamento.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao--compacta sb__protocolo-env" aria-labelledby="protocolo-titulo">
+    <div class="env">
+      <CabecalhoSecao
+        kicker="Protocolo de campo"
+        titulo="Os 14 pontos, na íntegra"
+        subtitulo="Sete no papel, sete no chão. Baixe e use com qualquer corretor, inclusive comigo."
+        as="h2"
+      />
+
+      <div class="sb__colunas">
+        <div>
+          <p class="rotulo sb__grupo">Documental</p>
+          <ListaNumerada itens={protocoloDocumental} ritmo="denso" inicio={1} />
+        </div>
+        <div>
+          <p class="rotulo sb__grupo">Físico</p>
+          <ListaNumerada itens={protocoloFisico} ritmo="denso" inicio={8} />
+        </div>
+      </div>
+
+      <blockquote class="sb__nota">
+        <p>{notaProtocolo}</p>
+      </blockquote>
+
+      <a
+        class="botao botao--escuro sb__baixar"
+        href="/checklist-14-pontos.pdf"
+        download
+        data-evento="checklist_download"
+      >
+        Baixar o checklist em uma página
+      </a>
+    </div>
+  </section>
+
+  <section class="secao--compacta sb__fecho-env">
+    <div class="env sb__fecho">
+      <div>
+        <h2 class="sb__h2">Quer conversar?</h2>
+        <p class="lead">
+          Sem compromisso e sem discurso de venda. {corretor.sla}
+        </p>
+      </div>
+      <div class="sb__fecho-acoes">
+        <BotaoWhats origem="sobre-fecho" rotulo="Falar no WhatsApp" />
+        <a class="botao botao--secundario" href="/#briefing">Fazer o briefing</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sb__cab-env {
+    padding-top: var(--s-7);
+    border-bottom: var(--borda);
+  }
+
+  .sb__topo {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .sb__retrato {
+    display: grid;
+    gap: var(--s-6);
+    position: sticky;
+    top: var(--s-7);
+  }
+
+  .sb__moldura {
+    border: var(--borda);
+    background: var(--marmore);
+    padding: var(--s-6);
+    display: grid;
+    justify-items: center;
+    gap: var(--s-5);
+    align-content: center;
+    aspect-ratio: 4 / 5;
+  }
+
+  .sb__moldura :global(.croqui) {
+    color: var(--filete);
+  }
+
+  .sb__moldura-legenda {
+    display: grid;
+    gap: var(--s-2);
+    text-align: center;
+    max-width: 28ch;
+  }
+
+  .sb__protocolo-env {
+    background: var(--papel-2);
+    border-bottom: var(--borda);
+  }
+
+  .sb__colunas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-8);
+  }
+
+  .sb__grupo {
+    color: var(--grafite);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--grafite);
+  }
+
+  .sb__nota {
+    margin-top: var(--s-7);
+    padding-left: var(--s-5);
+    border-left: var(--borda-2);
+    font-family: var(--f-display);
+    font-size: var(--t-lead);
+    line-height: 1.5;
+    max-width: 56ch;
+  }
+
+  .sb__baixar {
+    margin-top: var(--s-7);
+  }
+
+  .sb__h2 {
+    font-size: var(--t-h2);
+  }
+
+  .sb__fecho {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--s-7);
+    align-items: center;
+  }
+
+  .sb__fecho .lead {
+    margin-top: var(--s-3);
+  }
+
+  .sb__fecho-acoes {
+    display: flex;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 900px) {
+    .sb__topo,
+    .sb__colunas,
+    .sb__fecho {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-6);
+    }
+
+    .sb__retrato {
+      position: static;
+      max-width: 420px;
+    }
+
+    .sb__fecho-acoes {
+      justify-content: flex-start;
+    }
+  }
+</style>

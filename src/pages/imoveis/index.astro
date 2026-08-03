@@ -1,0 +1,360 @@
+---
+import { getCollection } from 'astro:content';
+
+import Base from '../../layouts/Base.astro';
+import FichaImovel from '../../components/FichaImovel.astro';
+import ToggleUnidade from '../../components/ToggleUnidade.astro';
+import CabecalhoSecao from '../../components/CabecalhoSecao.astro';
+import BotaoWhats from '../../components/BotaoWhats.astro';
+
+import { territorios } from '../../data/territorios';
+import { dataCurta, areas as fmtAreas } from '../../lib/format';
+
+const imoveis = (await getCollection('imoveis')).sort((a, b) => {
+  const ordem = { ativa: 0, reservada: 1, vendida: 2 } as const;
+  const d = ordem[a.data.status] - ordem[b.data.status];
+  return d !== 0 ? d : b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime();
+});
+
+const ativas = imoveis.filter((i) => i.data.status === 'ativa');
+const ultima = imoveis
+  .map((i) => i.data.atualizadoEm)
+  .sort((a, b) => b.getTime() - a.getTime())[0];
+
+const finalidades = [
+  { valor: 'produzir', rotulo: 'Produção' },
+  { valor: 'morar', rotulo: 'Moradia' },
+  { valor: 'lazer', rotulo: 'Lazer' },
+  { valor: 'investir', rotulo: 'Investimento' },
+  { valor: 'turismo', rotulo: 'Turismo' },
+];
+
+const faixas = [
+  { valor: 'ate-5', rotulo: 'Até 5 ha', min: 0, max: 5 },
+  { valor: '5-20', rotulo: '5 a 20 ha', min: 5, max: 20 },
+  { valor: '20-50', rotulo: '20 a 50 ha', min: 20, max: 50 },
+  { valor: '50-150', rotulo: '50 a 150 ha', min: 50, max: 150 },
+  { valor: '150+', rotulo: 'Acima de 150 ha', min: 150, max: 100000 },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Carteira de imóveis rurais no Espírito Santo',
+  numberOfItems: imoveis.length,
+  inLanguage: 'pt-BR',
+};
+---
+
+<Base
+  titulo="Carteira — fazendas, chácaras e terrenos rurais no ES"
+  descricao={`${ativas.length} áreas rurais em carteira no Espírito Santo: fazendas, chácaras, sítios e terrenos, com ficha técnica, situação documental e croqui do perímetro.`}
+  jsonLd={jsonLd}
+>
+  <section class="secao--compacta ct__cab-env">
+    <div class="env">
+      <CabecalhoSecao
+        kicker="A carteira"
+        titulo="Todas as áreas"
+        subtitulo="Ativas, reservadas e vendidas. Mantenho as vendidas no ar porque elas mostram o que passa por aqui e em quanto tempo sai."
+        as="h1"
+      />
+
+      <div class="ct__controles">
+        <div class="ct__filtros" data-filtros>
+          <fieldset class="ct__grupo">
+            <legend class="rotulo rotulo--fraco">Finalidade</legend>
+            <div class="ct__chips">
+              {
+                finalidades.map((f) => (
+                  <button
+                    type="button"
+                    class="chip"
+                    data-filtro="finalidade"
+                    data-valor={f.valor}
+                    aria-pressed="false"
+                  >
+                    {f.rotulo}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <fieldset class="ct__grupo">
+            <legend class="rotulo rotulo--fraco">Região</legend>
+            <div class="ct__chips">
+              {
+                territorios.map((t) => (
+                  <button
+                    type="button"
+                    class="chip"
+                    data-filtro="regiao"
+                    data-valor={t.slug}
+                    aria-pressed="false"
+                  >
+                    {t.nomeCurto}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <fieldset class="ct__grupo">
+            <legend class="rotulo rotulo--fraco">Área</legend>
+            <div class="ct__chips">
+              {
+                faixas.map((f) => (
+                  <button
+                    type="button"
+                    class="chip"
+                    data-filtro="faixa"
+                    data-valor={f.valor}
+                    data-min={f.min}
+                    data-max={f.max}
+                    aria-pressed="false"
+                  >
+                    {f.rotulo}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <fieldset class="ct__grupo">
+            <legend class="rotulo rotulo--fraco">Situação</legend>
+            <div class="ct__chips">
+              <button
+                type="button"
+                class="chip"
+                data-filtro="doc"
+                data-valor="sim"
+                aria-pressed="false"
+              >
+                Só com documentação completa
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-filtro="status"
+                data-valor="ativa"
+                aria-pressed="false"
+              >
+                Esconder vendidas
+              </button>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="ct__unidade">
+          <ToggleUnidade />
+        </div>
+      </div>
+
+      <div class="ct__estado">
+        <p class="rotulo" data-contagem aria-live="polite">
+          {fmtAreas(imoveis.length)}
+        </p>
+        <button type="button" class="link-seta" data-limpar hidden>Limpar filtros</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao--compacta">
+    <div class="env">
+      <div class="ct__grade" data-grade>
+        {imoveis.map((imovel) => <FichaImovel imovel={imovel} nivel={2} />)}
+      </div>
+
+      <p class="ct__vazio" data-vazio hidden>
+        Nenhuma área da carteira bate com esses filtros hoje. Me diga o que
+        você procura — boa parte sai antes de eu anunciar.
+      </p>
+
+      <div class="ct__rodape">
+        <p class="peq secundario">
+          Carteira atualizada em {ultima ? dataCurta(ultima) : '—'}.
+        </p>
+        <BotaoWhats
+          origem="carteira-rodape"
+          variante="secundario"
+          rotulo="Não achei o que procuro"
+          mensagem="Oi, olhei a carteira no site e não achei o que procuro."
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ct__cab-env {
+    border-bottom: var(--borda);
+    padding-top: var(--s-7);
+  }
+
+  .ct__controles {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    gap: var(--s-7);
+    align-items: start;
+    padding-top: var(--s-5);
+    border-top: var(--borda);
+  }
+
+  .ct__filtros {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  .ct__grupo {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .ct__grupo legend {
+    padding: 0;
+  }
+
+  .ct__chips {
+    display: flex;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+
+  .ct__estado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+    flex-wrap: wrap;
+    margin-top: var(--s-6);
+    padding-top: var(--s-4);
+    border-top: var(--borda);
+  }
+
+  .ct__grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: var(--gutter);
+  }
+
+  .ct__vazio {
+    border: var(--borda);
+    background: var(--marmore);
+    padding: var(--s-7);
+    max-width: 52ch;
+    font-size: var(--t-lead);
+    line-height: 1.5;
+  }
+
+  .ct__rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+    flex-wrap: wrap;
+    margin-top: var(--s-7);
+    padding-top: var(--s-5);
+    border-top: var(--borda);
+  }
+
+  @media (max-width: 900px) {
+    .ct__controles {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-6);
+    }
+  }
+</style>
+
+<script>
+  /* Filtros no cliente: a carteira inteira já veio no HTML, então filtrar é
+     esconder — sem requisição, sem estado de carregamento, funciona offline.
+     Com 200+ imóveis isso mudaria; até lá, é a solução mais simples que
+     resolve. */
+  function iniciar(
+    raiz: HTMLElement,
+    grade: HTMLElement,
+    contagem: HTMLElement,
+    vazio: HTMLElement,
+    limpar: HTMLButtonElement,
+  ) {
+    const fichas = [...grade.querySelectorAll<HTMLElement>('[data-regiao]')];
+    const botoesFaixa = [
+      ...raiz.querySelectorAll<HTMLButtonElement>('[data-filtro="faixa"]'),
+    ];
+    const ativos = new Map<string, Set<string>>();
+
+    const plural = (n: number) => `${n} ${n === 1 ? 'área' : 'áreas'}`;
+
+    const faixaBate = (area: number): boolean => {
+      const sel = ativos.get('faixa');
+      if (!sel?.size) return true;
+      return botoesFaixa
+        .filter((b) => sel.has(b.dataset.valor!))
+        .some((b) => area > Number(b.dataset.min) && area <= Number(b.dataset.max));
+    };
+
+    const aplicar = () => {
+      const regiao = ativos.get('regiao');
+      const finalidade = ativos.get('finalidade');
+      const doc = ativos.get('doc');
+      const status = ativos.get('status');
+      let visiveis = 0;
+
+      for (const ficha of fichas) {
+        const ok =
+          (!regiao?.size || regiao.has(ficha.dataset.regiao!)) &&
+          (!finalidade?.size ||
+            ficha.dataset.finalidade!.split(' ').some((f) => finalidade.has(f))) &&
+          (!doc?.size || ficha.dataset.docCompleta === 'sim') &&
+          (!status?.size || ficha.dataset.status === 'ativa') &&
+          faixaBate(Number(ficha.dataset.area));
+
+        ficha.hidden = !ok;
+        if (ok) visiveis++;
+      }
+
+      contagem.textContent = plural(visiveis);
+      vazio.hidden = visiveis > 0;
+      grade.hidden = visiveis === 0;
+      limpar.hidden = ![...ativos.values()].some((s) => s.size > 0);
+    };
+
+    raiz.addEventListener('click', (ev) => {
+      const b = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-filtro]');
+      if (!b) return;
+      const grupo = b.dataset.filtro!;
+      const valor = b.dataset.valor!;
+      if (!ativos.has(grupo)) ativos.set(grupo, new Set());
+      const set = ativos.get(grupo)!;
+      const ligado = set.has(valor);
+      if (ligado) set.delete(valor);
+      else set.add(valor);
+      b.setAttribute('aria-pressed', String(!ligado));
+      aplicar();
+    });
+
+    limpar.addEventListener('click', () => {
+      ativos.clear();
+      raiz
+        .querySelectorAll<HTMLButtonElement>('[data-filtro]')
+        .forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      aplicar();
+    });
+
+    aplicar();
+  }
+
+  const raiz = document.querySelector<HTMLElement>('[data-filtros]');
+  const grade = document.querySelector<HTMLElement>('[data-grade]');
+  const contagem = document.querySelector<HTMLElement>('[data-contagem]');
+  const vazio = document.querySelector<HTMLElement>('[data-vazio]');
+  const limpar = document.querySelector<HTMLButtonElement>('[data-limpar]');
+
+  if (raiz && grade && contagem && vazio && limpar) {
+    iniciar(raiz, grade, contagem, vazio, limpar);
+  }
+</script>

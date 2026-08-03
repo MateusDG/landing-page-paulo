@@ -1,0 +1,225 @@
+---
+/**
+ * LAYOUT EDITORIAL — guias, diário e páginas de texto longo.
+ * Coluna única de 34em, com uma ficha de metadados à esquerda no desktop.
+ */
+import Base from './Base.astro';
+import BotaoWhats from '../components/BotaoWhats.astro';
+import { corretor } from '../data/site';
+
+interface Props {
+  titulo: string;
+  tituloSeo?: string;
+  descricao: string;
+  kicker?: string;
+  meta?: readonly { rotulo: string; valor: string }[];
+  trilha?: { rotulo: string; href: string }[];
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Aviso de rodapé (disclaimer jurídico dos guias). */
+  aviso?: string;
+  /** Esconde o bloco de contato do fim. */
+  semFecho?: boolean;
+}
+
+const {
+  titulo,
+  tituloSeo,
+  descricao,
+  kicker,
+  meta = [],
+  trilha = [],
+  jsonLd,
+  aviso,
+  semFecho = false,
+} = Astro.props;
+---
+
+<Base titulo={tituloSeo ?? titulo} descricao={descricao} jsonLd={jsonLd}>
+  <article class="ed">
+    <div class="env">
+      {
+        trilha.length > 0 && (
+          <nav class="ed__trilha" aria-label="Você está em">
+            {trilha.map((t) => (
+              <>
+                <a href={t.href}>{t.rotulo}</a>
+                <span aria-hidden="true">/</span>
+              </>
+            ))}
+            <span class="ed__trilha-atual">{titulo}</span>
+          </nav>
+        )
+      }
+
+      <div class="ed__grade">
+        <aside class="ed__lateral">
+          {meta.length > 0 && (
+            <dl class="ed__meta">
+              {meta.map((m) => (
+                <div>
+                  <dt class="rotulo rotulo--fraco">{m.rotulo}</dt>
+                  <dd class="mono">{m.valor}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </aside>
+
+        <div class="ed__corpo">
+          <header class="ed__cab">
+            {kicker && <p class="rotulo rotulo--terra">{kicker}</p>}
+            <h1 class="ed__titulo">{titulo}</h1>
+            <p class="lead ed__descricao">{descricao}</p>
+          </header>
+
+          <div class="prosa ed__prosa">
+            <slot />
+          </div>
+
+          {
+            aviso && (
+              <p class="ed__aviso">
+                <span class="rotulo rotulo--fraco">Aviso</span>
+                {aviso}
+              </p>
+            )
+          }
+
+          {
+            !semFecho && (
+              <div class="ed__fecho">
+                <p class="ed__fecho-texto">
+                  Ficou com dúvida sobre alguma área específica? Me chame — é
+                  mais rápido que ler outro guia. {corretor.sla}
+                </p>
+                <BotaoWhats
+                  origem={`guia:${titulo.slice(0, 30)}`}
+                  variante="secundario"
+                  rotulo="Perguntar no WhatsApp"
+                />
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .ed {
+    padding-block: var(--s-7) var(--secao-y);
+  }
+
+  .ed__trilha {
+    display: flex;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    letter-spacing: var(--tracking-rotulo);
+    text-transform: uppercase;
+    color: var(--grafite-40);
+    margin-bottom: var(--s-7);
+  }
+
+  .ed__trilha a {
+    text-decoration: none;
+    color: var(--grafite-70);
+  }
+
+  .ed__trilha a:hover {
+    color: var(--terra);
+  }
+
+  .ed__trilha-atual {
+    color: var(--grafite);
+  }
+
+  .ed__grade {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .ed__lateral {
+    position: sticky;
+    top: var(--s-7);
+  }
+
+  .ed__meta {
+    border-top: var(--borda);
+    margin: 0;
+  }
+
+  .ed__meta > div {
+    padding-block: var(--s-3);
+    border-bottom: var(--borda-f);
+    display: grid;
+    gap: 2px;
+  }
+
+  .ed__meta dd {
+    margin: 0;
+    font-size: var(--t-peq);
+  }
+
+  .ed__corpo {
+    max-width: 40em;
+  }
+
+  .ed__titulo {
+    font-size: var(--t-h1);
+    margin-top: var(--s-3);
+    max-width: 18ch;
+  }
+
+  .ed__descricao {
+    margin-top: var(--s-5);
+    max-width: 52ch;
+  }
+
+  .ed__prosa {
+    margin-top: var(--s-8);
+    padding-top: var(--s-6);
+    border-top: var(--borda);
+  }
+
+  .ed__aviso {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: var(--s-8);
+    padding: var(--s-5);
+    border: var(--borda);
+    background: var(--papel-2);
+    font-size: var(--t-micro);
+    line-height: 1.6;
+    color: var(--grafite-70);
+    max-width: var(--medida);
+  }
+
+  .ed__fecho {
+    display: grid;
+    gap: var(--s-4);
+    justify-items: start;
+    margin-top: var(--s-8);
+    padding-top: var(--s-6);
+    border-top: var(--borda);
+  }
+
+  .ed__fecho-texto {
+    max-width: 48ch;
+  }
+
+  @media (max-width: 900px) {
+    .ed__grade {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-6);
+    }
+
+    .ed__lateral {
+      position: static;
+    }
+  }
+</style>

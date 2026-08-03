@@ -1,0 +1,182 @@
+---
+/**
+ * HEADER
+ *
+ * Não é fixo no desktop: header fixo rouba altura e é assinatura de template.
+ * Ele reaparece ao rolar para CIMA (comportamento útil, não decorativo) e
+ * some ao descer. Sem JS, fica simplesmente no topo do documento.
+ *
+ * O CRECI aparece já aqui. É exigência legal em peça publicitária de corretor
+ * e, de quebra, é sinal de credibilidade — aproveitamos as duas coisas.
+ */
+import { corretor, navPrincipal } from '../data/site';
+import BotaoWhats from './BotaoWhats.astro';
+
+const caminho = Astro.url.pathname;
+/* Só marca como página atual quem tem caminho próprio. Âncoras da home
+   ("/#regioes") não são páginas e não devem receber aria-current. */
+const ativo = (href: string) => {
+  const base = href.split('#')[0];
+  return base.length > 1 && caminho.startsWith(base);
+};
+---
+
+<header class="cab" data-cabecalho>
+  <div class="env cab__int">
+    <a class="cab__marca" href="/">
+      <span class="cab__nome">{corretor.nome}</span>
+      <span class="rotulo rotulo--fraco cab__papel">
+        {corretor.papel} · CRECI-{corretor.uf} {corretor.creci}
+      </span>
+    </a>
+
+    <nav class="cab__nav" aria-label="Navegação principal">
+      <ul class="cab__lista">
+        {
+          navPrincipal.map((item) => (
+            <li>
+              <a
+                class="cab__link"
+                href={item.href}
+                aria-current={ativo(item.href) ? 'page' : undefined}
+              >
+                {item.rotulo}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <BotaoWhats
+      origem="header"
+      variante="secundario"
+      rotulo="Falar comigo"
+      class="cab__cta"
+    />
+  </div>
+</header>
+
+<style>
+  .cab {
+    position: relative;
+    z-index: var(--z-header);
+    border-bottom: var(--borda);
+    background: var(--papel);
+  }
+
+  .cab__int {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-6);
+    min-height: 76px;
+    padding-block: var(--s-3);
+  }
+
+  .cab__marca {
+    display: grid;
+    gap: 3px;
+    text-decoration: none;
+    flex: none;
+  }
+
+  .cab__nome {
+    font-family: var(--f-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+
+  .cab__papel {
+    font-size: 0.6875rem;
+  }
+
+  .cab__lista {
+    display: flex;
+    gap: var(--s-5);
+    align-items: center;
+  }
+
+  .cab__link {
+    display: inline-block;
+    padding-block: var(--s-2);
+    font-size: var(--t-peq);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--grafite-70);
+    border-bottom: 1px solid transparent;
+    transition:
+      color var(--dur-rapida) var(--ease),
+      border-color var(--dur-rapida) var(--ease);
+  }
+
+  .cab__link:hover,
+  .cab__link[aria-current='page'] {
+    color: var(--grafite);
+    border-bottom-color: var(--terra);
+  }
+
+  /* Revelação ao rolar para cima. Só existe com JS. */
+  :global(.js) .cab {
+    position: sticky;
+    top: 0;
+    transition: transform var(--dur-media) var(--ease);
+  }
+
+  :global(.js) .cab[data-oculto='true'] {
+    transform: translateY(-100%);
+  }
+
+  /* No mobile a navegação vive na barra inferior fixa — o polegar está lá
+     embaixo, não no topo. O header vira só marca + CRECI. */
+  @media (max-width: 900px) {
+    .cab__nav,
+    .cab__cta {
+      display: none;
+    }
+
+    .cab__int {
+      min-height: 64px;
+    }
+
+    :global(.js) .cab {
+      position: static;
+    }
+  }
+</style>
+
+<script>
+  const cab = document.querySelector<HTMLElement>('[data-cabecalho]');
+  if (cab && window.matchMedia('(min-width: 901px)').matches) {
+    let ultimo = window.scrollY;
+    let travado = false;
+
+    const aoRolar = () => {
+      const y = window.scrollY;
+      // Só esconde depois de passar da altura do próprio header.
+      const descendo = y > ultimo && y > cab.offsetHeight * 1.5;
+      cab.dataset.oculto = String(descendo);
+      ultimo = y;
+      travado = false;
+    };
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!travado) {
+          travado = true;
+          requestAnimationFrame(aoRolar);
+        }
+      },
+      { passive: true },
+    );
+
+    // Teclado nunca deve perder o header: se algo dentro dele receber foco,
+    // ele volta.
+    cab.addEventListener('focusin', () => {
+      cab.dataset.oculto = 'false';
+    });
+  }
+</script>

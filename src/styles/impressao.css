@@ -1,0 +1,66 @@
+/* ==========================================================================
+   IMPRESSÃO
+
+   Duas situações reais: alguém imprime uma ficha de imóvel para levar na
+   visita, e o checklist de 14 pontos vira o PDF de public/.
+
+   Cuidado não óbvio: a largura de página A4 (~700px úteis) dispara os
+   breakpoints de mobile do site. Sem as regras abaixo, a barra fixa do
+   polegar aparece no meio do papel e as colunas colapsam.
+   ========================================================================== */
+
+@media print {
+  /* Cromo do site — nada disso faz sentido em papel */
+  .cab,
+  .rod,
+  .bm,
+  .ruido,
+  .aviso-exemplo,
+  .pular-para-conteudo,
+  .bf,
+  .botao,
+  .link-seta {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000;
+    padding-bottom: 0 !important;
+    font-size: 10pt;
+  }
+
+  /* Impede que as media queries de mobile colapsem as duas colunas */
+  .ck__colunas {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Evita quebra no meio de uma unidade de informação */
+  .ck__item,
+  .fi,
+  .ficha,
+  .ln__item,
+  figure,
+  tr {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* Nada de sublinhado de link nem URL impressa: em papel só polui */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+}

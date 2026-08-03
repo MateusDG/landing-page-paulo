@@ -1,0 +1,76 @@
+---
+/**
+ * COTA DIMENSIONAL — linha com setas nas pontas e um número no meio,
+ * como em desenho técnico.
+ *
+ * Terceiro elemento identitário do sistema. Detalhe pequeno, efeito grande:
+ * é o que faz um print de qualquer parte da página ser reconhecível. Usado
+ * para medir espaço na tela e para exibir área, distância e progresso.
+ */
+interface Props {
+  valor: string;
+  orientacao?: 'horizontal' | 'vertical';
+  class?: string;
+}
+
+const { valor, orientacao = 'horizontal', class: classe = '' } = Astro.props;
+---
+
+<div class:list={['cota', `cota--${orientacao}`, classe]} aria-hidden="true">
+  <span class="cota__ponta cota__ponta--ini"></span>
+  <span class="cota__linha"></span>
+  <span class="cota__valor mono">{valor}</span>
+  <span class="cota__linha"></span>
+  <span class="cota__ponta cota__ponta--fim"></span>
+</div>
+
+<style>
+  .cota {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    color: var(--grafite-40);
+  }
+
+  .cota__linha {
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    min-width: var(--s-4);
+  }
+
+  .cota__ponta {
+    width: 1px;
+    height: 9px;
+    background: currentColor;
+    flex: none;
+  }
+
+  .cota__valor {
+    font-size: var(--t-micro);
+    letter-spacing: var(--tracking-rotulo);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex: none;
+  }
+
+  .cota--vertical {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .cota--vertical .cota__linha {
+    width: 1px;
+    height: auto;
+    min-height: var(--s-4);
+  }
+
+  .cota--vertical .cota__ponta {
+    width: 9px;
+    height: 1px;
+  }
+
+  .cota--vertical .cota__valor {
+    writing-mode: vertical-rl;
+  }
+</style>

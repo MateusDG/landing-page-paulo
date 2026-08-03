@@ -1,0 +1,31 @@
+{
+  "name": "corretor-rural-es",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Landing page para corretor de imóveis rurais no Espírito Santo — fazendas, chácaras, sítios e terrenos.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "sync": "astro sync",
+    "pdf": "node scripts/gerar-pdf.mjs",
+    "shot": "node scripts/shot.mjs",
+    "fonts": "./scripts/build-fonts.sh"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "astro": "^5.18.2",
+    "sharp": "^0.34.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "lightningcss": "^1.33.0",
+    "typescript": "^5.9.2"
+  }
+}

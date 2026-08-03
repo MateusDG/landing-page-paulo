@@ -1,0 +1,14 @@
+---
+/**
+ * JSON-LD — dados estruturados.
+ * Um único ponto de saída para todo schema.org do site.
+ */
+interface Props {
+  dados: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { dados } = Astro.props;
+const json = JSON.stringify(dados);
+---
+
+<script type="application/ld+json" set:html={json} is:inline />

@@ -1,0 +1,130 @@
+---
+/**
+ * FICHA TÉCNICA — o componente-base do sistema.
+ *
+ * Pares rótulo/valor em monoespaçado, separados por filete. É ele que
+ * transforma metadado em "documento" em vez de "card de site", e por isso
+ * aparece em imóvel, no perfil do corretor, nas regiões e no rodapé.
+ *
+ * Numeral tabular é obrigatório: sem ele as colunas dançam e a página perde
+ * o ar de documento.
+ */
+interface Linha {
+  rotulo: string;
+  valor: string;
+  /** Destaca o valor em terra — no máximo um por ficha. */
+  destaque?: boolean;
+}
+
+interface Props {
+  titulo?: string;
+  linhas: readonly Linha[];
+  /** Nota de rodapé da ficha, ex.: data de atualização. */
+  nota?: string;
+  /** `caixa` desenha borda ao redor; `livre` só usa os filetes internos. */
+  variante?: 'caixa' | 'livre';
+  class?: string;
+}
+
+const { titulo, linhas, nota, variante = 'caixa', class: classe = '' } = Astro.props;
+---
+
+<div class:list={['ficha', `ficha--${variante}`, classe]}>
+  {
+    titulo && (
+      <p class="rotulo ficha__titulo">
+        {titulo}
+      </p>
+    )
+  }
+  <dl class="ficha__lista">
+    {
+      linhas.map((l) => (
+        <div class="ficha__linha">
+          <dt class="rotulo rotulo--fraco ficha__rotulo">{l.rotulo}</dt>
+          <dd class:list={['mono', 'ficha__valor', l.destaque && 'ficha__valor--destaque']}>
+            {l.valor}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+  {nota && <p class="rotulo rotulo--fraco ficha__nota">{nota}</p>}
+</div>
+
+<style>
+  .ficha {
+    --ficha-pad: var(--s-5);
+  }
+
+  .ficha--caixa {
+    border: var(--borda);
+    background: var(--marmore);
+    padding: var(--ficha-pad);
+  }
+
+  .ficha__titulo {
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--grafite);
+    margin-bottom: var(--s-1);
+    color: var(--grafite);
+  }
+
+  .ficha__lista {
+    margin: 0;
+  }
+
+  .ficha__linha {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: var(--s-4);
+    padding-block: var(--s-3);
+    border-bottom: var(--borda-f);
+  }
+
+  .ficha__linha:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .ficha__rotulo {
+    margin: 0;
+  }
+
+  .ficha__valor {
+    margin: 0;
+    text-align: right;
+    font-size: var(--t-peq);
+    line-height: 1.35;
+    color: var(--grafite);
+    /* valores longos (ex.: "Córrego perene · 2 nascentes") quebram sem
+       empurrar o rótulo */
+    max-width: 22ch;
+  }
+
+  .ficha__valor--destaque {
+    color: var(--terra);
+    font-weight: 600;
+  }
+
+  .ficha__nota {
+    margin-top: var(--s-4);
+    padding-top: var(--s-3);
+    border-top: var(--borda-f);
+  }
+
+  /* Em telas estreitas o par vira duas linhas — rótulo acima, valor abaixo,
+     alinhado à esquerda. Duas colunas em 320px viram sopa. */
+  @media (max-width: 400px) {
+    .ficha__linha {
+      grid-template-columns: 1fr;
+      gap: var(--s-1);
+    }
+
+    .ficha__valor {
+      text-align: left;
+      max-width: none;
+    }
+  }
+</style>

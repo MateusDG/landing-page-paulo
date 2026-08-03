@@ -1,0 +1,237 @@
+/* ==========================================================================
+   COMPONENTES GLOBAIS
+   Só entra aqui o que é usado em 3+ lugares. O resto vive com escopo no
+   próprio .astro.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Seção — o ritmo vertical da página.
+   As larguras variam de propósito (7 / 5 / 9 / 12 colunas). Se todas as
+   seções tiverem a mesma largura, a página vira template.
+   -------------------------------------------------------------------------- */
+
+.secao {
+  padding-block: var(--secao-y);
+  position: relative;
+}
+
+.secao--compacta {
+  padding-block: var(--secao-y-sm);
+}
+
+.secao--filete {
+  border-top: var(--borda);
+}
+
+.secao--papel2 {
+  background: var(--papel-2);
+}
+
+/* Cabeçalho de seção: rótulo mono numerado + título. O número da seção é
+   parte da linguagem de documento — não é decoração. */
+.cabecalho-secao {
+  display: grid;
+  gap: var(--s-4);
+  margin-bottom: var(--s-7);
+}
+
+.cabecalho-secao__indice {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.cabecalho-secao__indice::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--filete);
+  transform: translateY(-0.28em);
+}
+
+/* --------------------------------------------------------------------------
+   Botões — três variantes, nenhuma sombra, raio 2px.
+   -------------------------------------------------------------------------- */
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  min-height: 48px;
+  padding: var(--s-3) var(--s-5);
+  border-radius: var(--raio-sm);
+  font-family: var(--f-texto);
+  font-size: var(--t-peq);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    background-color var(--dur-rapida) var(--ease),
+    border-color var(--dur-rapida) var(--ease),
+    color var(--dur-rapida) var(--ease);
+}
+
+.botao--primario {
+  background: var(--terra);
+  color: var(--papel);
+  border-color: var(--terra);
+}
+
+.botao--primario:hover {
+  background: var(--terra-esc);
+  border-color: var(--terra-esc);
+}
+
+.botao--secundario {
+  background: transparent;
+  color: var(--grafite);
+  border-color: var(--filete);
+}
+
+.botao--secundario:hover {
+  border-color: var(--grafite);
+  background: var(--marmore);
+}
+
+.botao--escuro {
+  background: var(--grafite);
+  color: var(--papel);
+  border-color: var(--grafite);
+}
+
+.botao--escuro:hover {
+  background: #000;
+}
+
+.botao[disabled],
+.botao[aria-disabled='true'] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Link de texto com seta — o CTA terciário do sistema. */
+.link-seta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-peq);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid var(--filete);
+  padding-bottom: 2px;
+  transition: border-color var(--dur-rapida) var(--ease);
+}
+
+.link-seta:hover {
+  border-bottom-color: var(--terra);
+  color: var(--terra);
+}
+
+.link-seta__seta {
+  transition: transform var(--dur-rapida) var(--ease);
+}
+
+.link-seta:hover .link-seta__seta {
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   Chip de filtro — usado na carteira. Alvo de toque ≥ 44px.
+   -------------------------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  border: var(--borda);
+  border-radius: var(--raio-sm);
+  background: transparent;
+  font-family: var(--f-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-rotulo);
+  text-transform: uppercase;
+  color: var(--grafite-70);
+  transition:
+    border-color var(--dur-rapida) var(--ease),
+    color var(--dur-rapida) var(--ease),
+    background-color var(--dur-rapida) var(--ease);
+}
+
+.chip:hover {
+  border-color: var(--grafite);
+  color: var(--grafite);
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--grafite);
+  border-color: var(--grafite);
+  color: var(--papel);
+}
+
+/* --------------------------------------------------------------------------
+   Carimbo VENDIDA — rotacionado, sem sombra, sem brilho.
+   -------------------------------------------------------------------------- */
+
+.carimbo {
+  display: inline-block;
+  transform: rotate(-8deg);
+  border: 2px solid var(--erro);
+  color: var(--erro);
+  padding: var(--s-2) var(--s-3);
+  font-family: var(--f-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: 0.72;
+}
+
+/* --------------------------------------------------------------------------
+   Revelação ao entrar na viewport.
+   Sem JS a classe nunca é adicionada e o conteúdo aparece normalmente —
+   nada de opacity:0 preso no CSS.
+   -------------------------------------------------------------------------- */
+
+.js .revelar {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.js .revelar.visivel {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-lenta) var(--ease),
+    transform var(--dur-lenta) var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .revelar {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Filete horizontal com rótulo — divisor com informação, não decoração.
+   -------------------------------------------------------------------------- */
+
+.filete-rotulado {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.filete-rotulado::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--filete);
+}

@@ -1,0 +1,61 @@
+---
+/**
+ * CABEÇALHO DE SEÇÃO
+ * Rótulo numerado + filete + título. O número da seção é parte da linguagem
+ * de documento do site — não é decoração.
+ */
+import { indice } from '../lib/format';
+
+interface Props {
+  n?: number;
+  kicker: string;
+  titulo: string;
+  subtitulo?: string;
+  /** Alinha o bloco à direita, para alternar a composição entre seções. */
+  direita?: boolean;
+  as?: 'h1' | 'h2' | 'h3';
+}
+
+const { n, kicker, titulo, subtitulo, direita = false, as: Tag = 'h2' }: Props =
+  Astro.props;
+---
+
+<header class:list={['cs', direita && 'cs--direita']}>
+  <p class="cabecalho-secao__indice">
+    <span class="rotulo rotulo--terra">{n !== undefined ? `${indice(n)} — ` : ''}{kicker}</span>
+  </p>
+  <Tag class="cs__titulo">{titulo}</Tag>
+  {subtitulo && <p class="lead cs__sub">{subtitulo}</p>}
+</header>
+
+<style>
+  .cs {
+    display: grid;
+    gap: var(--s-4);
+    margin-bottom: var(--s-7);
+  }
+
+  .cs__titulo {
+    max-width: 20ch;
+  }
+
+  /* Quando o cabeçalho de seção é o título da página, ele ganha o corpo de h1
+     sem perder o desenho do componente. */
+  h1.cs__titulo {
+    font-size: var(--t-h1);
+    letter-spacing: -0.025em;
+  }
+
+  .cs__sub {
+    max-width: 46ch;
+  }
+
+  .cs--direita {
+    justify-items: end;
+    text-align: right;
+  }
+
+  .cs--direita .cabecalho-secao__indice {
+    flex-direction: row-reverse;
+  }
+</style>

@@ -1,0 +1,125 @@
+---
+import Editorial from '../../layouts/Editorial.astro';
+import { glossario, disclaimerGlossario } from '../../data/glossario';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'Glossário do comprador de imóvel rural',
+    inLanguage: 'pt-BR',
+    hasDefinedTerm: glossario.map((v) => ({
+      '@type': 'DefinedTerm',
+      name: v.sigla ? `${v.termo} (${v.sigla})` : v.termo,
+      description: v.resumo,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: glossario.map((v) => ({
+      '@type': 'Question',
+      name: `O que é ${v.sigla ?? v.termo}?`,
+      acceptedAnswer: { '@type': 'Answer', text: `${v.resumo} ${v.porQueImporta}` },
+    })),
+  },
+];
+---
+
+<Editorial
+  titulo="Glossário do comprador rural"
+  tituloSeo="Glossário do comprador rural: matrícula, CAR, CCIR, ITR, outorga e módulo fiscal"
+  descricao="Os doze termos que aparecem na hora errada de uma compra de terra — o que cada um significa e, principalmente, que problema ele resolve ou esconde."
+  kicker="Referência"
+  meta={[{ rotulo: 'Verbetes', valor: String(glossario.length) }]}
+  trilha={[{ rotulo: 'Guias', href: '/guia/' }]}
+  jsonLd={jsonLd}
+  aviso={disclaimerGlossario}
+>
+  <p>
+    Cada verbete tem duas partes: o que o termo é, e por que ele deveria
+    importar para você. A segunda parte é a que resolve negócio.
+  </p>
+
+  <dl class="gl">
+    {
+      glossario.map((v, i) => (
+        <div class="gl__verbete" id={v.sigla?.toLowerCase() ?? undefined}>
+          <dt class="gl__termo">
+            <span class="mono gl__n">{String(i + 1).padStart(2, '0')}</span>
+            <span>
+              {v.termo}
+              {v.sigla && <span class="gl__sigla"> · {v.sigla}</span>}
+            </span>
+          </dt>
+          <dd class="gl__corpo">
+            <p>{v.resumo}</p>
+            <p class="gl__importa">
+              <span class="rotulo rotulo--terra">Por que importa</span>
+              {v.porQueImporta}
+            </p>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</Editorial>
+
+<style>
+  .gl {
+    margin-top: var(--s-7);
+    border-top: var(--borda);
+  }
+
+  .gl__verbete {
+    padding-block: var(--s-6);
+    border-bottom: var(--borda-f);
+    scroll-margin-top: var(--s-7);
+  }
+
+  .gl__termo {
+    display: flex;
+    gap: var(--s-4);
+    align-items: baseline;
+    font-family: var(--f-display);
+    font-size: var(--t-h3);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .gl__n {
+    font-size: var(--t-micro);
+    color: var(--terra);
+    letter-spacing: var(--tracking-rotulo);
+    flex: none;
+  }
+
+  .gl__sigla {
+    font-family: var(--f-mono);
+    font-size: 0.7em;
+    font-weight: 500;
+    color: var(--grafite-40);
+    letter-spacing: 0.04em;
+  }
+
+  .gl__corpo {
+    margin: var(--s-4) 0 0 3rem;
+    display: grid;
+    gap: var(--s-4);
+    max-width: 56ch;
+  }
+
+  .gl__importa {
+    display: grid;
+    gap: var(--s-2);
+    padding-left: var(--s-5);
+    border-left: 2px solid var(--terra);
+    color: var(--grafite-70);
+  }
+
+  @media (max-width: 560px) {
+    .gl__corpo {
+      margin-left: 0;
+    }
+  }
+</style>

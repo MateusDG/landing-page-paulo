@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import BotaoWhats from '../components/BotaoWhats.astro';
+import Croqui from '../components/Croqui.astro';
+import { CONTORNO_ES, VIEWBOX_ES, territorios } from '../data/territorios';
+---
+
+<Base titulo="Página não encontrada" descricao="O endereço acessado não corresponde a nenhuma página do site. Volte para a carteira de fazendas, chácaras e terrenos rurais no Espírito Santo." noindex>
+  <section class="secao e4">
+    <div class="env e4__int">
+      <div>
+        <p class="rotulo rotulo--terra">Erro 404</p>
+        <h1 class="e4__titulo">Essa divisa não existe.</h1>
+        <p class="lead e4__texto">
+          O endereço que você abriu não corresponde a nenhuma página do site.
+          Pode ser um link antigo — ou uma área que saiu da carteira.
+        </p>
+
+        <ul class="e4__links">
+          <li><a class="link-seta" href="/">Voltar para o começo <span aria-hidden="true">→</span></a></li>
+          <li><a class="link-seta" href="/imoveis/">Ver a carteira <span aria-hidden="true">→</span></a></li>
+          {
+            territorios.map((t) => (
+              <li>
+                <a class="link-seta" href={`/regiao/${t.slug}/`}>
+                  {t.nome} <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="e4__acao">
+          <BotaoWhats
+            origem="404"
+            variante="secundario"
+            mensagem="Oi, cliquei num link do site que não abriu."
+            rotulo="Avisar que o link quebrou"
+          />
+        </div>
+      </div>
+
+      <div class="e4__mapa">
+        <Croqui path={CONTORNO_ES} viewBox={VIEWBOX_ES} tamanho={240} desenhar />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .e4__int {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: var(--s-8);
+    align-items: center;
+  }
+
+  .e4__titulo {
+    font-size: var(--t-h1);
+    margin-top: var(--s-3);
+    max-width: 14ch;
+  }
+
+  .e4__texto {
+    margin-top: var(--s-5);
+    max-width: 46ch;
+  }
+
+  .e4__links {
+    display: grid;
+    gap: var(--s-3);
+    justify-items: start;
+    margin-top: var(--s-7);
+    padding-top: var(--s-5);
+    border-top: var(--borda);
+  }
+
+  .e4__acao {
+    margin-top: var(--s-7);
+  }
+
+  .e4__mapa {
+    display: grid;
+    justify-items: center;
+    color: var(--filete);
+  }
+
+  @media (max-width: 900px) {
+    .e4__int {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .e4__mapa {
+      display: none;
+    }
+  }
+</style>

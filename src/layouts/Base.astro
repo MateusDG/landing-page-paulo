@@ -1,0 +1,206 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/tipografia.css';
+import '../styles/componentes.css';
+import '../styles/impressao.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BarraMobile from '../components/BarraMobile.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { PUBLIC_UMAMI_SRC, PUBLIC_UMAMI_ID } from 'astro:env/client';
+import { corretor, meta, DADOS_DE_EXEMPLO } from '../data/site';
+
+interface Props {
+  titulo?: string;
+  descricao?: string;
+  /** Caminho relativo da imagem OG. Padrão: a OG genérica do site. */
+  og?: string;
+  /** Some da indexação (páginas legais, obrigado). */
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  class?: string;
+}
+
+const {
+  titulo,
+  descricao = meta.descricao,
+  og = '/og/padrao.png',
+  noindex = false,
+  jsonLd,
+  class: classe = '',
+} = Astro.props;
+
+const tituloFinal = titulo ? `${titulo} — ${corretor.nome}` : meta.titulo;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogUrl = new URL(og, Astro.site).href;
+
+/* Ruído de papel: SVG inline em data URI. ~330 bytes, zero requisição.
+   Tira o "digital limpo demais" que denuncia página gerada. */
+const RUIDO =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E\")";
+
+const umamiSrc = PUBLIC_UMAMI_SRC;
+const umamiId = PUBLIC_UMAMI_ID;
+
+/* O aviso aparece sempre que DADOS_DE_EXEMPLO for true — inclusive em
+   staging e em produção. É intencional: se o site foi ao ar com nome, CRECI
+   e telefone fictícios, esconder isso seria o pior resultado possível.
+   Sai sozinho ao virar a chave em src/data/site.ts. */
+const mostrarAvisoExemplo = DADOS_DE_EXEMPLO;
+
+/* Identidade do negócio — vai em todas as páginas. */
+const jsonLdBase = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  '@id': `${Astro.site}#corretor`,
+  name: corretor.nome,
+  description: meta.descricao,
+  url: Astro.site?.href,
+  telephone: `+${corretor.whatsapp}`,
+  email: corretor.email,
+  areaServed: {
+    '@type': 'State',
+    name: 'Espírito Santo',
+    address: { '@type': 'PostalAddress', addressRegion: 'ES', addressCountry: 'BR' },
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: corretor.cidadeBase,
+    addressRegion: corretor.uf,
+    addressCountry: 'BR',
+  },
+  knowsLanguage: 'pt-BR',
+  identifier: { '@type': 'PropertyValue', name: 'CRECI', value: `CRECI-${corretor.uf} ${corretor.creci}` },
+};
+---
+
+<!doctype html>
+<html lang="pt-BR" style={`--textura-ruido: ${RUIDO}`}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloFinal}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={meta.locale} />
+    <meta property="og:site_name" content={corretor.nome} />
+    <meta property="og:title" content={tituloFinal} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#f5f3ee" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {/* Só a display é pré-carregada: ela é a fonte do LCP. */}
+    <link
+      rel="preload"
+      href="/fonts/fraunces-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <JsonLd dados={jsonLd ? [jsonLdBase, ...(Array.isArray(jsonLd) ? jsonLd : [jsonLd])] : jsonLdBase} />
+
+    {
+      umamiSrc && umamiId && (
+        <script defer src={umamiSrc} data-website-id={umamiId} is:inline />
+      )
+    }
+
+    {/* Marca a página como "com JS" antes da primeira pintura, para que as
+        revelações não pisquem. Único script bloqueante do site. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body class={classe}>
+    <div class="ruido" aria-hidden="true"></div>
+    <a class="pular-para-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+    {
+      mostrarAvisoExemplo && (
+        <p class="aviso-exemplo">
+          <strong>Dados de exemplo.</strong> Nome, CRECI, telefone, imóveis,
+          fotos e números ainda são fictícios. Ver <code>src/data/site.ts</code>{' '}
+          e README §“Antes de publicar”.
+        </p>
+      )
+    }
+
+    <Header />
+
+    <main id="conteudo">
+      <slot />
+    </main>
+
+    <Footer />
+    <BarraMobile />
+
+    <script>
+      /* Revelação ao entrar na viewport + desenho do croqui.
+         Um observer só, para tudo. Se o navegador não suportar, o conteúdo
+         simplesmente já está visível (as classes nunca são removidas do CSS
+         base — ver componentes.css). */
+      const alvos = document.querySelectorAll('.revelar, .croqui--desenhar');
+
+      if ('IntersectionObserver' in window && alvos.length) {
+        const obs = new IntersectionObserver(
+          (entradas) => {
+            for (const e of entradas) {
+              if (!e.isIntersecting) continue;
+              const el = e.target as HTMLElement;
+              el.classList.add(el.classList.contains('revelar') ? 'visivel' : 'desenhado');
+              obs.unobserve(el);
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        alvos.forEach((a) => obs.observe(a));
+      } else {
+        alvos.forEach((a) => {
+          a.classList.add('visivel', 'desenhado');
+        });
+      }
+
+      /* Analytics: um listener delegado para todo elemento com data-evento.
+         Funciona com Umami, GA4 ou qualquer coisa que exponha um global. */
+      document.addEventListener('click', (ev) => {
+        const alvo = (ev.target as HTMLElement)?.closest<HTMLElement>('[data-evento]');
+        if (!alvo) return;
+        const nome = alvo.dataset.evento!;
+        const dados = { ...alvo.dataset };
+        delete dados.evento;
+        (window as any).umami?.track?.(nome, dados);
+        (window as any).gtag?.('event', nome, dados);
+      });
+    </script>
+
+    <style>
+      .aviso-exemplo {
+        position: relative;
+        z-index: 200;
+        background: var(--terra);
+        color: var(--papel);
+        padding: var(--s-3) var(--margem);
+        font-size: var(--t-micro);
+        line-height: 1.5;
+      }
+
+      .aviso-exemplo code {
+        font-family: var(--f-mono);
+      }
+    </style>
+  </body>
+</html>

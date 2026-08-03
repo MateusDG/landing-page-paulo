@@ -1,0 +1,171 @@
+---
+/**
+ * GALERIA DO IMÓVEL
+ *
+ * Quando existem fotos, mostra a galeria. Quando ainda não existem, mostra
+ * a SHOT LIST — as doze fotos que precisam ser feitas naquela área, com a
+ * razão de cada uma.
+ *
+ * Isso é deliberado. A alternativa seria banco de imagens, e uma foto de
+ * stock destrói mais credibilidade do que dez fotos amadoras somam. O estado
+ * vazio aqui não é um buraco: é a lista de tarefas do fotógrafo, útil de
+ * verdade para o corretor. Ver README §Fotografia.
+ */
+interface Foto {
+  src: string;
+  alt: string;
+  legenda?: string;
+}
+
+interface Props {
+  fotos: Foto[];
+  municipio: string;
+}
+
+const { fotos, municipio } = Astro.props;
+
+const shotList = [
+  ['A chegada', 'A estrada de acesso vista do carro. Acesso é a objeção nº 1.'],
+  ['A porteira', 'Ancora o lugar e mostra o estado da entrada.'],
+  ['A vista da sede', 'É o que o comprador vai olhar todo dia.'],
+  ['A água', 'Nascente, córrego, açude ou poço. Fator de preço nº 1.'],
+  ['O solo na mão', 'Close. Prova de terreno e a imagem mais forte do conjunto.'],
+  ['A lavoura ou o pasto', 'Plano médio, estado real da produção.'],
+  ['As benfeitorias', 'Incluindo o que está ruim. Honestidade é credibilidade.'],
+  ['Cerca e divisa', 'Sinaliza cuidado com limites.'],
+  ['Energia', 'Poste, padrão, bitola. Objeção prática comum.'],
+  ['A vizinhança', 'O que se vê da divisa. Ninguém mostra; todos querem saber.'],
+  ['Uma aérea só', 'Baixa altitude, para entender a forma da área.'],
+  ['O detalhe humano', 'Botina, mão, cachorro, café no fogão. É o que faz parecer real.'],
+];
+---
+
+{
+  fotos.length > 0 ? (
+    <div class="gal">
+      {fotos.map((f, i) => (
+        <figure class:list={['gal__item', i === 0 && 'gal__item--larga']}>
+          <img src={f.src} alt={f.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          {f.legenda && <figcaption class="rotulo rotulo--fraco">{f.legenda}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  ) : (
+    <div class="shot">
+      <div class="shot__cab">
+        <p class="rotulo rotulo--terra">Fotografia pendente</p>
+        <p class="shot__intro">
+          Esta área ainda não foi fotografada. Quando for, entram estas doze —
+          e nenhuma imagem de banco. As fotos de {municipio} são feitas por mim,
+          na área, no dia da vistoria.
+        </p>
+      </div>
+
+      <ol class="shot__lista">
+        {shotList.map(([titulo, porque], i) => (
+          <li class="shot__item">
+            <span class="mono shot__n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="shot__quadro" aria-hidden="true" />
+            <span class="shot__texto">
+              <span class="shot__titulo">{titulo}</span>
+              <span class="shot__porque">{porque}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
+<style>
+  .gal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--gutter);
+  }
+
+  .gal__item {
+    margin: 0;
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .gal__item--larga {
+    grid-column: 1 / -1;
+  }
+
+  .gal__item img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border: var(--borda);
+  }
+
+  .gal__item--larga img {
+    aspect-ratio: 21 / 9;
+  }
+
+  /* --- Estado sem fotos ------------------------------------------------- */
+  .shot {
+    border: var(--borda);
+    background: var(--marmore);
+    padding: clamp(var(--s-5), 4vw, var(--s-7));
+  }
+
+  .shot__intro {
+    margin-top: var(--s-3);
+    font-size: var(--t-peq);
+    line-height: 1.6;
+    color: var(--grafite-70);
+    max-width: 56ch;
+  }
+
+  .shot__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--gutter);
+    margin-top: var(--s-6);
+    padding-top: var(--s-6);
+    border-top: var(--borda);
+  }
+
+  .shot__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: var(--s-2) var(--s-3);
+    align-items: start;
+  }
+
+  .shot__n {
+    font-size: var(--t-micro);
+    color: var(--terra);
+    letter-spacing: var(--tracking-rotulo);
+    grid-row: 1;
+  }
+
+  .shot__quadro {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    aspect-ratio: 3 / 2;
+    border: 1px dashed var(--filete);
+    background: var(--papel-2);
+  }
+
+  .shot__texto {
+    grid-row: 1;
+    display: grid;
+    gap: 2px;
+  }
+
+  .shot__titulo {
+    font-size: var(--t-peq);
+    font-weight: 600;
+  }
+
+  .shot__porque {
+    font-size: var(--t-micro);
+    line-height: 1.5;
+    color: var(--grafite-70);
+  }
+</style>
