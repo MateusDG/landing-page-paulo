@@ -54,10 +54,19 @@ const bloquearIndexacao = noindex || DADOS_DE_EXEMPLO;
 const diretivaRobos = bloquearIndexacao
   ? 'noindex, nofollow'
   : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+function urlHttpsOpcional(valor: string | undefined, nome: string): string | undefined {
+  if (!valor) return undefined;
+  const url = new URL(valor);
+  if (url.protocol !== 'https:' || url.username || url.password) {
+    throw new Error(`${nome} precisa ser uma URL HTTPS sem credenciais.`);
+  }
+  return url.href;
+}
+
 const linksExternos = [
-  PUBLIC_GOOGLE_BUSINESS_URL,
-  PUBLIC_INSTAGRAM_URL,
-  PUBLIC_FACEBOOK_URL,
+  urlHttpsOpcional(PUBLIC_GOOGLE_BUSINESS_URL, 'PUBLIC_GOOGLE_BUSINESS_URL'),
+  urlHttpsOpcional(PUBLIC_INSTAGRAM_URL, 'PUBLIC_INSTAGRAM_URL'),
+  urlHttpsOpcional(PUBLIC_FACEBOOK_URL, 'PUBLIC_FACEBOOK_URL'),
 ].filter((url): url is string => Boolean(url));
 
 /* Ruído de papel: SVG inline em data URI. ~330 bytes, zero requisição.
@@ -65,9 +74,17 @@ const linksExternos = [
 const RUIDO =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E\")";
 
-const umamiSrc = PUBLIC_UMAMI_SRC;
+const umamiSrc = urlHttpsOpcional(PUBLIC_UMAMI_SRC, 'PUBLIC_UMAMI_SRC');
 const umamiId = PUBLIC_UMAMI_ID;
 const gtmId = PUBLIC_GTM_ID;
+
+if (Boolean(umamiSrc) !== Boolean(umamiId)) {
+  throw new Error('PUBLIC_UMAMI_SRC e PUBLIC_UMAMI_ID precisam ser preenchidos juntos.');
+}
+
+if (gtmId && !/^GTM-[A-Z0-9]+$/.test(gtmId)) {
+  throw new Error('PUBLIC_GTM_ID precisa seguir o formato GTM-XXXXXXX.');
+}
 
 /* Identidade do negócio, vai em todas as páginas. */
 const jsonLdBase = {

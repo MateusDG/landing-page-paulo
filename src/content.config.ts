@@ -29,8 +29,29 @@ const REGIOES = [
 
 const FINALIDADES = ['produzir', 'morar', 'lazer', 'investir', 'turismo'] as const;
 
+const caminhoFoto = z
+  .string()
+  .regex(
+    /^\/imoveis\/[a-z0-9-]+\/[a-z0-9._-]+\.(?:jpe?g|png|webp)$/i,
+    'a foto precisa ser um arquivo local dentro de /imoveis/',
+  )
+  .refine((src) => !src.includes('..'), 'o caminho da foto nao pode conter ..');
+
+const caminhoSvg = z
+  .string()
+  .min(20, 'croqui é obrigatório, ver README §Croquis')
+  .regex(
+    /^[MmLlHhVvCcSsQqTtAaZz0-9+.,\-\s]+$/,
+    'croqui contem caracteres que nao pertencem a um path SVG',
+  );
+
+const viewBoxSvg = z.string().regex(
+  /^-?\d+(?:\.\d+)?(?:\s+-?\d+(?:\.\d+)?){3}$/,
+  'viewBox precisa conter exatamente quatro numeros',
+);
+
 const foto = z.object({
-  src: z.string(),
+  src: caminhoFoto,
   /* alt específico, não "fazenda". Ver README §Fotografia. */
   alt: z.string().min(12, 'alt precisa descrever a foto, não rotulá-la'),
   legenda: z.string().optional(),
@@ -53,8 +74,8 @@ const imoveis = defineCollection({
 
       /* Perímetro real da área, simplificado para ~20 vértices.
          Origem: shapefile do CAR ou do SIGEF. Ver README §Croquis. */
-      croqui: z.string().min(20, 'croqui é obrigatório, ver README §Croquis'),
-      croquiViewBox: z.string().default('0 0 100 100'),
+      croqui: caminhoSvg,
+      croquiViewBox: viewBoxSvg.default('0 0 100 100'),
       croquiVerificado: z.boolean().default(false),
 
       finalidade: z.array(z.enum(FINALIDADES)).min(1),

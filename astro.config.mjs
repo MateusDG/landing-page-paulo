@@ -7,8 +7,20 @@ import { DADOS_DE_EXEMPLO } from './src/data/site.ts';
 
 // O domínio final entra aqui e em .env (PUBLIC_SITE_URL).
 // Ele alimenta sitemap, canonical, og:url e o JSON-LD.
-const SITE = process.env.PUBLIC_SITE_URL ?? 'https://valdecimoveis.com.br';
-const SITE_ORIGIN = SITE.endsWith('/') ? SITE.slice(0, -1) : SITE;
+/** @param {string} valor */
+function validarSite(valor) {
+  const url = new URL(valor);
+  if (url.protocol !== 'https:' || url.username || url.password) {
+    throw new Error('PUBLIC_SITE_URL precisa ser uma URL HTTPS sem credenciais.');
+  }
+  if (url.pathname !== '/' || url.search || url.hash) {
+    throw new Error('PUBLIC_SITE_URL deve conter somente a origem, sem caminho, busca ou hash.');
+  }
+  return url.origin;
+}
+
+const SITE = validarSite(process.env.PUBLIC_SITE_URL ?? 'https://valdecimoveis.com.br');
+const SITE_ORIGIN = SITE;
 
 /* O sitemap principal também carrega as fotos de cada anúncio. Assim o
    Google processa páginas e imagens na mesma leitura, sem depender de um

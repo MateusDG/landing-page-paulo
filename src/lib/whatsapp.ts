@@ -10,6 +10,10 @@ import { corretor } from '../data/site';
 
 const NUMERO = String(PUBLIC_WHATSAPP || corretor.whatsapp).replace(/\D/g, '');
 
+if (!/^55\d{10,11}$/.test(NUMERO)) {
+  throw new Error('PUBLIC_WHATSAPP precisa estar no formato internacional: 55 + DDD + numero.');
+}
+
 export interface ContextoWhats {
   /** Código interno do imóvel, ex.: FA-0142 */
   imovel?: string;

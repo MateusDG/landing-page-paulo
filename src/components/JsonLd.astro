@@ -8,7 +8,14 @@ interface Props {
 }
 
 const { dados } = Astro.props;
-const json = JSON.stringify(dados);
+/* Evita que um texto futuro contendo `</script>` encerre o bloco e injete
+   HTML executavel. Os escapes continuam sendo JSON valido para o Google. */
+const json = JSON.stringify(dados)
+  .replace(/&/g, '\\u0026')
+  .replace(/</g, '\\u003c')
+  .replace(/>/g, '\\u003e')
+  .replace(/\u2028/g, '\\u2028')
+  .replace(/\u2029/g, '\\u2029');
 ---
 
 <script type="application/ld+json" set:html={json} is:inline />
