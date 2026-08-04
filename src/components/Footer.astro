@@ -21,8 +21,13 @@ const ano = new Date().getFullYear();
   <div class="env">
     <div class="rod__grade">
       <div class="rod__marca">
-        <p class="rod__nome">{corretor.nome}</p>
-        <p class="rotulo rotulo--fraco">{corretor.papel}</p>
+        <img
+          class="rod__logo"
+          src="/logo.svg"
+          alt={`${corretor.nome} — ${corretor.papel}`}
+          width="300"
+          height="71"
+        />
 
         <div class="rod__contato" id="contato-whatsapp">
           <ContatoWhats origem="rodape" />
@@ -87,11 +92,10 @@ const ano = new Date().getFullYear();
     gap: var(--s-7) var(--gutter);
   }
 
-  .rod__nome {
-    font-family: var(--f-display);
-    font-size: var(--t-h3);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+  .rod__logo {
+    display: block;
+    width: min(300px, 100%);
+    height: auto;
   }
 
   .rod__contato {

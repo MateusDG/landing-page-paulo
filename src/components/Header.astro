@@ -23,8 +23,13 @@ const ativo = (href: string) => {
 <header class="cab" data-cabecalho>
   <div class="env cab__int">
     <a class="cab__marca" href="/">
-      <span class="cab__nome">{corretor.nome}</span>
-      <span class="rotulo rotulo--fraco cab__papel">{corretor.papel}</span>
+      <img
+        class="cab__logo"
+        src="/logo.svg"
+        alt={`${corretor.nome} — ${corretor.papel}`}
+        width="244"
+        height="58"
+      />
     </a>
 
     <nav class="cab__nav" aria-label="Navegação principal">
@@ -69,22 +74,15 @@ const ativo = (href: string) => {
   }
 
   .cab__marca {
-    display: grid;
-    gap: 3px;
+    display: block;
     text-decoration: none;
     flex: none;
   }
 
-  .cab__nome {
-    font-family: var(--f-display);
-    font-size: 1.0625rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.1;
-  }
-
-  .cab__papel {
-    font-size: 0.6875rem;
+  .cab__logo {
+    display: block;
+    width: 244px;
+    height: auto;
   }
 
   .cab__lista {
