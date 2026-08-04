@@ -36,4 +36,18 @@ ServerSignature Off
   Header always set X-Permitted-Cross-Domain-Policies "none"
   Header always set X-XSS-Protection "0"
   Header always unset X-Powered-By
+
+  # HTML pode ser reutilizado brevemente pelo navegador/CDN. Os arquivos do
+  # Astro levam hash no nome e podem permanecer em cache por um ano.
+  <FilesMatch "\.html?$">
+    Header set Cache-Control "public, max-age=300, stale-while-revalidate=86400"
+  </FilesMatch>
+  <FilesMatch "\.(?:woff2|jpe?g|png|webp|avif|svg)$">
+    Header set Cache-Control "public, max-age=2592000, stale-while-revalidate=86400"
+  </FilesMatch>
+
+  <IfModule mod_setenvif.c>
+    SetEnvIf Request_URI "^/_astro/" RECURSO_COM_HASH=1
+    Header set Cache-Control "public, max-age=31536000, immutable" env=RECURSO_COM_HASH
+  </IfModule>
 </IfModule>

@@ -96,7 +96,6 @@ const politica = [
   "frame-ancestors 'none'",
   "form-action 'self'",
   `script-src ${fontesScript.join(' ')}`,
-  `script-src-elem ${fontesScript.join(' ')}`,
   "script-src-attr 'none'",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",

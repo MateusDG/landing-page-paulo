@@ -69,6 +69,7 @@ const shotList = [
               height={fotos[0].altura ?? 1067}
               loading="lazy"
               decoding="async"
+              fetchpriority="low"
             />
           </picture>
           <span class="gal__abrir-hint">Abrir galeria</span>
@@ -118,6 +119,7 @@ const shotList = [
                   height={f.altura ?? 1067}
                   loading="lazy"
                   decoding="async"
+                  fetchpriority="low"
                 />
               </picture>
               <span class="gal__thumb-n">{String(i + 1).padStart(2, '0')}</span>

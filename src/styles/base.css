@@ -12,7 +12,9 @@
   font-weight: 400 700;
   font-stretch: normal;
   font-style: normal;
-  font-display: swap;
+  /* O título principal é o LCP. Em conexões lentas, `optional` impede uma
+     troca tardia de fonte de repintar esse título vários segundos depois. */
+  font-display: optional;
   /* opsz é aplicado automaticamente pelo navegador via font-optical-sizing */
 }
 
@@ -21,7 +23,7 @@
   src: url('/fonts/inter-tight-var.woff2') format('woff2-variations');
   font-weight: 400 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -29,7 +31,7 @@
   src: url('/fonts/jetbrains-mono-var.woff2') format('woff2-variations');
   font-weight: 400 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* ---- Reset --------------------------------------------------------------- */

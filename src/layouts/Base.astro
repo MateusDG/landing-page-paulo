@@ -168,6 +168,7 @@ const jsonLdBase = {
       as="font"
       type="font/woff2"
       crossorigin
+      fetchpriority="high"
     />
 
     <JsonLd dados={jsonLd ? [jsonLdBase, ...(Array.isArray(jsonLd) ? jsonLd : [jsonLd])] : jsonLdBase} />

@@ -43,11 +43,10 @@ export default defineConfig({
   trailingSlash: 'always',
   compressHTML: true,
   build: {
-    /* 'auto' inlina só as folhas pequenas e deixa a principal como arquivo
-       com hash — que fica em cache entre as páginas. Com 29 páginas e um CSS
-       de ~40 KB, repetir o estilo inteiro em cada HTML custaria mais do que
-       a requisição extra da primeira visita. */
-    inlineStylesheets: 'auto',
+    /* O CSS crítico é pequeno e o título do hero é o LCP. Inlinar remove
+       duas viagens de rede antes da primeira pintura, especialmente valiosas
+       no 4G; a compressão do HTML mantém o custo de transferência contido. */
+    inlineStylesheets: 'always',
     format: 'directory',
   },
   prefetch: {
