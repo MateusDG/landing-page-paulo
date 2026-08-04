@@ -9,7 +9,14 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BarraMobile from '../components/BarraMobile.astro';
 import JsonLd from '../components/JsonLd.astro';
-import { PUBLIC_UMAMI_SRC, PUBLIC_UMAMI_ID } from 'astro:env/client';
+import {
+  PUBLIC_UMAMI_SRC,
+  PUBLIC_UMAMI_ID,
+  PUBLIC_GOOGLE_SITE_VERIFICATION,
+  PUBLIC_GOOGLE_BUSINESS_URL,
+  PUBLIC_INSTAGRAM_URL,
+  PUBLIC_FACEBOOK_URL,
+} from 'astro:env/client';
 import { corretor, meta, DADOS_DE_EXEMPLO } from '../data/site';
 import { numeroWhats } from '../lib/whatsapp';
 
@@ -35,10 +42,22 @@ const {
   class: classe = '',
 } = Astro.props;
 
-const tituloFinal = titulo ? `${titulo} | ${corretor.nome}` : meta.titulo;
+const tituloFinal = titulo
+  ? titulo.includes(corretor.nome)
+    ? titulo
+    : `${titulo} | ${corretor.nome}`
+  : meta.titulo;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogUrl = new URL(og, Astro.site).href;
 const bloquearIndexacao = noindex || DADOS_DE_EXEMPLO;
+const diretivaRobos = bloquearIndexacao
+  ? 'noindex, nofollow'
+  : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+const linksExternos = [
+  PUBLIC_GOOGLE_BUSINESS_URL,
+  PUBLIC_INSTAGRAM_URL,
+  PUBLIC_FACEBOOK_URL,
+].filter((url): url is string => Boolean(url));
 
 /* Ruído de papel: SVG inline em data URI. ~330 bytes, zero requisição.
    Tira o "digital limpo demais" que denuncia página gerada. */
@@ -57,6 +76,15 @@ const jsonLdBase = {
   description: meta.descricao,
   url: Astro.site?.href,
   telephone: `+${numeroWhats}`,
+  image: new URL('/og/padrao.png', Astro.site).href,
+  logo: new URL('/favicon.svg', Astro.site).href,
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: `+${numeroWhats}`,
+    contactType: 'Atendimento comercial',
+    areaServed: 'BR-ES',
+    availableLanguage: 'Portuguese',
+  },
   areaServed: {
     '@type': 'State',
     name: 'Espírito Santo',
@@ -68,6 +96,14 @@ const jsonLdBase = {
     addressCountry: 'BR',
   },
   knowsLanguage: 'pt-BR',
+  knowsAbout: [
+    'Compra e venda de imóveis rurais',
+    'Fazendas',
+    'Sítios',
+    'Chácaras',
+    'Terrenos rurais',
+  ],
+  ...(linksExternos.length ? { sameAs: linksExternos } : {}),
 };
 ---
 
@@ -78,8 +114,12 @@ const jsonLdBase = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tituloFinal}</title>
     <meta name="description" content={descricao} />
+    <meta name="author" content={corretor.nome} />
+    <meta name="robots" content={diretivaRobos} />
+    {PUBLIC_GOOGLE_SITE_VERIFICATION && (
+      <meta name="google-site-verification" content={PUBLIC_GOOGLE_SITE_VERIFICATION} />
+    )}
     <link rel="canonical" href={canonical} />
-    {bloquearIndexacao && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content={ogTipo} />
     <meta property="og:locale" content={meta.locale} />
@@ -88,10 +128,15 @@ const jsonLdBase = {
     <meta property="og:description" content={descricao} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:secure_url" content={ogUrl} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content={`Imóveis rurais com ${corretor.nome}`} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={tituloFinal} />
+    <meta name="twitter:description" content={descricao} />
+    <meta name="twitter:image" content={ogUrl} />
 
     <meta name="theme-color" content="#f5f3ee" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

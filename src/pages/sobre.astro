@@ -10,8 +10,10 @@ import { numeroWhats } from '../lib/whatsapp';
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
+  url: new URL('/sobre/', Astro.site).href,
   mainEntity: {
     '@type': 'Person',
+    '@id': `${Astro.site}#valdecir-francisco`,
     name: corretor.nome,
     jobTitle: corretor.papel,
     telephone: `+${numeroWhats}`,
@@ -28,7 +30,7 @@ const jsonLd = {
 ---
 
 <Base
-  titulo="Sobre"
+  titulo={`${corretor.nome}, imóveis rurais no Espírito Santo`}
   descricao={`${corretor.nome}, compra e venda de imóveis rurais no Espírito Santo. Atendimento direto para compradores e proprietários.`}
   jsonLd={jsonLd}
 >

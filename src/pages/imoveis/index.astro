@@ -40,25 +40,44 @@ const faixas = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Carteira de imóveis rurais no Espírito Santo',
+  url: new URL('/imoveis/', Astro.site).href,
+  name: 'Fazendas, sítios e chácaras à venda no Espírito Santo',
+  description: `${ativas.length} imóveis rurais à venda no Espírito Santo, com fotos e informações de cada propriedade.`,
   numberOfItems: imoveis.length,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: imoveis.length,
+    itemListElement: imoveis.map((imovel, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: imovel.data.titulo,
+      url: new URL(`/imovel/${imovel.id}/`, Astro.site).href,
+    })),
+  },
   inLanguage: 'pt-BR',
 };
 ---
 
 <Base
-  titulo="Carteira, fazendas, chácaras e terrenos rurais no ES"
-  descricao={`${ativas.length} áreas rurais em carteira no Espírito Santo: fazendas, chácaras, sítios e terrenos, com ficha técnica, dados de campo e croqui do perímetro.`}
+  titulo="Fazendas, sítios e chácaras à venda no Espírito Santo"
+  descricao={`Veja ${ativas.length} imóveis rurais à venda no Espírito Santo. Consulte fotos, área, preço, acesso e características de fazendas, sítios, chácaras e terrenos.`}
   jsonLd={jsonLd}
 >
   <section class="secao--compacta ct__cab-env">
     <div class="env">
       <CabecalhoSecao
         kicker="A carteira"
-        titulo="Todas as áreas"
-        subtitulo="Ativas, reservadas e vendidas. Mantenho as vendidas no ar porque elas mostram o que passa por aqui e em quanto tempo sai."
+        titulo="Fazendas, sítios e chácaras à venda no Espírito Santo"
+        subtitulo="Consulte as propriedades disponíveis e filtre por finalidade, região ou tamanho da área."
         as="h1"
       />
+
+      <p class="ct__intro peq secundario">
+        Veja imóveis nas <a href="/regiao/montanhas-capixabas/">Montanhas Capixabas</a>,
+        no <a href="/regiao/norte-capixaba/">Norte Capixaba</a>, no{' '}
+        <a href="/regiao/sul-e-caparao/">Sul e Caparaó</a> e no{' '}
+        <a href="/regiao/litoral-e-franja/">Litoral e entorno da Grande Vitória</a>.
+      </p>
 
       <div class="ct__controles">
         <div class="ct__filtros" data-filtros>
@@ -190,6 +209,11 @@ const jsonLd = {
     align-items: start;
     padding-top: var(--s-5);
     border-top: var(--borda);
+  }
+
+  .ct__intro {
+    max-width: 72ch;
+    margin-top: var(--s-5);
   }
 
   .ct__filtros {

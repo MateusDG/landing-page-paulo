@@ -22,17 +22,27 @@ for (const grupo of grupos) {
 
   for (const [indice, nome] of nomes.entries()) {
     const arquivo = path.join(origem, nome);
-    const saida = path.join(destino, `${String(indice + 1).padStart(2, '0')}.jpg`);
-    await sharp(arquivo)
-      .rotate()
-      .resize({
-        width: 1600,
-        height: 1600,
-        fit: 'inside',
-        withoutEnlargement: true,
-      })
-      .jpeg({ quality: 95, progressive: true, mozjpeg: true })
-      .toFile(saida);
+    const base = path.join(destino, String(indice + 1).padStart(2, '0'));
+
+    await Promise.all([
+      sharp(arquivo)
+        .rotate()
+        .resize({
+          width: 1600,
+          height: 1600,
+          fit: 'inside',
+          withoutEnlargement: true,
+        })
+        .jpeg({ quality: 86, progressive: true, mozjpeg: true })
+        .toFile(`${base}.jpg`),
+      ...[160, 320, 640, 960].map((largura) =>
+        sharp(arquivo)
+          .rotate()
+          .resize({ width: largura, withoutEnlargement: true })
+          .webp({ quality: largura === 160 ? 76 : 82, effort: 5 })
+          .toFile(`${base}-${largura}.webp`),
+      ),
+    ]);
   }
 
   console.log(`${grupo.origem}: ${nomes.length} fotos preparadas em public/imoveis/${grupo.destino}`);

@@ -32,6 +32,15 @@ jobs:
         run: npm run check
 
       - name: Gerar o site estatico
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://valdecimoveis.com.br' }}
+          PUBLIC_WHATSAPP: ${{ vars.PUBLIC_WHATSAPP || '5527999309535' }}
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_GOOGLE_BUSINESS_URL: ${{ vars.PUBLIC_GOOGLE_BUSINESS_URL }}
+          PUBLIC_INSTAGRAM_URL: ${{ vars.PUBLIC_INSTAGRAM_URL }}
+          PUBLIC_FACEBOOK_URL: ${{ vars.PUBLIC_FACEBOOK_URL }}
+          PUBLIC_UMAMI_SRC: ${{ vars.PUBLIC_UMAMI_SRC }}
+          PUBLIC_UMAMI_ID: ${{ vars.PUBLIC_UMAMI_ID }}
         run: npm run build
 
       - name: Atualizar a branch de publicacao

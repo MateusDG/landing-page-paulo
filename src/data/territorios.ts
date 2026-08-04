@@ -35,6 +35,8 @@ export interface Territorio {
   acesso: string[];
   relevo: string;
   resumo: string;
+  /** Descrição curta e exclusiva para o resultado no Google. */
+  descricaoSeo: string;
   /** Quem compra aqui, alimenta o filtro de atendimento. */
   perfis: string[];
   /** Nota de campo do corretor. Primeira pessoa. É o que nenhum portal tem. */
@@ -75,6 +77,8 @@ export const territorios: Territorio[] = [
       'Onde ficam as áreas maiores e a agricultura em escala do estado. ' +
       'Maior polo de café conilon do país, com mamão, coco e eucalipto ' +
       'dividindo o mesmo eixo logístico da BR-101 e dos portos.',
+    descricaoSeo:
+      'Fazendas e imóveis rurais no Norte Capixaba, com áreas para produção, café conilon, pecuária e investimento. Veja as propriedades disponíveis.',
     perfis: ['produzir', 'investir'],
     notaDeCampo:
       'Aqui o preço não é feito pelo tamanho da área, é feito pela água. ' +
@@ -105,6 +109,8 @@ export const territorios: Territorio[] = [
       'clima ameno o ano todo. Propriedades menores e muito parceladas por ' +
       'herança familiar, o que torna importante conhecer bem as características ' +
       'e os limites de cada área.',
+    descricaoSeo:
+      'Sítios, chácaras e imóveis rurais nas Montanhas Capixabas, incluindo Santa Teresa, Domingos Martins e Venda Nova do Imigrante.',
     perfis: ['morar', 'lazer', 'turismo'],
     notaDeCampo:
       'Muita área boa aqui vem de partilha de família e tem características ' +
@@ -133,6 +139,8 @@ export const territorios: Territorio[] = [
       'Herança cafeeira antiga, sedes históricas e forte influência mineira ' +
       'no jeito de negociar. O Caparaó puxa café especial com pontuação e ' +
       'turismo de montanha; o eixo de Cachoeiro puxa rocha ornamental.',
+    descricaoSeo:
+      'Fazendas, sítios e imóveis rurais no Sul do Espírito Santo e Caparaó, com opções para café, pecuária, turismo e investimento.',
     perfis: ['produzir', 'investir', 'turismo'],
     notaDeCampo:
       'É a região onde mais se fala em alqueire e menos em hectare. ' +
@@ -162,6 +170,8 @@ export const territorios: Territorio[] = [
       'Proximidade da Grande Vitória, pressão de urbanização e demanda ' +
       'constante por chácara de fim de semana. É também onde a expectativa ' +
       'especulativa mais distorce o preço pedido.',
+    descricaoSeo:
+      'Chácaras, terrenos e imóveis rurais no litoral e na região próxima à Grande Vitória, com opções para moradia, lazer e investimento.',
     perfis: ['lazer', 'investir', 'morar'],
     notaDeCampo:
       'É a região onde eu mais recuso área. Muita coisa é vendida como ' +

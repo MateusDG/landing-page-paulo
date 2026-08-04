@@ -61,13 +61,30 @@ const contagemPorRegiao = Object.fromEntries(
   territorios.map((t) => [t.slug, ativas.filter((i) => i.data.regiao === t.slug).length]),
 );
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: corretor.nome,
-  url: Astro.site?.href,
-  inLanguage: 'pt-BR',
-};
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: `${corretor.nome} Imóveis`,
+    alternateName: 'Valdecir Imóveis',
+    url: Astro.site?.href,
+    description: meta.descricao,
+    publisher: { '@id': `${Astro.site}#corretor` },
+    inLanguage: 'pt-BR',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Imóveis rurais em destaque no Espírito Santo',
+    numberOfItems: vitrineFinal.length,
+    itemListElement: vitrineFinal.map((imovel, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: imovel.data.titulo,
+      url: new URL(`/imovel/${imovel.id}/`, Astro.site).href,
+    })),
+  },
+];
 ---
 
 <Base descricao={meta.descricao} jsonLd={jsonLd}>
@@ -85,7 +102,7 @@ const jsonLd = {
           </p>
 
           <div class="hero__acoes">
-            <a class="botao botao--primario" href="#carteira">Ver o que tenho hoje</a>
+            <a class="botao botao--primario" href="#carteira">Ver imóveis à venda</a>
             <a class="link-seta" href="/sobre/">
               Conheça meu trabalho
               <span class="link-seta__seta" aria-hidden="true">→</span>
@@ -116,8 +133,8 @@ const jsonLd = {
     <div class="env">
       <div class="carteira__cab">
         <CabecalhoSecao
-          kicker="A carteira"
-          titulo="O que eu tenho hoje"
+          kicker="Imóveis rurais"
+          titulo="Fazendas, sítios, chácaras e terrenos disponíveis"
           subtitulo="Atualizo essa lista toda semana. Quando sai, marco como vendida em vez de apagar."
         />
         <ToggleUnidade />

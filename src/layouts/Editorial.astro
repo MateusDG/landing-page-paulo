@@ -18,6 +18,8 @@ interface Props {
   aviso?: string;
   /** Esconde o bloco de contato do fim. */
   semFecho?: boolean;
+  /** Remove páginas auxiliares dos resultados de busca. */
+  noindex?: boolean;
 }
 
 const {
@@ -30,10 +32,11 @@ const {
   jsonLd,
   aviso,
   semFecho = false,
+  noindex = false,
 } = Astro.props;
 ---
 
-<Base titulo={tituloSeo ?? titulo} descricao={descricao} jsonLd={jsonLd} ogTipo="article">
+<Base titulo={tituloSeo ?? titulo} descricao={descricao} jsonLd={jsonLd} ogTipo="article" noindex={noindex}>
   <article class="ed">
     <div class="env">
       {

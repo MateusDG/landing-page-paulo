@@ -21,6 +21,11 @@ interface Props {
 
 const { fotos, municipio } = Astro.props;
 
+const urlWebp = (src: string, largura: number) =>
+  src.replace(/\.(?:jpe?g|png|webp)$/i, `-${largura}.webp`);
+const srcsetWebp = (src: string) =>
+  [320, 640, 960].map((largura) => `${urlWebp(src, largura)} ${largura}w`).join(', ');
+
 const shotList = [
   ['A chegada', 'A estrada de acesso vista do carro. Acesso é a objeção nº 1.'],
   ['A porteira', 'Ancora o lugar e mostra o estado da entrada.'],
@@ -49,16 +54,23 @@ const shotList = [
           data-gal-index="0"
           aria-label={`Abrir foto 1 de ${fotos.length}: ${fotos[0].alt}`}
         >
-          <img
-            data-gal-main
-            src={fotos[0].src}
-            alt={fotos[0].alt}
-            width={fotos[0].largura ?? 1600}
-            height={fotos[0].altura ?? 1067}
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-          />
+          <picture>
+            <source
+              data-gal-main-source
+              type="image/webp"
+              srcset={srcsetWebp(fotos[0].src)}
+              sizes="(max-width: 700px) calc(100vw - 42px), 1120px"
+            />
+            <img
+              data-gal-main
+              src={fotos[0].src}
+              alt={fotos[0].alt}
+              width={fotos[0].largura ?? 1600}
+              height={fotos[0].altura ?? 1067}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
           <span class="gal__abrir-hint">Abrir galeria</span>
         </button>
 
@@ -97,14 +109,17 @@ const shotList = [
               aria-label={`Ver foto ${i + 1} de ${fotos.length}: ${f.alt}`}
               aria-current={i === 0 ? 'true' : undefined}
             >
-              <img
-                src={f.src}
-                alt={`Miniatura: ${f.alt}`}
-                width={f.largura ?? 1600}
-                height={f.altura ?? 1067}
-                loading={i < 4 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
+              <picture>
+                <source type="image/webp" srcset={urlWebp(f.src, 160)} />
+                <img
+                  src={f.src}
+                  alt={`Miniatura: ${f.alt}`}
+                  width={f.largura ?? 1600}
+                  height={f.altura ?? 1067}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <span class="gal__thumb-n">{String(i + 1).padStart(2, '0')}</span>
             </button>
           </div>
@@ -126,7 +141,7 @@ const shotList = [
               <span class="sr-only">Anterior</span>
             </button>
             <figure class="gal__dialog-figure">
-              <img data-gal-dialog-img src={fotos[0].src} alt={fotos[0].alt} decoding="async" />
+              <img data-gal-dialog-img alt="" decoding="async" />
               <figcaption data-gal-dialog-caption>{fotos[0].legenda ?? ''}</figcaption>
             </figure>
             <button type="button" class="gal__dialog-nav" data-gal-next aria-label="Próxima foto">
@@ -211,6 +226,11 @@ const shotList = [
     min-height: 280px;
     object-fit: contain;
     background: var(--grafite);
+  }
+
+  .gal__abrir picture,
+  .gal__thumb picture {
+    display: block;
   }
 
   .gal__abrir-hint {
@@ -557,6 +577,7 @@ const shotList = [
     const dialog = root.querySelector<HTMLDialogElement>('[data-gal-dialog]');
     const mainTrigger = root.querySelector<HTMLButtonElement>('[data-gal-main-trigger]');
     const mainImage = root.querySelector<HTMLImageElement>('[data-gal-main]');
+    const mainSource = root.querySelector<HTMLSourceElement>('[data-gal-main-source]');
     const mainCaption = root.querySelector<HTMLElement>('[data-gal-main-caption]');
     const counter = root.querySelector<HTMLElement>('[data-gal-contador]');
     const dialogImage = root.querySelector<HTMLImageElement>('[data-gal-dialog-img]');
@@ -572,13 +593,18 @@ const shotList = [
       altura: Number(button.dataset.galAltura ?? button.querySelector('img')?.getAttribute('height') ?? 1067),
     }));
 
+    const gerarSrcsetWebp = (src: string) =>
+      [320, 640, 960]
+        .map((largura) => `${src.replace(/\.(?:jpe?g|png|webp)$/i, `-${largura}.webp`)} ${largura}w`)
+        .join(', ');
+
     /* Lê os dados do HTML renderizado para que as imagens sejam substituíveis
        no markdown sem duplicar informação na lógica da galeria. */
     thumbs.forEach((button, index) => {
       const foto = button.querySelector<HTMLImageElement>('img');
       if (!foto || !items[index]) return;
       items[index] = {
-        src: foto.currentSrc || foto.src,
+        src: items[index].src,
         alt: foto.alt.replace(/^Miniatura: /, ''),
         legenda: button.dataset.galLegenda ?? '',
         largura: Number(foto.getAttribute('width') ?? 1600),
@@ -601,6 +627,7 @@ const shotList = [
         mainImage.width = item.largura;
         mainImage.height = item.altura;
       }
+      if (mainSource) mainSource.srcset = gerarSrcsetWebp(item.src);
       if (mainTrigger) {
         mainTrigger.dataset.galIndex = String(index);
         mainTrigger.setAttribute('aria-label', `Abrir foto ${index + 1} de ${items.length}: ${item.alt}`);
@@ -610,7 +637,7 @@ const shotList = [
         mainCaption.hidden = !item.legenda;
       }
       if (counter) counter.textContent = `${index + 1} / ${items.length}`;
-      if (dialogImage) {
+      if (dialogImage && dialog?.open) {
         dialogImage.src = item.src;
         dialogImage.alt = item.alt;
         dialogImage.width = item.largura;
@@ -640,8 +667,8 @@ const shotList = [
     const abrir = (proximo: number, trigger: HTMLButtonElement) => {
       if (!dialog) return;
       retorno = trigger;
-      render(proximo);
       if (!dialog.open) dialog.showModal();
+      render(proximo);
       closeButton?.focus({ preventScroll: true });
     };
 

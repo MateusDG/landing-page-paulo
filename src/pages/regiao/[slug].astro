@@ -50,29 +50,42 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
+    url: new URL(`/regiao/${t.slug}/`, Astro.site).href,
     name: `Imóveis rurais em ${t.nome}`,
+    description: t.descricaoSeo,
     about: {
       '@type': 'Place',
       name: t.nome,
       containedInPlace: { '@type': 'State', name: 'Espírito Santo' },
     },
-    numberOfItems: ativas.length,
+    numberOfItems: daRegiao.length,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: daRegiao.length,
+      itemListElement: daRegiao.map((imovel, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: imovel.data.titulo,
+        url: new URL(`/imovel/${imovel.id}/`, Astro.site).href,
+      })),
+    },
     inLanguage: 'pt-BR',
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Carteira', item: new URL('/imoveis/', Astro.site).href },
-      { '@type': 'ListItem', position: 2, name: t.nome },
+      { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Imóveis rurais', item: new URL('/imoveis/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: t.nome, item: new URL(`/regiao/${t.slug}/`, Astro.site).href },
     ],
   },
 ];
 ---
 
 <Base
-  titulo={`Fazendas e chácaras em ${t.nome}, ES`}
-  descricao={`${t.resumo} ${fmtAreas(ativas.length)} em carteira, em ${fmtMunicipios(t.municipios.length)}.`}
+  titulo={`Imóveis rurais em ${t.nome}, Espírito Santo`}
+  descricao={t.descricaoSeo}
   og={`/og/regiao-${t.slug}.png`}
   jsonLd={jsonLd}
 >
@@ -86,8 +99,8 @@ const jsonLd = [
 
       <div class="rg__topo">
         <div>
-          <p class="rotulo rotulo--terra">Região de atuação</p>
-          <h1 class="rg__titulo">{t.nome}</h1>
+          <p class="rotulo rotulo--terra">Fazendas, sítios e chácaras</p>
+          <h1 class="rg__titulo">Imóveis rurais em {t.nome}</h1>
           <p class="lead rg__resumo">{t.resumo}</p>
 
           <blockquote class="rg__nota">

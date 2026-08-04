@@ -76,14 +76,22 @@ const rotuloFinalidade: Record<string, string> = {
   turismo: 'Turismo',
 };
 
+const paginaUrl = new URL(Astro.url.pathname, Astro.site).href;
+const imagens = d.fotos.map((foto) => new URL(foto.src, Astro.site).href);
+const nomeSeo = areaConhecida
+  ? `${d.titulo}, ${formatarArea(areaHa)} ha`
+  : d.titulo;
+const descricaoSeo = d.resumo;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
-  name: areaConhecida
-    ? `${d.titulo}, ${formatarArea(areaHa)} ha em ${d.municipio}/ES`
-    : `${d.titulo} em ${d.municipio}/ES`,
+  '@id': `${paginaUrl}#imovel`,
+  url: paginaUrl,
+  name: nomeSeo,
   sku: d.codigo,
   description: d.resumo,
+  image: imagens,
   category: 'Imóvel rural',
   additionalProperty: [
     ...(areaConhecida ? [{ '@type': 'PropertyValue', name: 'Área (ha)', value: areaHa }] : []),
@@ -101,42 +109,56 @@ const jsonLd = {
         : d.status === 'reservada'
           ? 'https://schema.org/LimitedAvailability'
           : 'https://schema.org/InStock',
-      url: new URL(Astro.url.pathname, Astro.site).href,
+      url: paginaUrl,
+      seller: { '@id': `${Astro.site}#corretor` },
     },
   }),
+};
+
+const paginaLd = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateListing',
+  '@id': `${paginaUrl}#anuncio`,
+  url: paginaUrl,
+  name: nomeSeo,
+  description: descricaoSeo,
+  datePosted: d.publicadoEm.toISOString(),
+  dateModified: d.atualizadoEm.toISOString(),
+  ...(imagens.length ? { image: imagens, primaryImageOfPage: imagens[0] } : {}),
+  about: { '@id': `${paginaUrl}#imovel` },
+  inLanguage: 'pt-BR',
 };
 
 const breadcrumb = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Carteira', item: new URL('/imoveis/', Astro.site).href },
+    { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Imóveis rurais', item: new URL('/imoveis/', Astro.site).href },
     {
       '@type': 'ListItem',
-      position: 2,
+      position: 3,
       name: rotuloTerritorio(d.regiao),
       item: new URL(`/regiao/${d.regiao}/`, Astro.site).href,
     },
-    { '@type': 'ListItem', position: 3, name: d.titulo },
+    { '@type': 'ListItem', position: 4, name: d.titulo, item: paginaUrl },
   ],
 };
 ---
 
 <Base
-  titulo={areaConhecida
-    ? `${d.titulo} · ${formatarArea(areaHa)} ha em ${d.municipio}/ES`
-    : `${d.titulo} · ${d.municipio}/ES`}
-  descricao={d.resumo}
+  titulo={nomeSeo}
+  descricao={descricaoSeo}
   og={`/og/imovel-${imovel.id}.png`}
   ogTipo="product"
-  jsonLd={[jsonLd, breadcrumb]}
+  jsonLd={[paginaLd, jsonLd, breadcrumb]}
 >
   <article class="im">
     {/* --- Cabeçalho da ficha -------------------------------------------- */}
     <header class="im__cab secao--compacta">
       <div class="env">
         <nav class="im__trilha" aria-label="Você está em">
-          <a href="/imoveis/">Carteira</a>
+          <a href="/imoveis/">Imóveis</a>
           <span aria-hidden="true">/</span>
           <a href={`/regiao/${d.regiao}/`}>{rotuloTerritorio(d.regiao)}</a>
           <span aria-hidden="true">/</span>

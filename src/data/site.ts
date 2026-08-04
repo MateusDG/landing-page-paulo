@@ -11,14 +11,14 @@ export const corretor = {
 } as const;
 
 export const navPrincipal = [
-  { rotulo: 'Carteira', href: '/imoveis/' },
+  { rotulo: 'Imóveis', href: '/imoveis/' },
   { rotulo: 'Regiões', href: '/#regioes' },
   { rotulo: 'Quero vender', href: '/quero-vender/' },
 ] as const;
 
 export const navRodape = {
   carteira: [
-    { rotulo: 'Todas as áreas', href: '/imoveis/' },
+    { rotulo: 'Imóveis rurais à venda', href: '/imoveis/' },
     { rotulo: 'Montanhas Capixabas', href: '/regiao/montanhas-capixabas/' },
     { rotulo: 'Norte Capixaba', href: '/regiao/norte-capixaba/' },
     { rotulo: 'Sul e Caparaó', href: '/regiao/sul-e-caparao/' },
@@ -34,9 +34,9 @@ export const navRodape = {
 } as const;
 
 export const meta = {
-  titulo: `${corretor.nome}, compra e venda de imóveis no Espírito Santo`,
+  titulo: `Imóveis rurais à venda no Espírito Santo | ${corretor.nome}`,
   descricao:
-    'Compra e venda de fazendas, chácaras, sítios e terrenos rurais no Espírito Santo. ' +
-    'Atendimento direto em quatro regiões do estado.',
+    'Fazendas, sítios, chácaras e terrenos rurais à venda no Espírito Santo. ' +
+    `Veja fotos, localização, área, acesso e fale diretamente com ${corretor.nome}.`,
   locale: 'pt_BR',
 } as const;

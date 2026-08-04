@@ -53,6 +53,30 @@ export default defineConfig({
         optional: true,
         default: '',
       }),
+      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: '',
+      }),
+      PUBLIC_GOOGLE_BUSINESS_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: '',
+      }),
+      PUBLIC_INSTAGRAM_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: '',
+      }),
+      PUBLIC_FACEBOOK_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: '',
+      }),
     },
   },
 

@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import CabecalhoSecao from '../components/CabecalhoSecao.astro';
 import BotaoWhats from '../components/BotaoWhats.astro';
 import FichaTecnica from '../components/FichaTecnica.astro';
-import { corretor } from '../data/site';
 import { territorios } from '../data/territorios';
 
 const oQueEuPreciso = [
@@ -17,15 +16,19 @@ const oQueEuPreciso = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  serviceType: 'Intermediação de venda de imóvel rural',
+  '@id': `${Astro.site}quero-vender/#servico`,
+  url: new URL('/quero-vender/', Astro.site).href,
+  name: 'Venda de imóvel rural no Espírito Santo',
+  description: 'Atendimento a proprietários que desejam vender fazendas, sítios, chácaras ou terrenos rurais no Espírito Santo.',
+  serviceType: 'Compra e venda de imóvel rural',
   areaServed: { '@type': 'State', name: 'Espírito Santo' },
-  provider: { '@type': 'Person', name: corretor.nome },
+  provider: { '@id': `${Astro.site}#corretor` },
   inLanguage: 'pt-BR',
 };
 ---
 
 <Base
-  titulo="Quero vender minha área"
+  titulo="Venda de imóvel rural no Espírito Santo"
   descricao="Atendimento a proprietários que desejam vender fazendas, chácaras, sítios ou terrenos rurais no Espírito Santo."
   jsonLd={jsonLd}
 >
