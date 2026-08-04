@@ -244,6 +244,11 @@ const jsonLdBase = {
         delete dados.evento;
         (window as any).umami?.track?.(nome, dados);
         (window as any).gtag?.('event', nome, dados);
+        // O GTM escuta eventos personalizados diretamente no dataLayer.
+        // Assim, cliques de WhatsApp podem disparar conversões sem duplicar
+        // o carregamento da tag base do Google Ads.
+        const dataLayer = ((window as any).dataLayer = (window as any).dataLayer || []);
+        dataLayer.push({ event: nome, ...dados });
       });
     </script>
 
