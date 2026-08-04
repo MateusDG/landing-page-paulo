@@ -41,6 +41,8 @@ jobs:
           PUBLIC_FACEBOOK_URL: ${{ vars.PUBLIC_FACEBOOK_URL }}
           PUBLIC_UMAMI_SRC: ${{ vars.PUBLIC_UMAMI_SRC }}
           PUBLIC_UMAMI_ID: ${{ vars.PUBLIC_UMAMI_ID }}
+          PUBLIC_GTM_ID: ${{ vars.PUBLIC_GTM_ID || 'GTM-P3LBCHF8' }}
+          PUBLIC_GOOGLE_ADS_ID: ${{ vars.PUBLIC_GOOGLE_ADS_ID || 'AW-18371455109' }}
         run: npm run build
 
       - name: Atualizar a branch de publicacao

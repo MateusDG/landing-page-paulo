@@ -12,6 +12,7 @@ import JsonLd from '../components/JsonLd.astro';
 import {
   PUBLIC_UMAMI_SRC,
   PUBLIC_UMAMI_ID,
+  PUBLIC_GTM_ID,
   PUBLIC_GOOGLE_SITE_VERIFICATION,
   PUBLIC_GOOGLE_BUSINESS_URL,
   PUBLIC_INSTAGRAM_URL,
@@ -66,6 +67,7 @@ const RUIDO =
 
 const umamiSrc = PUBLIC_UMAMI_SRC;
 const umamiId = PUBLIC_UMAMI_ID;
+const gtmId = PUBLIC_GTM_ID;
 
 /* Identidade do negócio, vai em todas as páginas. */
 const jsonLdBase = {
@@ -159,6 +161,22 @@ const jsonLdBase = {
       )
     }
 
+    {/* O contêiner centraliza tags futuras no Google Tag Manager. */}
+    {gtmId && (
+      <script is:inline define:vars={{ gtmId }}>
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var f = d.getElementsByTagName(s)[0];
+          var j = d.createElement(s);
+          var dl = l !== 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmId);
+      </script>
+    )}
+
     {/* Marca a página como "com JS" antes da primeira pintura, para que as
         revelações não pisquem. Único script bloqueante do site. */}
     <script is:inline>
@@ -167,6 +185,17 @@ const jsonLdBase = {
   </head>
 
   <body class={classe}>
+    {gtmId && (
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+          title="Google Tag Manager"
+        ></iframe>
+      </noscript>
+    )}
     <div class="ruido" aria-hidden="true"></div>
     <a class="pular-para-conteudo" href="#conteudo">Pular para o conteúdo</a>
 

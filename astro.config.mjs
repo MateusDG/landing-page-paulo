@@ -72,6 +72,18 @@ export default defineConfig({
         optional: true,
         default: '',
       }),
+      PUBLIC_GTM_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: '',
+      }),
+      PUBLIC_GOOGLE_ADS_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: '',
+      }),
       PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
         context: 'client',
         access: 'public',
