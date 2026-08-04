@@ -72,16 +72,6 @@ const imoveis = defineCollection({
         nota: z.string(),
       }),
 
-      documentos: z.object({
-        matricula: z.boolean(),
-        car: z.boolean(),
-        geo: z.boolean(),
-        ccir: z.boolean(),
-        itr: z.boolean(),
-        outorga: z.enum(['sim', 'nao', 'na']),
-        nota: z.string().optional(),
-      }),
-
       tempoDeVitoria: z.string(),
       distanciaVitoriaKm: z.number().optional(),
       coordenada: z.string().optional(),
@@ -138,27 +128,4 @@ const diario = defineCollection({
   }),
 });
 
-const casos = defineCollection({
-  loader: glob({ base: './src/content/casos', pattern: '**/*.md' }),
-  schema: z.object({
-    referencia: z.string(),
-    municipio: z.string(),
-    regiao: z.enum(REGIOES),
-    areaHa: z.number().positive(),
-    fechadoEm: z.coerce.date(),
-    comprador: z.string(),
-    procuravam: z.string(),
-    oQueTravou: z.string(),
-    oQueFizemos: z.string(),
-    resultado: z.string(),
-    depoimento: z.object({
-      texto: z.string(),
-      autor: z.string(),
-      cidade: z.string(),
-      autorizado: z.boolean(),
-    }),
-    destaque: z.boolean().default(false),
-  }),
-});
-
-export const collections = { imoveis, diario, casos };
+export const collections = { imoveis, diario };

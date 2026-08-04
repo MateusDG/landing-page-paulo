@@ -35,7 +35,7 @@ export interface Territorio {
   acesso: string[];
   relevo: string;
   resumo: string;
-  /** Quem compra aqui, alimenta o filtro do briefing. */
+  /** Quem compra aqui, alimenta o filtro de atendimento. */
   perfis: string[];
   /** Nota de campo do corretor. Primeira pessoa. É o que nenhum portal tem. */
   notaDeCampo: string;
@@ -79,8 +79,8 @@ export const territorios: Territorio[] = [
     notaDeCampo:
       'Aqui o preço não é feito pelo tamanho da área, é feito pela água. ' +
       'Duas áreas vizinhas do mesmo tamanho podem ter 40% de diferença de ' +
-      'valor porque uma tem outorga e a outra depende de chuva. É a primeira ' +
-      'coisa que eu confiro no Norte, antes até da matrícula.',
+      'valor porque uma tem água disponível o ano todo e a outra depende de ' +
+      'chuva. Esse é um dos primeiros pontos que observo no Norte.',
   },
   {
     slug: 'montanhas-capixabas',
@@ -103,14 +103,13 @@ export const territorios: Territorio[] = [
     resumo:
       'Colonização italiana, alemã e pomerana, agroturismo consolidado e ' +
       'clima ameno o ano todo. Propriedades menores e muito parceladas por ' +
-      'herança familiar, o que faz a documentação exigir mais atenção que ' +
-      'a média.',
+      'herança familiar, o que torna importante conhecer bem as características ' +
+      'e os limites de cada área.',
     perfis: ['morar', 'lazer', 'turismo'],
     notaDeCampo:
-      'Muita área boa aqui vem de partilha de família e nunca foi ' +
-      'desmembrada formalmente. Você compra "a parte de cima do sítio" e ' +
-      'descobre que a matrícula é uma só, com seis herdeiros. Dá para ' +
-      'resolver, mas tem que entrar sabendo, e o prazo muda.',
+      'Muita área boa aqui vem de partilha de família e tem características ' +
+      'próprias de acesso e ocupação. Conhecer o local e conversar com quem ' +
+      'vive na região ajuda a tomar uma decisão segura.',
   },
   {
     slug: 'sul-e-caparao',

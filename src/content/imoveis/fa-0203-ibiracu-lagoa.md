@@ -9,8 +9,7 @@ croquiVerificado: false
 finalidade: ['lazer', 'morar']
 resumo: >-
   Trinta e cinco hectares em Ibiraçu, com lagoa, nascente, energia, uma pequena
-  casa e escritura informada pelo proprietário. O valor pedido é de R$ 1
-  milhão.
+  casa e valor pedido de R$ 1 milhão.
 agua: 'Lagoa e nascente'
 energia: 'Energia disponível'
 benfeitorias:
@@ -19,20 +18,12 @@ acesso:
   asfaltoKm: 0
   terraKm: 0
   nota: 'Acesso rural.'
-documentos:
-  matricula: false
-  car: false
-  geo: false
-  ccir: false
-  itr: false
-  outorga: 'nao'
-  nota: 'Escritura foi informada; matrícula atualizada e demais documentos ainda precisam ser conferidos.'
 tempoDeVitoria: 'A confirmar'
 preco: 1000000
 oQueFalta:
-  - 'A escritura informada ainda precisa ser comparada com a matrícula atualizada e os demais documentos rurais.'
   - 'A nascente e a lagoa aparecem na descrição e nas fotos, mas vazão, uso e regularização precisam ser verificados.'
   - 'A área da casa e suas condições de uso ainda não foram levantadas.'
+  - 'A distância e o tipo de estrada até a porteira precisam ser confirmados.'
 status: 'ativa'
 rascunho: true
 fotos:
@@ -66,7 +57,7 @@ atualizadoEm: 2026-08-03
 ---
 
 A descrição recebida fala em 35 hectares em Ibiraçu, com uma lagoa, nascente,
-energia, uma pequena casa e escritura. O valor informado é de R$ 1 milhão.
+energia e uma pequena casa. O valor informado é de R$ 1 milhão.
 
 As fotos mostram a casa de apoio, a lagoa e o entorno arborizado. É uma área
 com vocação para lazer e moradia.

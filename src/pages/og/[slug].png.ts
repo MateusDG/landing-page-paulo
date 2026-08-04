@@ -28,13 +28,13 @@ export async function getStaticPaths() {
     {
       params: { slug: 'padrao' },
       props: {
-        kicker: 'Corretor de imóveis rurais · Espírito Santo',
-        titulo: 'Terra no Espírito Santo se compra com a matrícula na mão.',
+        kicker: 'Compra e venda de imóveis · Espírito Santo',
+        titulo: 'Compra e venda de imóveis rurais no Espírito Santo.',
         croqui: CONTORNO_ES,
         croquiViewBox: VIEWBOX_ES,
         meta: [
           { rotulo: 'Regiões', valor: '4' },
-          { rotulo: 'Protocolo', valor: '14 pontos' },
+          { rotulo: 'Atendimento', valor: 'direto' },
         ],
       },
     },

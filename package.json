@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Landing page para corretor de imóveis rurais no Espírito Santo: fazendas, chácaras, sítios e terrenos.",
+  "description": "Landing page para compra e venda de imóveis rurais no Espírito Santo: fazendas, chácaras, sítios e terrenos.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -11,7 +11,6 @@
     "preview": "astro preview",
     "check": "astro check",
     "sync": "astro sync",
-    "pdf": "node scripts/gerar-pdf.mjs",
     "shot": "node scripts/shot.mjs",
     "fonts": "./scripts/build-fonts.sh",
     "images": "node scripts/preparar-imagens.mjs"

@@ -64,7 +64,7 @@ export function precoPorHa(valor: number | null | undefined, areaHa: number): st
   })}/ha`;
 }
 
-/** Índice de seção: 1 → "01". Parte da linguagem de documento. */
+/** Índice de seção: 1 → "01". Parte da linguagem visual. */
 export function indice(n: number): string {
   return String(n).padStart(2, '0');
 }

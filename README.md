@@ -35,7 +35,6 @@ npm run dev
 | `npm run preview` | Serve o `dist/` já construído |
 | `npm run check` | Tipagem TypeScript + diagnóstico Astro |
 | `npm run fonts` | Regenera as fontes subsetadas em `public/fonts/` |
-| `npm run pdf` | Regenera `public/checklist-14-pontos.pdf` |
 | `npm run images` | Redimensiona as fotos de `img/` e prepara cópias para publicação |
 | `npm run shot -- <url> <saida.png> [--w=] [--h=] [--full] [--y=]` | Captura de tela para QA visual |
 
@@ -95,14 +94,10 @@ cp .env.example .env
 - [ ] Conferir e completar os 4 imóveis cadastrados em `src/content/imoveis/`
 - [ ] Preencher [`src/data/deslocamento.ts`](src/data/deslocamento.ts) com
       tempos **medidos por você**
-- [ ] Revisar os 14 pontos em [`src/data/protocolo.ts`](src/data/protocolo.ts)
-      contra o seu processo real — se você não faz um dos pontos, **tire o
-      ponto**, não invente processo
 - [ ] Confirmar as faixas de preço por região
 - [ ] Confirmar o fator de conversão do alqueire praticado em cada sub-região
       (ver [`src/lib/unidades.ts`](src/lib/unidades.ts)) — o alqueire **não é
       uniforme no Brasil** e negociação com medidas trocadas já travou negócio
-- [ ] Substituir o caso em `src/content/casos/` por um real, com autorização
 - [ ] Fotografar (ver §Fotografia)
 
 ### 4. Jurídico — obrigatório
@@ -200,11 +195,10 @@ serra; verdes **dessaturados em ~10%** (verde estourado é a assinatura de
 
 ```
 src/
-├─ content/            imóveis · guias · diário · casos   (Markdown + Zod)
+├─ content/            imóveis · diário   (Markdown + Zod)
 ├─ data/               dados estruturados que não são conteúdo editorial
 │  ├─ site.ts          ← o arquivo que você mais vai editar
 │  ├─ territorios.ts   4 regiões + geometria do mapa
-│  ├─ protocolo.ts     os 14 pontos
 │  ├─ deslocamento.ts  índice de tempo até cada município
 │  ├─ glossario.ts     12 verbetes
 │  └─ briefing.ts      os 5 passos
@@ -217,9 +211,8 @@ src/
    ├─ imoveis/                        carteira com filtros no cliente
    ├─ imovel/[slug].astro             ficha completa
    ├─ regiao/[slug].astro             4 páginas de território
-   ├─ guia/                           hub + guias + glossário + deslocamento
    ├─ og/[slug].png.ts                imagens OG geradas no build
-   └─ checklist.astro                 origem do PDF de 14 pontos
+   └─ sobre.astro                     apresentação e atendimento
 ```
 
 ### Três elementos identitários
@@ -292,7 +285,6 @@ links, âncoras, JSON-LD, proteção de indexação e conteúdo removido.
 | Arquivo | Para quê |
 |---|---|
 | `scripts/build-fonts.py` | Subseta as três fontes variáveis para pt-BR. Fixa `SOFT`/`WONK` do Fraunces e mantém `opsz` variável — é o que faz o título de 6,5rem e o h3 de 1,375rem terem desenhos diferentes em vez de escala burra. Os `.woff2` são versionados; o build não depende de Python. |
-| `scripts/gerar-pdf.mjs` | Imprime `/checklist/` em A4 e salva em `public/`. |
 | `scripts/shot.mjs` | Captura de tela para QA visual (viewport, página inteira ou a partir de um scroll). |
 | `scripts/gerar-croquis.mjs` | Só para o conteúdo de exemplo. Ver §Croquis. |
 
@@ -318,8 +310,7 @@ usa cookie e **dispensa banner de consentimento** — foi por isso que ele foi
 escolhido em vez do GA4. Se trocar por GA4 ou adicionar qualquer pixel, a
 página `/privacidade` precisa mudar **e** um banner passa a ser necessário.
 
-Eventos já instrumentados: `briefing_inicio`, `briefing_passo`,
-`briefing_envio`, `whats_clique`, `checklist_download`.
+Evento já instrumentado: `whats_clique`.
 
 O agregado de `briefing_envio` é inteligência de mercado: mostra qual
 finalidade e qual região têm demanda reprimida — ou seja, **onde captar**.

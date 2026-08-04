@@ -1,8 +1,7 @@
 /* ==========================================================================
    IMPRESSÃO
 
-   Duas situações reais: alguém imprime uma ficha de imóvel para levar na
-   visita, e o checklist de 14 pontos vira o PDF de public/.
+   Uma situação real: alguém imprime uma ficha de imóvel para levar na visita.
 
    Cuidado não óbvio: a largura de página A4 (~700px úteis) dispara os
    breakpoints de mobile do site. Sem as regras abaixo, a barra fixa do

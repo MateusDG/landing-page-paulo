@@ -19,20 +19,12 @@ acesso:
   asfaltoKm: 0
   terraKm: 0
   nota: 'Acesso rural.'
-documentos:
-  matricula: false
-  car: false
-  geo: false
-  ccir: false
-  itr: false
-  outorga: 'nao'
-  nota: 'Documentação e eventual regularização da captação de água ainda não foram conferidas.'
 tempoDeVitoria: '1h20'
 preco: 500000
 oQueFalta:
   - 'A quantidade de café é uma estimativa informada pelo proprietário; contar os pés e verificar idade, variedade e produtividade.'
-  - 'Matrícula, CAR, CCIR, ITR, georreferenciamento e uso da água ainda não foram conferidos.'
   - 'A distância e a condição da estrada até a porteira precisam ser confirmadas.'
+  - 'A disponibilidade de água e as condições do plantio serão detalhadas durante a visita.'
 status: 'ativa'
 rascunho: true
 fotos:

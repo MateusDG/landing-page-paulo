@@ -1,25 +1,25 @@
 ---
-titulo: 'Seis herdeiros e uma matrícula só'
+titulo: 'Uma área dividida entre gerações'
 local: 'Santa Maria de Jetibá'
 regiao: 'montanhas-capixabas'
 data: 2026-05-30
 ---
 
 Fui chamado para avaliar "a parte de cima do sítio da família". Cheguei lá e
-era exatamente isso: uma parte de cima, com cerca, com café plantado, com
-casa, e sem matrícula própria.
+era exatamente isso: uma área com cerca, café plantado e uma casa, separada
+há anos do restante da propriedade.
 
-A matrícula é uma só, do sítio inteiro, com seis herdeiros. A divisão que
-existe é de fato, feita entre irmãos há vinte anos, respeitada por todos e
-registrada em lugar nenhum.
+Seis herdeiros mantêm essa divisão entre irmãos há vinte anos, respeitada por
+todos. O acesso, os limites e a rotina de uso da área foram definidos pela
+própria família ao longo do tempo.
 
-Dá para resolver. Passa por inventário concluído, partilha, e um
-desmembramento que precisa respeitar o módulo fiscal do município. Não é
-rápido e não é barato.
+Uma negociação assim exige conversa franca entre todos e planejamento para
+que cada parte saiba exatamente o que está comprando. Não é rápido e pede
+acompanhamento próximo.
 
 Expliquei isso para quem queria comprar, com prazo estimado e ordem de
 grandeza de custo. A pessoa decidiu esperar a família regularizar. Foi a
 decisão certa, e eu não ganhei nada com ela.
 
-Na região das montanhas isso é frequente. Herança sem partilha formal é
-provavelmente a pendência mais comum que encontro por aqui.
+Na região das montanhas isso é frequente. Áreas de família costumam ter uma
+história própria, e conhecer essa história ajuda a conduzir a negociação.

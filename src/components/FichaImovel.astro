@@ -6,7 +6,7 @@
  * croqui, área e dados. Motivos:
  *   1. Foto vai para a ficha completa, onde há espaço para as 12 da shot list.
  *   2. Sem foto a lista fica escaneável e densa, quem compra 40 ha compara
- *      água, acesso e documento, não decoração.
+ *      água, acesso e contexto, não decoração.
  *   3. É o que impede a carteira de virar galeria de estoque, que é o visual
  *      de todo portal imobiliário.
  *
@@ -33,14 +33,6 @@ interface Props {
       finalidade: string[];
       agua: string;
       acesso: { asfaltoKm: number; terraKm: number; nota: string };
-      documentos: {
-        matricula: boolean;
-        car: boolean;
-        geo: boolean;
-        ccir: boolean;
-        itr: boolean;
-        outorga: 'sim' | 'nao' | 'na';
-      };
       tempoDeVitoria: string;
       preco: number | null;
       status: 'ativa' | 'reservada' | 'vendida';

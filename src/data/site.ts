@@ -3,7 +3,7 @@ export const DADOS_DE_EXEMPLO = false;
 export const corretor = {
   nome: 'Valdecir Francisco',
   nomeCurto: 'Valdecir Francisco',
-  papel: 'Corretor de imóveis rurais',
+  papel: 'Compra e Venda de Imóveis',
   uf: 'ES',
   /* Formato internacional, só dígitos: 55 + DDD + número.
      Sobrescrito por PUBLIC_WHATSAPP no .env. */
@@ -34,10 +34,9 @@ export const navRodape = {
 } as const;
 
 export const meta = {
-  titulo: `${corretor.nome}, corretor de imóveis rurais no Espírito Santo`,
+  titulo: `${corretor.nome}, compra e venda de imóveis no Espírito Santo`,
   descricao:
-    'Fazendas, chácaras, sítios e terrenos rurais no Espírito Santo. ' +
-    'Ando a área, leio a matrícula e confiro o CAR antes de anunciar. ' +
-    'Montanhas, Norte, Sul e Caparaó e Litoral.',
+    'Compra e venda de fazendas, chácaras, sítios e terrenos rurais no Espírito Santo. ' +
+    'Atendimento direto em quatro regiões do estado.',
   locale: 'pt_BR',
 } as const;

@@ -18,20 +18,12 @@ acesso:
   asfaltoKm: 0
   terraKm: 0
   nota: 'Acesso rural.'
-documentos:
-  matricula: false
-  car: false
-  geo: false
-  ccir: false
-  itr: false
-  outorga: 'nao'
-  nota: 'Documentação ainda não conferida. A nascente e os pesqueiros exigem verificação de uso da água.'
 tempoDeVitoria: 'A confirmar'
 preco: 500000
 oQueFalta:
-  - 'A matrícula, o CAR, o CCIR, o ITR e a regularização dos pesqueiros ainda não foram conferidos.'
   - 'A metragem informada é total da área; a distribuição entre pesqueiros, apoio e área livre precisa ser levantada.'
   - 'A distância e o tipo de estrada até a porteira precisam ser confirmados.'
+  - 'As condições de uso da nascente e dos pesqueiros serão apresentadas durante a visita.'
 status: 'ativa'
 rascunho: true
 fotos:

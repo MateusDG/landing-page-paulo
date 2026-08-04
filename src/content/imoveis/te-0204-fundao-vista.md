@@ -19,20 +19,12 @@ acesso:
   asfaltoKm: 0
   terraKm: 4
   nota: 'Quatro quilômetros de estrada de chão, conforme a descrição recebida.'
-documentos:
-  matricula: false
-  car: false
-  geo: false
-  ccir: false
-  itr: false
-  outorga: 'nao'
-  nota: 'Documentação, área total e condição do espelho d’água ainda não foram conferidas.'
 tempoDeVitoria: 'A confirmar'
 preco: null
 oQueFalta:
   - 'A área total não foi informada. Sem essa medida não é possível calcular o valor final pelo preço de R$ 30 por m².'
-  - 'Matrícula, CAR, CCIR, ITR e eventual restrição ambiental ainda precisam ser conferidos.'
   - 'A origem e a regularização do espelho d’água precisam ser verificadas.'
+  - 'A condição da estrada e as possibilidades de uso da área serão detalhadas durante a visita.'
 status: 'ativa'
 rascunho: true
 fotos:

@@ -1,11 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import CabecalhoSecao from '../components/CabecalhoSecao.astro';
-import ListaNumerada from '../components/ListaNumerada.astro';
 import BotaoWhats from '../components/BotaoWhats.astro';
 import Croqui from '../components/Croqui.astro';
 import { corretor } from '../data/site';
-import { protocoloDocumental, protocoloFisico, notaProtocolo } from '../data/protocolo';
 import { CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
 import { numeroWhats } from '../lib/whatsapp';
 
@@ -17,7 +15,13 @@ const jsonLd = {
     name: corretor.nome,
     jobTitle: corretor.papel,
     telephone: `+${numeroWhats}`,
-    knowsAbout: ['Imóvel rural', 'Café conilon', 'Café arábica', 'Georreferenciamento', 'CAR'],
+    knowsAbout: [
+      'Compra e venda de imóveis rurais',
+      'Fazendas',
+      'Chácaras',
+      'Sítios',
+      'Terrenos rurais',
+    ],
   },
   inLanguage: 'pt-BR',
 };
@@ -25,7 +29,7 @@ const jsonLd = {
 
 <Base
   titulo="Sobre"
-  descricao={`${corretor.nome}, corretor de imóveis rurais no Espírito Santo. Como eu trabalho e o que eu confiro antes de anunciar.`}
+  descricao={`${corretor.nome}, compra e venda de imóveis rurais no Espírito Santo. Atendimento direto para compradores e proprietários.`}
   jsonLd={jsonLd}
 >
   <section class="secao--compacta sb__cab-env">
@@ -39,42 +43,26 @@ const jsonLd = {
       <div class="sb__texto">
         <CabecalhoSecao
           kicker="Sobre"
-          titulo="Uma pessoa só, e isso é de propósito"
+          titulo="Compra e venda com atendimento pessoal"
           as="h1"
         />
 
         <div class="prosa">
           <p>
-            Sou {corretor.nome} e trabalho com imóveis rurais no Espírito Santo.
+            Sou {corretor.nome} e atuo com compra e venda de imóveis rurais no Espírito Santo.
           </p>
 
           <p>
-            Não sou imobiliária e não tenho equipe. Você fala comigo do primeiro
-            WhatsApp até a escritura. A contrapartida é que eu não consigo
-            atender todo mundo ao mesmo tempo, e prefiro assim, porque o
-            trabalho que eu faço não escala: envolve dirigir até a área, andar
-            o perímetro e conversar com vizinho.
+            O atendimento é feito diretamente comigo, desde o primeiro contato
+            até a conclusão da negociação. Apresento cada oportunidade com
+            clareza e acompanho compradores e proprietários em todas as etapas.
           </p>
 
-          <h2>Por que eu insisto tanto em documento</h2>
+          <h2>Conhecimento das regiões</h2>
 
           <p>
-            Porque compra de terra raramente dá errado no preço. Dá errado no
-            documento: área que não bate com a matrícula, reserva legal proposta
-            em cima da lavoura, nascente sem outorga, acesso pelo vizinho sem
-            servidão registrada, ITR atrasado que acompanha o imóvel.
-          </p>
-
-          <p>
-            Nenhuma dessas coisas aparece na foto. Todas aparecem no cartório,
-            quando o comprador já pode ter pagado o sinal.
-          </p>
-
-          <h2>Onde eu ando</h2>
-
-          <p>
-            Atuo em quatro regiões do Espírito Santo, cada uma com lógica de
-            compra própria: as{' '}
+            Atuo em quatro regiões do Espírito Santo, cada uma com suas próprias
+            características de relevo, produção, acesso e oportunidades: as{' '}
             <a href="/regiao/montanhas-capixabas/">Montanhas Capixabas</a>, o{' '}
             <a href="/regiao/norte-capixaba/">Norte</a>, o{' '}
             <a href="/regiao/sul-e-caparao/">Sul e Caparaó</a> e o{' '}
@@ -82,71 +70,29 @@ const jsonLd = {
             metropolitana</a>.
           </p>
 
+          <h2>Como trabalho</h2>
+
           <p>
-            Fora dessas regiões eu costumo indicar um colega em vez de aceitar
-            e atender mal.
+            Cada imóvel é apresentado com informações objetivas sobre localização,
+            características e condições de venda. O acompanhamento próximo ajuda
+            a alinhar expectativas e tornar a negociação mais simples.
           </p>
 
-          <h2>O que eu não faço</h2>
-
-          <ul>
-            <li>Não anuncio área que eu não visitei.</li>
-            <li>Não publico foto de banco de imagens.</li>
-            <li>
-              Não escondo o ponto fraco da área até a visita, ele vai escrito
-              na ficha.
-            </li>
-            <li>
-              Não passo preço enquanto houver pendência de valor desconhecido,
-              como dívida de ITR em levantamento.
-            </li>
-          </ul>
+          <p>
+            Fora dessas regiões, costumo indicar um profissional local para
+            garantir um atendimento adequado.
+          </p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="secao--compacta sb__protocolo-env" aria-labelledby="protocolo-titulo">
-    <div class="env">
-      <CabecalhoSecao
-        kicker="Protocolo de campo"
-        titulo="Os 14 pontos, na íntegra"
-        subtitulo="Sete no papel, sete no chão. Baixe e use com qualquer corretor, inclusive comigo."
-        as="h2"
-      />
-
-      <div class="sb__colunas">
-        <div>
-          <p class="rotulo sb__grupo">Documental</p>
-          <ListaNumerada itens={protocoloDocumental} ritmo="denso" inicio={1} />
-        </div>
-        <div>
-          <p class="rotulo sb__grupo">Físico</p>
-          <ListaNumerada itens={protocoloFisico} ritmo="denso" inicio={8} />
-        </div>
-      </div>
-
-      <blockquote class="sb__nota">
-        <p>{notaProtocolo}</p>
-      </blockquote>
-
-      <a
-        class="botao botao--escuro sb__baixar"
-        href="/checklist-14-pontos.pdf"
-        download
-        data-evento="checklist_download"
-      >
-        Baixar o checklist em uma página
-      </a>
     </div>
   </section>
 
   <section class="secao--compacta sb__fecho-env">
     <div class="env sb__fecho">
       <div>
-        <h2 class="sb__h2">Quer conversar?</h2>
+        <h2 class="sb__h2">Deseja conversar sobre uma propriedade?</h2>
         <p class="lead">
-          Sem compromisso e sem discurso de venda.
+          Estou à disposição pelo WhatsApp.
         </p>
       </div>
       <div class="sb__fecho-acoes">
@@ -191,37 +137,6 @@ const jsonLd = {
     color: var(--filete);
   }
 
-  .sb__protocolo-env {
-    background: var(--papel-2);
-    border-bottom: var(--borda);
-  }
-
-  .sb__colunas {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-8);
-  }
-
-  .sb__grupo {
-    color: var(--grafite);
-    padding-bottom: var(--s-3);
-    border-bottom: 1px solid var(--grafite);
-  }
-
-  .sb__nota {
-    margin-top: var(--s-7);
-    padding-left: var(--s-5);
-    border-left: var(--borda-2);
-    font-family: var(--f-display);
-    font-size: var(--t-lead);
-    line-height: 1.5;
-    max-width: 56ch;
-  }
-
-  .sb__baixar {
-    margin-top: var(--s-7);
-  }
-
   .sb__h2 {
     font-size: var(--t-h2);
   }
@@ -246,7 +161,6 @@ const jsonLd = {
 
   @media (max-width: 900px) {
     .sb__topo,
-    .sb__colunas,
     .sb__fecho {
       grid-template-columns: minmax(0, 1fr);
       gap: var(--s-6);
