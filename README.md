@@ -73,13 +73,11 @@ Tudo em [`src/data/site.ts`](src/data/site.ts), marcado com `// PREENCHER`:
 
 - [x] `nome`: Valdecir Francisco
 - [x] `whatsapp`: `5527999309535`
-- [ ] `cidadeBase` e `desde`
 - [ ] `sla` — **só prometa o que você cumpre.** Prometer resposta e falhar é
       pior que não prometer.
 - [ ] `emCampo` — os seis números da ficha "Em campo". Precisam ser
       verdadeiros e contados. A linha **"Áreas que recusei"** é a mais valiosa
       da página; nenhum concorrente publica isso. Não remova.
-- [ ] `coordenadaBase`
 - [ ] Virar `DADOS_DE_EXEMPLO = false` — some a faixa de aviso.
 
 ### 2. Ambiente

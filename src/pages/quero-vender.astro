@@ -1,56 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
 import CabecalhoSecao from '../components/CabecalhoSecao.astro';
-import ListaNumerada from '../components/ListaNumerada.astro';
 import BotaoWhats from '../components/BotaoWhats.astro';
 import FichaTecnica from '../components/FichaTecnica.astro';
 import { corretor } from '../data/site';
 import { territorios } from '../data/territorios';
 
-/* Metade do negócio do corretor está na captação, e essa página costuma ser
-   esquecida ou virar um formulário de duas linhas. Aqui ela tem o mesmo peso
-   editorial do resto do site. */
-const comoFunciona = [
-  {
-    titulo: 'Você me manda o básico',
-    detalhe:
-      'Município, área aproximada, o que tem na área e se sabe onde está a matrícula. Uma mensagem resolve.',
-  },
-  {
-    titulo: 'Eu confiro a documentação antes de qualquer visita',
-    detalhe:
-      'Matrícula, CAR, CCIR, ITR. Se houver pendência, eu te digo qual é e quanto custa resolver, antes de a gente falar de preço.',
-  },
-  {
-    titulo: 'Vou até a área e ando o perímetro',
-    detalhe:
-      'Meio dia, geralmente. Levo o GPS e comparo com a planta. É aqui que aparecem as divergências de área.',
-  },
-  {
-    titulo: 'A gente define o preço com base no que a área é',
-    detalhe:
-      'Não no que o vizinho pediu. Água, acesso, documento e aptidão definem o valor, e eu mostro a conta.',
-  },
-  {
-    titulo: 'Anuncio com ficha completa, croqui e os pontos fracos declarados',
-    detalhe:
-      'Sim, os pontos fracos. Anúncio honesto atrai comprador que não desiste no cartório, e é o que faz negócio fechar mais rápido.',
-  },
-  {
-    titulo: 'Levo compradores qualificados, não curiosos',
-    detalhe:
-      'Quem chega até a visita já explicou o que procura, já sabe a faixa de preço e já conhece os detalhes da área.',
-  },
-];
-
 const oQueEuPreciso = [
-  { rotulo: 'Município', valor: 'obrigatório' },
-  { rotulo: 'Área aproximada', valor: 'em ha ou alq' },
-  { rotulo: 'Matrícula', valor: 'se tiver em mãos' },
-  { rotulo: 'Uso atual', valor: 'lavoura, pasto, mato' },
-  { rotulo: 'Água', valor: 'nascente, córrego, poço' },
-  { rotulo: 'Acesso', valor: 'asfalto e terra' },
-  { rotulo: 'Prazo', valor: 'com ou sem pressa' },
+  { rotulo: 'Localização', valor: 'município da área' },
+  { rotulo: 'Tamanho', valor: 'medida aproximada' },
+  { rotulo: 'Tipo de imóvel', valor: 'fazenda, sítio, chácara ou terreno' },
+  { rotulo: 'Características', valor: 'principais informações da área' },
+  { rotulo: 'Contato', valor: 'nome e telefone do proprietário' },
 ];
 
 const jsonLd = {
@@ -65,76 +26,41 @@ const jsonLd = {
 
 <Base
   titulo="Quero vender minha área"
-  descricao="Vender fazenda, chácara, sítio ou terreno rural no Espírito Santo. Confiro a documentação antes de anunciar e levo comprador qualificado, não curioso."
+  descricao="Atendimento a proprietários que desejam vender fazendas, chácaras, sítios ou terrenos rurais no Espírito Santo."
   jsonLd={jsonLd}
 >
   <section class="secao--compacta qv__cab-env">
     <div class="env qv__topo">
       <div>
         <CabecalhoSecao
-          kicker="Captação"
+          kicker="Venda de imóvel rural"
           titulo="Quero vender minha área"
-          subtitulo="Se você tem terra à venda no Espírito Santo e está cansado de visita de curioso, o problema provavelmente não é o preço. É o anúncio."
+          subtitulo="Apresente as informações da sua propriedade para iniciar o atendimento de venda no Espírito Santo."
           as="h1"
       />
 
         <div class="qv__acoes">
           <BotaoWhats
             origem="quero-vender-topo"
-            mensagem="Oi, tenho uma área para vender no ES."
-            rotulo="Mandar os dados da minha área"
+            mensagem="Olá, tenho uma área para vender no Espírito Santo."
+            rotulo="Apresentar minha área"
           />
-          <a class="link-seta" href="#como">
-            Como funciona <span class="link-seta__seta" aria-hidden="true">→</span>
-          </a>
         </div>
       </div>
 
       <aside class="qv__lateral">
         <FichaTecnica
-          titulo="O que eu preciso saber"
+          titulo="Informações iniciais"
           linhas={oQueEuPreciso}
-          nota="Nada disso precisa estar pronto. Se você não souber, a gente descobre junto."
+          nota="Envie apenas as informações disponíveis. Os demais dados podem ser complementados durante o atendimento."
         />
       </aside>
     </div>
   </section>
 
-  <section class="secao--compacta qv__franco-env">
-    <div class="env">
-      <div class="qv__franco">
-        <p class="rotulo rotulo--terra">Sendo franco</p>
-        <p class="qv__franco-texto">
-          Eu não pego toda área que me oferecem. Se a documentação está travada
-          num inventário, se o preço pedido está muito acima do que a região
-          pratica, ou se a área não tem acesso garantido, eu digo isso na
-          primeira conversa em vez de deixar o anúncio parado por um ano.
-        </p>
-        <p class="peq secundario">
-          Isso não é falta de vontade de trabalhar. É que anúncio parado
-          desgasta o imóvel, e depois de seis meses no ar sem proposta, todo
-          comprador acha que tem algo errado.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="secao--compacta" id="como" aria-labelledby="como-titulo">
-    <div class="env">
-      <div class="qv__como">
-        <CabecalhoSecao
-          kicker="O processo"
-          titulo="Como funciona, do primeiro contato ao anúncio"
-          as="h2"
-        />
-        <ListaNumerada itens={comoFunciona} />
-      </div>
-    </div>
-  </section>
-
   <section class="secao--compacta qv__onde-env" aria-labelledby="onde-titulo">
     <div class="env">
-      <h2 class="qv__h2" id="onde-titulo">Onde eu atuo</h2>
+      <h2 class="qv__h2" id="onde-titulo">Regiões de atuação</h2>
       <div class="qv__regioes">
         {
           territorios.map((t) => (
@@ -146,8 +72,8 @@ const jsonLd = {
         }
       </div>
       <p class="peq secundario qv__onde-nota">
-        Fora dessas regiões eu costumo indicar um colega em vez de aceitar e
-        atender mal.
+        Para propriedades localizadas fora dessas regiões, a possibilidade de
+        atendimento será avaliada conforme a localização.
       </p>
     </div>
   </section>
@@ -155,12 +81,12 @@ const jsonLd = {
   <section class="secao--compacta qv__fecho-env">
     <div class="env qv__fecho">
       <div>
-        <h2 class="qv__h2">Manda os dados que eu te respondo hoje</h2>
-        <p class="lead">Fale comigo pelo WhatsApp.</p>
+        <h2 class="qv__h2">Deseja apresentar sua área?</h2>
+        <p class="lead">Envie as informações disponíveis pelo WhatsApp.</p>
       </div>
       <BotaoWhats
         origem="quero-vender-fecho"
-        mensagem="Oi, tenho uma área para vender no ES. Segue o que eu sei dela:"
+        mensagem="Olá, tenho uma área para vender no Espírito Santo. Seguem as informações disponíveis:"
         rotulo="Falar sobre a minha área"
       />
     </div>
@@ -185,29 +111,6 @@ const jsonLd = {
     align-items: center;
     gap: var(--s-5);
     flex-wrap: wrap;
-  }
-
-  .qv__franco-env {
-    background: var(--papel-2);
-    border-bottom: var(--borda);
-  }
-
-  .qv__franco {
-    display: grid;
-    gap: var(--s-4);
-    max-width: 62ch;
-    padding-left: var(--s-5);
-    border-left: var(--borda-2);
-  }
-
-  .qv__franco-texto {
-    font-family: var(--f-display);
-    font-size: var(--t-lead);
-    line-height: 1.5;
-  }
-
-  .qv__como {
-    max-width: 72ch;
   }
 
   .qv__h2 {

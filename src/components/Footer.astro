@@ -6,8 +6,8 @@
  */
 import { corretor, navRodape } from '../data/site';
 import { dataCurta } from '../lib/format';
-import { linkWhats, numeroWhatsVisivel } from '../lib/whatsapp';
 import { getCollection } from 'astro:content';
+import ContatoWhats from './ContatoWhats.astro';
 
 const imoveis = await getCollection('imoveis');
 const ativas = imoveis.filter((i) => i.data.status === 'ativa').length;
@@ -24,16 +24,9 @@ const ano = new Date().getFullYear();
         <p class="rod__nome">{corretor.nome}</p>
         <p class="rotulo rotulo--fraco">{corretor.papel}</p>
 
-        <dl class="rod__contato">
-          <div>
-            <dt class="rotulo rotulo--fraco">WhatsApp</dt>
-            <dd>
-              <a href={linkWhats({ origem: 'rodape' })} rel="noopener" target="_blank">
-                {numeroWhatsVisivel}
-              </a>
-            </dd>
-          </div>
-        </dl>
+        <div class="rod__contato" id="contato-whatsapp">
+          <ContatoWhats origem="rodape" />
+        </div>
       </div>
 
       <nav class="rod__nav" aria-label="Carteira">
@@ -104,24 +97,6 @@ const ano = new Date().getFullYear();
 
   .rod__contato {
     margin-top: var(--s-6);
-    display: grid;
-    gap: var(--s-4);
-  }
-
-  .rod__contato dd {
-    margin: 0;
-    font-size: var(--t-peq);
-  }
-
-  .rod__contato a {
-    text-decoration: none;
-    border-bottom: 1px solid var(--filete);
-    transition: border-color var(--dur-rapida) var(--ease);
-  }
-
-  .rod__contato a:hover {
-    border-bottom-color: var(--terra);
-    color: var(--terra);
   }
 
   .rod__titulo {
