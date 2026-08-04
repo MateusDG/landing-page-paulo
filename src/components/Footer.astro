@@ -74,6 +74,15 @@ const ano = new Date().getFullYear();
       <p class="rotulo rotulo--fraco">
         © {ano} {corretor.nome} · Fotos autorais
       </p>
+      <p class="rod__credito">
+        Feito e administrado por
+        <a
+          href="https://wa.me/5527998619377"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Falar com Mateus Diniz pelo WhatsApp"
+        >Mateus Diniz</a>.
+      </p>
     </div>
   </div>
 </footer>
@@ -142,6 +151,23 @@ const ano = new Date().getFullYear();
     line-height: 1.55;
     color: var(--grafite-70);
     max-width: 62ch;
+  }
+
+  .rod__credito {
+    font-size: var(--t-micro);
+    line-height: 1.55;
+    color: var(--grafite-70);
+  }
+
+  .rod__credito a {
+    color: var(--grafite);
+    text-underline-offset: 0.18em;
+    transition: color var(--dur-rapida) var(--ease);
+  }
+
+  .rod__credito a:hover,
+  .rod__credito a:focus-visible {
+    color: var(--terra);
   }
 
   @media (max-width: 900px) {
