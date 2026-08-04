@@ -8,11 +8,10 @@ negócio; as seguintes constroem relevância e autoridade ao longo dos meses.
 
 1. Faça commit e push das alterações para a branch `main`.
 2. Aguarde a ação `Publicar na Hostinger` terminar sem erros no GitHub.
-3. Abra `https://valdecimoveis.com.br/robots.txt` e confirme que aparecem os
-   dois sitemaps.
+3. Abra `https://valdecimoveis.com.br/robots.txt` e confirme que aparece o
+   sitemap principal.
 4. Abra `https://valdecimoveis.com.br/sitemap-index.xml`.
-5. Abra `https://valdecimoveis.com.br/sitemap-images.xml`.
-6. Acesse `https://www.valdecimoveis.com.br/` e confirme que o navegador muda
+5. Acesse `https://www.valdecimoveis.com.br/` e confirme que o navegador muda
    para `https://valdecimoveis.com.br/`. O redirecionamento precisa ser 301.
 
 O domínio já usa HTTPS. A versão sem `www` é a versão oficial indicada pelas
@@ -40,8 +39,9 @@ variável `PUBLIC_GOOGLE_SITE_VERIFICATION` do GitHub.
 
 1. Dentro do Search Console, abra `Indexação` e depois `Sitemaps`.
 2. Envie `sitemap-index.xml`.
-3. Envie também `sitemap-images.xml`.
-4. Confirme que o status dos dois aparece como `Sucesso`.
+3. Confirme que o status aparece como `Processado`.
+4. O sitemap principal já contém as 25 imagens dos imóveis, então não é
+   necessário enviar um segundo sitemap de imagens.
 5. Volte depois de sete dias e confira se não surgiram erros de leitura.
 
 ## 4. Solicitar a atualização das páginas prioritárias
@@ -201,7 +201,7 @@ conversa não é o resultado final do negócio.
 - Publicar o site otimizado.
 - Corrigir o redirecionamento de `www`.
 - Verificar o Search Console.
-- Enviar os dois sitemaps.
+- Enviar o sitemap principal.
 - Solicitar indexação das páginas prioritárias.
 - Criar ou completar o Perfil da Empresa.
 

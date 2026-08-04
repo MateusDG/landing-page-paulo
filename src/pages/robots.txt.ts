@@ -9,7 +9,6 @@ export const GET: APIRoute = ({ site }) => {
         'User-agent: *',
         'Allow: /',
         `Sitemap: ${origem}/sitemap-index.xml`,
-        `Sitemap: ${origem}/sitemap-images.xml`,
       ];
 
   return new Response(`${linhas.join('\n')}\n`, {

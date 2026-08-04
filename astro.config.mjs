@@ -1,11 +1,30 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { readdirSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { DADOS_DE_EXEMPLO } from './src/data/site.ts';
 
 // O domínio final entra aqui e em .env (PUBLIC_SITE_URL).
 // Ele alimenta sitemap, canonical, og:url e o JSON-LD.
 const SITE = process.env.PUBLIC_SITE_URL ?? 'https://valdecimoveis.com.br';
+const SITE_ORIGIN = SITE.endsWith('/') ? SITE.slice(0, -1) : SITE;
+
+/* O sitemap principal também carrega as fotos de cada anúncio. Assim o
+   Google processa páginas e imagens na mesma leitura, sem depender de um
+   segundo sitemap que alguns painéis classificam como desconhecido. */
+const IMAGENS_IMOVEIS = Object.fromEntries(
+  readdirSync(resolve('src/content/imoveis'))
+    .filter((arquivo) => arquivo.endsWith('.md'))
+    .map((arquivo) => {
+      const slug = arquivo.replace(/\.md$/, '');
+      const conteudo = readFileSync(resolve('src/content/imoveis', arquivo), 'utf8');
+      const fotos = [...conteudo.matchAll(/^\s*-\s*src:\s*['"]([^'"]+)['"]\s*$/gm)].map(
+        ([, src]) => ({ url: new URL(src, `${SITE_ORIGIN}/`).href }),
+      );
+      return [slug, fotos];
+    }),
+);
 
 export default defineConfig({
   site: SITE,
@@ -88,7 +107,16 @@ export default defineConfig({
       changefreq: 'weekly',
       serialize(item) {
         if (item.url === `${SITE}/`) item.priority = 1.0;
-        else if (item.url.includes('/imovel/')) item.priority = 0.9;
+        else if (item.url.includes('/imovel/')) {
+          item.priority = 0.9;
+          const slug = item.url.split('/imovel/')[1]?.replace(/\/$/, '');
+          const fotos = slug ? IMAGENS_IMOVEIS[slug] : undefined;
+          if (fotos?.length) {
+            /** @type {import('sitemap').SitemapItemLoose} */
+            const itemComImagens = item;
+            itemComImagens.img = fotos;
+          }
+        }
         else if (item.url.includes('/regiao/')) item.priority = 0.8;
         else item.priority = 0.6;
         return item;

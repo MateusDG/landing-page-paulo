@@ -1,6 +1,8 @@
 RewriteEngine On
 
+# Redireciona o endereco legado para o indice atual de sitemaps.
+RewriteRule ^sitemap\.xml$ /sitemap-index.xml [R=301,L]
+
 # Uma unica versao publica evita duplicidade entre www e sem www.
 RewriteCond %{HTTP_HOST} ^www\.valdecimoveis\.com\.br$ [NC]
 RewriteRule ^ https://valdecimoveis.com.br%{REQUEST_URI} [R=301,L]
-
