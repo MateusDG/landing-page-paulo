@@ -1,17 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import CabecalhoSecao from '../components/CabecalhoSecao.astro';
-import FichaTecnica from '../components/FichaTecnica.astro';
 import ListaNumerada from '../components/ListaNumerada.astro';
 import BotaoWhats from '../components/BotaoWhats.astro';
 import Croqui from '../components/Croqui.astro';
-import { corretor, emCampo } from '../data/site';
+import { corretor } from '../data/site';
 import { protocoloDocumental, protocoloFisico, notaProtocolo } from '../data/protocolo';
-import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
-import { municipios as fmtMunicipios } from '../lib/format';
+import { CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
 import { numeroWhats } from '../lib/whatsapp';
-
-const totalMunicipios = territorios.reduce((s, t) => s + t.municipios.length, 0);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -29,7 +25,7 @@ const jsonLd = {
 
 <Base
   titulo="Sobre"
-  descricao={`${corretor.nome}, corretor de imóveis rurais no Espírito Santo desde ${corretor.desde}. Como eu trabalho e o que eu confiro antes de anunciar.`}
+  descricao={`${corretor.nome}, corretor de imóveis rurais no Espírito Santo. Como eu trabalho e o que eu confiro antes de anunciar.`}
   jsonLd={jsonLd}
 >
   <section class="secao--compacta sb__cab-env">
@@ -37,14 +33,7 @@ const jsonLd = {
       <div class="sb__retrato">
         <div class="sb__moldura">
           <Croqui path={CONTORNO_ES} viewBox={VIEWBOX_ES} tamanho={190} desenhar />
-          <div class="sb__moldura-legenda">
-            <p class="rotulo rotulo--fraco">Espaço reservado</p>
-            <p class="peq secundario">
-              Retrato em campo. Ver README §Fotografia.
-            </p>
-          </div>
         </div>
-        <FichaTecnica titulo="Em campo" linhas={emCampo} class="sb__ficha" />
       </div>
 
       <div class="sb__texto">
@@ -56,8 +45,7 @@ const jsonLd = {
 
         <div class="prosa">
           <p>
-            Sou {corretor.nome}. Trabalho com imóvel rural desde {corretor.desde} e minha base é{' '}
-            {corretor.cidadeBase}, no Espírito Santo.
+            Sou {corretor.nome} e trabalho com imóveis rurais no Espírito Santo.
           </p>
 
           <p>
@@ -85,8 +73,8 @@ const jsonLd = {
           <h2>Onde eu ando</h2>
 
           <p>
-            Atuo em {fmtMunicipios(totalMunicipios)} distribuídos em quatro
-            regiões, cada uma com lógica de compra própria: as{' '}
+            Atuo em quatro regiões do Espírito Santo, cada uma com lógica de
+            compra própria: as{' '}
             <a href="/regiao/montanhas-capixabas/">Montanhas Capixabas</a>, o{' '}
             <a href="/regiao/norte-capixaba/">Norte</a>, o{' '}
             <a href="/regiao/sul-e-caparao/">Sul e Caparaó</a> e o{' '}
@@ -158,12 +146,11 @@ const jsonLd = {
       <div>
         <h2 class="sb__h2">Quer conversar?</h2>
         <p class="lead">
-          Sem compromisso e sem discurso de venda. {corretor.sla}
+          Sem compromisso e sem discurso de venda.
         </p>
       </div>
       <div class="sb__fecho-acoes">
         <BotaoWhats origem="sobre-fecho" rotulo="Falar no WhatsApp" />
-        <a class="botao botao--secundario" href="/#perguntas">Responder perguntas rápidas</a>
       </div>
     </div>
   </section>
@@ -202,13 +189,6 @@ const jsonLd = {
 
   .sb__moldura :global(.croqui) {
     color: var(--filete);
-  }
-
-  .sb__moldura-legenda {
-    display: grid;
-    gap: var(--s-2);
-    text-align: center;
-    max-width: 28ch;
   }
 
   .sb__protocolo-env {

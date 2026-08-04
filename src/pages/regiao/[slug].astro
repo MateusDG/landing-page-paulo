@@ -8,9 +8,8 @@ import BotaoWhats from '../../components/BotaoWhats.astro';
 import CabecalhoSecao from '../../components/CabecalhoSecao.astro';
 
 import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../../data/territorios';
-import { deslocamento, notaDeslocamento } from '../../data/deslocamento';
 import { formatarArea } from '../../lib/unidades';
-import { numero, areas as fmtAreas, municipios as fmtMunicipios } from '../../lib/format';
+import { areas as fmtAreas, municipios as fmtMunicipios } from '../../lib/format';
 
 export function getStaticPaths() {
   return territorios.map((t) => ({ params: { slug: t.slug }, props: { t } }));
@@ -46,14 +45,6 @@ const linhas = [
     : []),
   { rotulo: 'Relevo', valor: t.relevo },
 ];
-
-const nomesCurtos: Record<string, string> = {
-  'montanhas-capixabas': 'Montanhas',
-  'norte-capixaba': 'Norte',
-  'sul-e-caparao': 'Sul e Caparaó',
-  'litoral-e-franja': 'Litoral',
-};
-const deslocRegiao = deslocamento.filter((l) => l.territorio === nomesCurtos[t.slug]);
 
 const jsonLd = [
   {
@@ -153,25 +144,6 @@ const jsonLd = [
           {t.acesso.map((a) => <li class="rg__pilha-item">{a}</li>)}
         </ul>
 
-        {
-          deslocRegiao.length > 0 && (
-            <table class="rg__tabela">
-              <caption class="rotulo rotulo--fraco rg__caption">
-                Tempo a partir de Vitória
-              </caption>
-              <tbody>
-                {deslocRegiao.map((l) => (
-                  <tr>
-                    <th scope="row">{l.municipio}</th>
-                    <td class="mono">{l.tempo}</td>
-                    <td class="mono">{numero(l.km)} km</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )
-        }
-        <p class="rg__desloc-nota">{notaDeslocamento}</p>
       </div>
     </div>
   </section>
@@ -221,7 +193,6 @@ const jsonLd = [
           mensagem={`Oi, procuro área em ${t.nome}.`}
           rotulo="Falar sobre essa região"
         />
-        <a class="botao botao--secundario" href="/#perguntas">Responder perguntas rápidas</a>
       </div>
     </div>
   </section>
@@ -348,41 +319,9 @@ const jsonLd = [
     font-size: var(--t-peq);
   }
 
-  .rg__tabela {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: var(--s-6);
-    font-size: var(--t-peq);
-  }
-
-  .rg__caption {
-    text-align: left;
-    padding-bottom: var(--s-3);
-    border-bottom: 1px solid var(--grafite);
-  }
-
-  .rg__tabela th,
-  .rg__tabela td {
-    text-align: left;
-    padding: var(--s-3) var(--s-3) var(--s-3) 0;
-    border-bottom: var(--borda-f);
-    font-weight: 400;
-  }
-
-  .rg__tabela td {
-    text-align: right;
-  }
-
-  .rg__desloc-nota {
-    margin-top: var(--s-4);
-    font-size: var(--t-micro);
-    line-height: 1.55;
-    color: var(--grafite-70);
-  }
-
   .rg__grade {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
     gap: var(--gutter);
   }
 

@@ -126,24 +126,6 @@ const imoveis = defineCollection({
     }),
 });
 
-const guias = defineCollection({
-  loader: glob({ base: './src/content/guias', pattern: '**/*.md' }),
-  schema: z.object({
-    titulo: z.string(),
-    /* Título de busca, costuma ser mais literal que o título editorial. */
-    tituloSeo: z.string().optional(),
-    descricao: z.string().min(70).max(180),
-    resumo: z.string(),
-    ordem: z.number().default(99),
-    publicadoEm: z.coerce.date(),
-    atualizadoEm: z.coerce.date(),
-    revisadoPorAdvogado: z.boolean().default(false),
-    perguntas: z
-      .array(z.object({ pergunta: z.string(), resposta: z.string() }))
-      .default([]),
-  }),
-});
-
 const diario = defineCollection({
   loader: glob({ base: './src/content/diario', pattern: '**/*.md' }),
   schema: z.object({
@@ -179,4 +161,4 @@ const casos = defineCollection({
   }),
 });
 
-export const collections = { imoveis, guias, diario, casos };
+export const collections = { imoveis, diario, casos };

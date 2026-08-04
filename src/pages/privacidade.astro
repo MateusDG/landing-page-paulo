@@ -5,10 +5,9 @@ import { linkWhats } from '../lib/whatsapp';
 
 /* ▸ REVISAR com advogado antes de publicar. O texto abaixo descreve o que o
    site EFETIVAMENTE faz, que é pouco, de propósito: não há cookie de
-   rastreio, não há pixel de rede social e o único dado coletado é o que o
-   visitante digita no questionário. Se você adicionar GA4, remarketing ou
-   qualquer pixel, esta página precisa mudar E um banner de consentimento
-   passa a ser necessário. */
+   rastreio, não há pixel de rede social e não há formulário de contato. Se
+   você adicionar GA4, remarketing ou qualquer pixel, esta página precisa
+   mudar E um banner de consentimento passa a ser necessário. */
 ---
 
 <Editorial
@@ -20,24 +19,19 @@ import { linkWhats } from '../lib/whatsapp';
     { rotulo: 'Responsável', valor: corretor.nome },
   ]}
   semFecho
-  aviso="Documento em revisão jurídica. Ao publicar o site, substitua esta versão pela revisada por advogado, com a razão social ou CPF do responsável e o encarregado de dados, se houver."
 >
   <h2>Quem é o responsável</h2>
   <p>
-    {corretor.nome}, com base em {corretor.cidadeBase}/{corretor.uf}. Para
-    assuntos de dados pessoais, <a href={linkWhats({ origem: 'privacidade' })}>fale pelo WhatsApp</a>.
+    {corretor.nome}, com atuação no Espírito Santo. Para assuntos de dados
+    pessoais, <a href={linkWhats({ origem: 'privacidade' })}>fale pelo WhatsApp</a>.
   </p>
 
   <h2>Que dados este site coleta</h2>
   <p>
-    Só o que você digita. O site não tem cadastro, não tem login e não usa
-    cookie de rastreamento ou pixel de rede social.
+    O site não tem cadastro, login ou formulário de contato e não usa cookie
+    de rastreamento ou pixel de rede social.
   </p>
   <ul>
-    <li>
-      <strong>Questionário de busca:</strong> nome, telefone de WhatsApp e as respostas de
-      finalidade, região, faixa de área, faixa de investimento e prazo.
-    </li>
     <li>
       <strong>Preferência de unidade</strong> (hectare ou alqueire), guardada
       só no seu navegador, em <code>localStorage</code>. Nunca sai do seu
@@ -52,23 +46,17 @@ import { linkWhats } from '../lib/whatsapp';
 
   <h2>Para que os dados são usados</h2>
   <p>
-    Exclusivamente para responder você sobre imóveis rurais compatíveis com o
-    que descreveu. A base legal é o seu consentimento, dado ao marcar a
-    autorização no questionário, e o interesse legítimo de responder a um contato
-    comercial que você iniciou.
+    A preferência de unidade serve apenas para manter hectare ou alqueire
+    selecionado no seu navegador. As métricas anônimas ajudam a entender quais
+    páginas são mais acessadas.
   </p>
-  <p>Seus dados não são vendidos, alugados nem cedidos a terceiros.</p>
 
   <h2>Com quem os dados são compartilhados</h2>
   <ul>
     <li>
-      <strong>WhatsApp:</strong> ao concluir o questionário, o site abre uma
-      conversa no WhatsApp com a mensagem já escrita. A partir daí a conversa
-      é regida pela política do próprio WhatsApp.
-    </li>
-    <li>
-      <strong>Ferramenta de gestão de contatos:</strong> o questionário pode ser
-      encaminhado a um sistema próprio de acompanhamento de atendimento.
+      <strong>WhatsApp:</strong> ao clicar em um botão de contato, você abre uma
+      conversa no WhatsApp. A partir daí, a conversa é regida pela política do
+      próprio WhatsApp.
     </li>
     <li>
       <strong>Hospedagem:</strong> o site é servido por uma rede de
@@ -79,9 +67,9 @@ import { linkWhats } from '../lib/whatsapp';
 
   <h2>Por quanto tempo</h2>
   <p>
-    Contatos recebidos pelo questionário são mantidos enquanto durar o atendimento e por até
-    24 meses depois, para o caso de você voltar a procurar. Depois disso são
-    apagados.
+    O site não armazena contatos. Conversas iniciadas no WhatsApp permanecem
+    no aplicativo até serem apagadas pelo usuário ou pelo responsável pelo
+    atendimento.
   </p>
 
   <h2>Seus direitos</h2>

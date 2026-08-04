@@ -8,15 +8,12 @@ import FaixaTopografica from '../components/FaixaTopografica.astro';
 import FichaImovel from '../components/FichaImovel.astro';
 import FichaTecnica from '../components/FichaTecnica.astro';
 import MapaTerritorios from '../components/MapaTerritorios.astro';
-import Briefing from '../components/Briefing.astro';
 import ToggleUnidade from '../components/ToggleUnidade.astro';
-import BotaoWhats from '../components/BotaoWhats.astro';
 import Croqui from '../components/Croqui.astro';
 
-import { corretor, emCampo, coordenadaBase, meta } from '../data/site';
-import { deslocamento, notaDeslocamento } from '../data/deslocamento';
+import { corretor, meta } from '../data/site';
 import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
-import { dataCurta, numero, areas as fmtAreas } from '../lib/format';
+import { dataCurta, areas as fmtAreas } from '../lib/format';
 import { formatarArea } from '../lib/unidades';
 
 const imoveis = (await getCollection('imoveis')).sort(
@@ -64,8 +61,6 @@ const contagemPorRegiao = Object.fromEntries(
   territorios.map((t) => [t.slug, ativas.filter((i) => i.data.regiao === t.slug).length]),
 );
 
-const deslocamentoPreview = deslocamento.slice(0, 8);
-
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -79,10 +74,6 @@ const jsonLd = {
   {/* ===================================================== 01 · HERO ===== */}
   <section class="hero" aria-labelledby="hero-titulo">
     <div class="env hero__int">
-      <p class="rotulo rotulo--fraco hero__coord">
-        {coordenadaBase.texto} · {coordenadaBase.local}
-      </p>
-
       <div class="hero__grade">
         <div class="hero__texto">
           <h1 class="display" id="hero-titulo">
@@ -159,52 +150,6 @@ const jsonLd = {
 
       <MapaTerritorios contagem={contagemPorRegiao} />
 
-      {/* Índice de deslocamento, conteúdo que só existe porque foi medido */}
-      <div class="desloc">
-        <div class="desloc__cab">
-          <div>
-            <p class="rotulo rotulo--terra">Índice de deslocamento</p>
-            <h3 class="desloc__titulo">Quanto tempo você leva de Vitória até lá</h3>
-            <p class="desloc__nota">{notaDeslocamento}</p>
-          </div>
-        </div>
-
-        <div class="desloc__tabela-env">
-          <table class="desloc__tabela">
-            <caption class="so-leitor">
-              Tempo de deslocamento a partir de Vitória, distância, percentual
-              de asfalto e observação de campo.
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Município</th>
-                <th scope="col">Tempo</th>
-                <th scope="col">Km</th>
-                <th scope="col">Asfalto</th>
-                <th scope="col">Observação de campo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                deslocamentoPreview.map((l) => (
-                  <tr>
-                    <th scope="row">{l.municipio}</th>
-                    <td class="mono">{l.tempo}</td>
-                    <td class="mono">{numero(l.km)}</td>
-                    <td class="mono">{l.asfalto}%</td>
-                    <td class="desloc__obs">{l.nota}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
-        </div>
-
-        <a class="link-seta" href="/guia/indice-de-deslocamento/">
-          Ver os {deslocamento.length} municípios
-          <span class="link-seta__seta" aria-hidden="true">→</span>
-        </a>
-      </div>
     </div>
   </section>
 
@@ -218,13 +163,6 @@ const jsonLd = {
           <div class="sobre__croqui">
             <Croqui path={CONTORNO_ES} viewBox={VIEWBOX_ES} tamanho={200} desenhar />
           </div>
-          <div class="sobre__moldura-legenda">
-            <p class="rotulo rotulo--fraco">Espaço reservado</p>
-            <p class="peq secundario">
-              Aqui entra o retrato em campo, botina suja, não terno em
-              estúdio. Ver README §Fotografia.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -233,8 +171,7 @@ const jsonLd = {
 
         <div class="prosa sobre__prosa">
           <p>
-            Sou {corretor.nome}. Trabalho com imóvel rural desde {corretor.desde} e minha base é
-            {' '}{corretor.cidadeBase}.
+            Sou {corretor.nome} e trabalho com imóveis rurais no Espírito Santo.
           </p>
           <p>
             Não sou imobiliária. Sou uma pessoa só, o que significa que você
@@ -249,37 +186,6 @@ const jsonLd = {
           </p>
         </div>
 
-        <div class="sobre__ficha">
-          <FichaTecnica titulo="Em campo" linhas={emCampo} variante="caixa" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* =============================================== 09 · PERGUNTAS === */}
-  <section class="secao secao--filete" id="perguntas" aria-label="Responder perguntas sobre o que você procura">
-    <div class="env perguntas-secao">
-      <div class="perguntas-secao__texto">
-        <CabecalhoSecao
-          kicker="Conversa"
-          titulo="Me diga o que você procura em cinco cliques"
-          subtitulo="Sem formulário longo, sem e-mail obrigatório. No fim, suas respostas seguem organizadas para o WhatsApp."
-        />
-
-        <ul class="perguntas-secao__lista">
-          <li>Você responde clicando, digita só nome e telefone, no fim.</li>
-          <li>Eu recebo o resumo estruturado, com região, área e prazo.</li>
-          <li>{corretor.sla}</li>
-        </ul>
-
-        <div class="perguntas-secao__alt">
-          <p class="rotulo rotulo--fraco">Prefere ir direto?</p>
-          <BotaoWhats origem="perguntas-secao" variante="secundario" rotulo="Falar no WhatsApp agora" />
-        </div>
-      </div>
-
-      <div class="perguntas-secao__form">
-        <Briefing origem="home" />
       </div>
     </div>
   </section>
@@ -291,10 +197,6 @@ const jsonLd = {
   .hero__int {
     padding-top: clamp(var(--s-7), 7vw, var(--s-9));
     padding-bottom: var(--s-8);
-  }
-
-  .hero__coord {
-    padding-bottom: var(--s-6);
   }
 
   .hero__grade {
@@ -359,7 +261,7 @@ const jsonLd = {
 
   .carteira__grade {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
     gap: var(--gutter);
   }
 
@@ -376,66 +278,6 @@ const jsonLd = {
 
   .carteira__nota {
     max-width: 40ch;
-  }
-
-  /* ---- 06 Regiões ------------------------------------------------------- */
-  .desloc {
-    margin-top: var(--s-9);
-    padding-top: var(--s-7);
-    border-top: var(--borda);
-  }
-
-  .desloc__titulo {
-    margin-top: var(--s-3);
-    font-size: var(--t-h2);
-    font-weight: 400;
-    max-width: 20ch;
-  }
-
-  .desloc__nota {
-    margin-top: var(--s-4);
-    margin-bottom: var(--s-6);
-    font-size: var(--t-peq);
-    color: var(--grafite-70);
-    max-width: 54ch;
-  }
-
-  .desloc__tabela-env {
-    overflow-x: auto;
-    margin-bottom: var(--s-5);
-  }
-
-  .desloc__tabela {
-    width: 100%;
-    min-width: 640px;
-    border-collapse: collapse;
-    font-size: var(--t-peq);
-  }
-
-  .desloc__tabela th,
-  .desloc__tabela td {
-    text-align: left;
-    padding: var(--s-3) var(--s-4) var(--s-3) 0;
-    border-bottom: var(--borda-f);
-    vertical-align: baseline;
-  }
-
-  .desloc__tabela thead th {
-    font-family: var(--f-mono);
-    font-size: var(--t-micro);
-    font-weight: 500;
-    letter-spacing: var(--tracking-rotulo);
-    text-transform: uppercase;
-    color: var(--grafite-70);
-    border-bottom: 1px solid var(--grafite);
-  }
-
-  .desloc__tabela tbody th {
-    font-weight: 500;
-  }
-
-  .desloc__obs {
-    color: var(--grafite-70);
   }
 
   /* ---- 07 Sobre --------------------------------------------------------- */
@@ -461,20 +303,8 @@ const jsonLd = {
     color: var(--filete);
   }
 
-  .sobre__moldura-legenda {
-    display: grid;
-    gap: var(--s-2);
-    text-align: center;
-    max-width: 32ch;
-  }
-
   .sobre__prosa {
     margin-top: calc(var(--s-7) * -1 + var(--s-2));
-  }
-
-  .sobre__ficha {
-    margin-top: var(--s-7);
-    max-width: 420px;
   }
 
   @media (max-width: 900px) {
@@ -488,50 +318,6 @@ const jsonLd = {
 
     .sobre__prosa {
       margin-top: 0;
-    }
-  }
-
-  /* ---- 09 Perguntas ----------------------------------------------------- */
-  .perguntas-secao {
-    display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-    gap: var(--s-8);
-    align-items: start;
-  }
-
-  .perguntas-secao__lista {
-    display: grid;
-    gap: var(--s-3);
-    border-top: var(--borda);
-    padding-top: var(--s-5);
-  }
-
-  .perguntas-secao__lista li {
-    position: relative;
-    padding-left: var(--s-5);
-    font-size: var(--t-peq);
-    color: var(--grafite-70);
-  }
-
-  .perguntas-secao__lista li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--terra);
-  }
-
-  .perguntas-secao__alt {
-    display: grid;
-    gap: var(--s-3);
-    justify-items: start;
-    margin-top: var(--s-7);
-    padding-top: var(--s-5);
-    border-top: var(--borda);
-  }
-
-  @media (max-width: 900px) {
-    .perguntas-secao {
-      grid-template-columns: minmax(0, 1fr);
     }
   }
 

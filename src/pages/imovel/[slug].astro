@@ -212,9 +212,6 @@ const breadcrumb = {
                       origem={`imovel:${d.codigo}`}
                       rotulo="Perguntar sobre esta área"
                     />
-                    <a class="botao botao--secundario" href="/#perguntas">
-                      Responder perguntas rápidas
-                    </a>
                   </div>
                 )
               }
@@ -312,9 +309,6 @@ const breadcrumb = {
                   origem={`imovel-fecho:${d.codigo}`}
                   rotulo="Falar sobre esta área"
                 />
-                <a class="botao botao--secundario" href="/guia/documentos-do-imovel-rural/">
-                  O que conferir antes
-                </a>
               </div>
             </div>
           )
@@ -492,7 +486,7 @@ const breadcrumb = {
 
   .im__campo {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: var(--s-8);
     align-items: start;
   }
@@ -546,7 +540,7 @@ const breadcrumb = {
 
   .im__similares {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
     gap: var(--gutter);
   }
 

@@ -590,7 +590,7 @@ const shotList = [
     let retorno: HTMLButtonElement | null = null;
     let toqueInicial: number | null = null;
 
-    const render = (proximo: number) => {
+    const render = (proximo: number, rolarMiniatura = true) => {
       if (!items.length) return;
       index = (proximo + items.length) % items.length;
       const item = items[index];
@@ -626,7 +626,9 @@ const shotList = [
         if (thumbIndex === index) thumb.setAttribute('aria-current', 'true');
         else thumb.removeAttribute('aria-current');
       });
-      thumbs[index]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      if (rolarMiniatura) {
+        thumbs[index]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
     };
 
     const fechar = () => {
@@ -693,6 +695,8 @@ const shotList = [
       { passive: true },
     );
 
-    render(0);
+    /* A renderização inicial não pode alterar a posição da página. Sem isso,
+       abrir uma ficha pela carteira fazia o navegador saltar até a galeria. */
+    render(0, false);
   }
 </script>

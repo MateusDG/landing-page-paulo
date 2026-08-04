@@ -54,7 +54,5 @@ export function formatarNumeroWhats(numero = NUMERO): string {
   return `(${nacional.slice(0, 2)}) ${nacional.slice(2, 7)}-${nacional.slice(7)}`;
 }
 
-/** Base sem query, usada no fallback sem JavaScript do briefing. */
-export const baseWhats = `https://wa.me/${NUMERO}`;
 export const numeroWhats = NUMERO;
 export const numeroWhatsVisivel = formatarNumeroWhats();

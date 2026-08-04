@@ -2,14 +2,6 @@
 /**
  * FAIXA TOPOGRÁFICA, curvas de nível geradas no build.
  *
- * Ocupa o lugar da fotografia 21:9 do hero enquanto o acervo autoral não
- * existe. É uma decisão de projeto, não um improviso: a alternativa seria
- * banco de imagens, e uma foto de stock destrói mais credibilidade do que
- * dez fotos amadoras somam.
- *
- * Quando o corretor tiver a foto de abertura (ver README §Fotografia),
- * troque este componente por <Image>, o resto do hero não muda.
- *
  * Determinístico: soma de senos com fase fixa. Mesmo desenho em todo build.
  */
 interface Props {
@@ -85,9 +77,6 @@ const curvas = Array.from({ length: linhas }, (_, i) => {
       ))
     }
   </svg>
-  <p class="rotulo rotulo--fraco top__legenda">
-    Curvas de nível · desenho de projeto, aqui entra a fotografia de abertura
-  </p>
 </div>
 
 <style>
@@ -105,18 +94,4 @@ const curvas = Array.from({ length: linhas }, (_, i) => {
     height: clamp(180px, 26vw, 320px);
   }
 
-  .top__legenda {
-    position: absolute;
-    right: var(--margem);
-    bottom: var(--s-4);
-    font-size: 0.6875rem;
-    max-width: 28ch;
-    text-align: right;
-  }
-
-  @media (max-width: 560px) {
-    .top__legenda {
-      display: none;
-    }
-  }
 </style>

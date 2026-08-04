@@ -33,10 +33,6 @@ const ano = new Date().getFullYear();
               </a>
             </dd>
           </div>
-          <div>
-            <dt class="rotulo rotulo--fraco">Base</dt>
-            <dd>{corretor.cidadeBase}/{corretor.uf}</dd>
-          </div>
         </dl>
       </div>
 
@@ -45,19 +41,6 @@ const ano = new Date().getFullYear();
         <ul>
           {
             navRodape.carteira.map((l) => (
-              <li>
-                <a href={l.href}>{l.rotulo}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <nav class="rod__nav" aria-label="Guias">
-        <p class="rotulo rod__titulo">Guias</p>
-        <ul>
-          {
-            navRodape.guias.map((l) => (
               <li>
                 <a href={l.href}>{l.rotulo}</a>
               </li>
@@ -108,7 +91,7 @@ const ano = new Date().getFullYear();
 
   .rod__grade {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
     gap: var(--s-7) var(--gutter);
   }
 

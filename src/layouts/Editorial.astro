@@ -1,11 +1,10 @@
 ---
 /**
- * LAYOUT EDITORIAL, guias, diário e páginas de texto longo.
+ * LAYOUT EDITORIAL, diário e páginas de texto longo.
  * Coluna única de 34em, com uma ficha de metadados à esquerda no desktop.
  */
 import Base from './Base.astro';
 import BotaoWhats from '../components/BotaoWhats.astro';
-import { corretor } from '../data/site';
 
 interface Props {
   titulo: string;
@@ -15,7 +14,7 @@ interface Props {
   meta?: readonly { rotulo: string; valor: string }[];
   trilha?: { rotulo: string; href: string }[];
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
-  /** Aviso de rodapé (disclaimer jurídico dos guias). */
+  /** Aviso opcional no rodapé de uma página editorial. */
   aviso?: string;
   /** Esconde o bloco de contato do fim. */
   semFecho?: boolean;
@@ -90,10 +89,10 @@ const {
               <div class="ed__fecho">
                 <p class="ed__fecho-texto">
                   Ficou com dúvida sobre alguma área específica? Me chame, é
-                  mais rápido que ler outro guia. {corretor.sla}
+                  mais rápido que procurar sozinho.
                 </p>
                 <BotaoWhats
-                  origem={`guia:${titulo.slice(0, 30)}`}
+                  origem={`conteudo:${titulo.slice(0, 30)}`}
                   variante="secundario"
                   rotulo="Perguntar no WhatsApp"
                 />
