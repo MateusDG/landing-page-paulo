@@ -15,16 +15,6 @@ ServerSignature Off
   RewriteRule ^sitemap\.xml$ /sitemap-index.xml [R=301,L]
 </IfModule>
 
-# O site e somente leitura. Nenhuma rota precisa aceitar escrita no servidor.
-<LimitExcept GET HEAD OPTIONS>
-  Require all denied
-</LimitExcept>
-
-# Defesa adicional caso algum arquivo de desenvolvimento seja enviado por erro.
-<FilesMatch "(^\.|\.(bak|conf|config|env|ini|log|orig|pem|key|sql|ya?ml)$)">
-  Require all denied
-</FilesMatch>
-
 <IfModule mod_headers.c>
   Header always set Content-Security-Policy "__CSP_POLICY__"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
