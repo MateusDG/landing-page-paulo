@@ -206,8 +206,8 @@ const shotList = [
 
   .gal__hero {
     position: relative;
-    border: var(--borda);
-    background: var(--grafite);
+    border-top: var(--borda-2);
+    background: var(--conilon-esc);
     overflow: hidden;
   }
 
@@ -228,7 +228,7 @@ const shotList = [
     max-height: min(62vw, 560px);
     min-height: 280px;
     object-fit: contain;
-    background: var(--grafite);
+    background: var(--conilon-esc);
   }
 
   .gal__abrir picture,
@@ -241,8 +241,8 @@ const shotList = [
     right: var(--s-4);
     bottom: var(--s-4);
     padding: var(--s-2) var(--s-3);
-    background: rgb(28 29 27 / 78%);
-    color: var(--papel);
+    background: color-mix(in srgb, var(--papel) 92%, transparent);
+    color: var(--grafite);
     font-family: var(--f-mono);
     font-size: var(--t-micro);
     letter-spacing: var(--tracking-rotulo);
@@ -296,6 +296,8 @@ const shotList = [
     grid-template-columns: auto auto minmax(0, 1fr);
     gap: var(--s-4);
     align-items: baseline;
+    padding-bottom: var(--s-3);
+    border-bottom: var(--borda);
   }
 
   .gal__info > p {
@@ -313,7 +315,7 @@ const shotList = [
     display: flex;
     gap: var(--s-3);
     overflow-x: auto;
-    padding: var(--s-2) var(--s-1) var(--s-3);
+    padding: var(--s-1) 0 var(--s-3);
     scroll-snap-type: x proximity;
     scrollbar-width: thin;
   }
@@ -446,9 +448,10 @@ const shotList = [
 
   /* --- Estado sem fotos ------------------------------------------------- */
   .shot {
-    border: var(--borda);
-    background: var(--marmore);
-    padding: clamp(var(--s-5), 4vw, var(--s-7));
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+    background: transparent;
+    padding-block: clamp(var(--s-5), 4vw, var(--s-7));
   }
 
   .shot__intro {

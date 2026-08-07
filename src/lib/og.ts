@@ -18,13 +18,13 @@ export const OG_LARGURA = 1200;
 export const OG_ALTURA = 630;
 
 const COR = {
-  papel: '#f5f3ee',
-  papel2: '#ebe7de',
-  grafite: '#24251f',
-  grafite70: '#55574d',
-  grafite40: '#83857a',
-  filete: '#c9c5b8',
-  terra: '#9c4a2a',
+  papel: '#f7f6f1',
+  papel2: '#eeece4',
+  grafite: '#1f2721',
+  grafite70: '#505850',
+  grafite40: '#626a62',
+  filete: '#d1d0c7',
+  terra: '#b75b34',
 };
 
 const SERIF = "Georgia,'Iowan Old Style','Liberation Serif','DejaVu Serif',serif";

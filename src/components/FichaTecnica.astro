@@ -58,14 +58,15 @@ const { titulo, linhas, nota, variante = 'caixa', class: classe = '' } = Astro.p
   }
 
   .ficha--caixa {
-    border: var(--borda);
-    background: var(--marmore);
-    padding: var(--ficha-pad);
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+    background: transparent;
+    padding-block: var(--ficha-pad);
   }
 
   .ficha__titulo {
     padding-bottom: var(--s-3);
-    border-bottom: 1px solid var(--grafite);
+    border-bottom: var(--borda);
     margin-bottom: var(--s-1);
     color: var(--grafite);
   }

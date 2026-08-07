@@ -56,8 +56,9 @@ const href = linkWhats({ origem, imovel, titulo, areaHa, municipio });
       inset-inline: 0;
       bottom: 0;
       z-index: var(--z-barra-mobile);
-      background: var(--papel);
-      border-top: var(--borda-2);
+      background: color-mix(in srgb, var(--papel) 96%, transparent);
+      border-top: var(--borda);
+      backdrop-filter: blur(10px);
       /* respeita a área segura do iPhone */
       padding-bottom: env(safe-area-inset-bottom, 0);
     }
@@ -82,9 +83,9 @@ const href = linkWhats({ origem, imovel, titulo, areaHa, municipio });
     }
 
     .bm__item--whats {
-      background: var(--terra);
+      background: var(--conilon);
       color: var(--papel);
-      border-left-color: var(--terra);
+      border-left-color: var(--conilon);
     }
 
     /* Impede que a barra cubra o fim do conteúdo. */

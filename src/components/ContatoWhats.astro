@@ -45,10 +45,10 @@ const {
     align-items: center;
     gap: var(--s-4);
     width: min(100%, 22rem);
-    padding: var(--s-4);
+    padding-block: var(--s-4);
     color: var(--grafite);
-    background: var(--papel-2);
-    border: var(--borda);
+    background: transparent;
+    border-block: var(--borda);
     text-decoration: none;
     transition:
       color var(--dur-rapida) var(--ease),
@@ -59,8 +59,8 @@ const {
   .contato-whats:hover,
   .contato-whats:focus-visible {
     color: var(--terra);
-    border-color: var(--terra);
-    background: var(--marmore);
+    border-color: var(--grafite);
+    background: transparent;
   }
 
   .contato-whats__icone {
@@ -68,9 +68,9 @@ const {
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
-    color: var(--papel);
-    background: var(--terra);
-    border-radius: 50%;
+    color: var(--conilon);
+    background: transparent;
+    border-radius: 0;
   }
 
   .contato-whats__icone svg {

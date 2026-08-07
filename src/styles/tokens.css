@@ -8,27 +8,28 @@
      A paleta sai da geologia do estado: granito, terra do norte capixaba,
      névoa da serra, folha de conilon. Não é "earthy tone" de biblioteca.
      80% da tela é --papel + --grafite. Cor vem da fotografia, não da UI. */
-  --papel:        #f5f3ee;
-  --papel-2:      #ebe7de;
-  --marmore:      #fdfcfa;
-  --grafite:      #24251f;
-  --grafite-70:   #55574d;
+  --papel:        #f7f6f1;
+  --papel-2:      #eeece4;
+  --marmore:      #fffefb;
+  --grafite:      #1f2721;
+  --grafite-70:   #505850;
   /* Calibrado, não escolhido no olho: 4.60:1 sobre --papel-2, o fundo mais
      escuro em que aparece. O rótulo mono do sistema tem 12px, então precisa
      do critério de texto normal (4.5:1), o valor "bonito" anterior
      (#83857a) só passava como texto grande. */
-  --grafite-40:   #66685d;
-  --filete:       #c9c5b8;
-  --filete-fraco: #ded9cd;
+  --grafite-40:   #626a62;
+  --filete:       #d1d0c7;
+  --filete-fraco: #e2e0d8;
 
-  --terra:        #9c4a2a;
-  --terra-esc:    #7a3720;
-  --terra-fraco:  #9c4a2a1f;
+  --terra:        #b75b34;
+  --terra-esc:    #8f4328;
+  --terra-fraco:  #b75b341a;
 
-  --conilon:      #3b4a38;
+  --conilon:      #234b37;
+  --conilon-esc:  #193728;
   --verificado:   #40613f;
   --erro:         #8b2e20;
-  --foco:         #9c4a2a;
+  --foco:         #234b37;
 
   /* ---- Tipografia ---------------------------------------------------- */
   --f-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
@@ -71,8 +72,8 @@
   --secao-y-sm:  clamp(var(--s-7), 6vw, var(--s-9));
 
   /* ---- Grid ----------------------------------------------------------- */
-  --largura-max: 1440px;
-  --margem:      clamp(1.25rem, 5vw, 6rem);
+  --largura-max: 1360px;
+  --margem:      clamp(1.25rem, 5.5vw, 5.5rem);
   --gutter:      clamp(1rem, 2vw, 1.5rem);
   --medida:      34em; /* 62 a 72 caracteres em corpo, inegociável */
 
@@ -82,7 +83,7 @@
   --borda-f: 1px solid var(--filete-fraco);
   --borda-2: 2px solid var(--grafite);
   --raio:    0;
-  --raio-sm: 2px;
+  --raio-sm: 1px;
 
   /* ---- Movimento -------------------------------------------------------
      Se você percebeu a animação, ela está errada. */

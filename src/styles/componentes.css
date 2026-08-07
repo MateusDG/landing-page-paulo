@@ -58,8 +58,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--s-3);
-  min-height: 48px;
-  padding: var(--s-3) var(--s-5);
+  min-height: 50px;
+  padding: var(--s-3) clamp(var(--s-5), 2.4vw, var(--s-6));
   border-radius: var(--raio-sm);
   font-family: var(--f-texto);
   font-size: var(--t-peq);
@@ -74,18 +74,18 @@
 }
 
 .botao--primario {
-  background: var(--terra);
+  background: var(--conilon);
   color: var(--papel);
-  border-color: var(--terra);
+  border-color: var(--conilon);
 }
 
 .botao--primario:hover {
-  background: var(--terra-esc);
-  border-color: var(--terra-esc);
+  background: var(--conilon-esc);
+  border-color: var(--conilon-esc);
 }
 
 .botao--secundario {
-  background: transparent;
+  background: var(--papel);
   color: var(--grafite);
   border-color: var(--filete);
 }
@@ -119,13 +119,13 @@
   font-size: var(--t-peq);
   font-weight: 500;
   text-decoration: none;
-  border-bottom: 1px solid var(--filete);
+  border-bottom: 1px solid transparent;
   padding-bottom: 2px;
   transition: border-color var(--dur-rapida) var(--ease);
 }
 
 .link-seta:hover {
-  border-bottom-color: var(--terra);
+  border-bottom-color: currentColor;
   color: var(--terra);
 }
 

@@ -451,7 +451,7 @@ const breadcrumb = {
 
   .im__topo {
     display: grid;
-    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    grid-template-columns: minmax(0, 9fr) minmax(280px, 3fr);
     gap: var(--s-8);
     align-items: start;
   }
@@ -465,9 +465,10 @@ const breadcrumb = {
     gap: var(--s-4);
     justify-items: center;
     width: 100%;
-    padding: var(--s-5);
-    border: var(--borda);
-    background: var(--marmore);
+    padding-block: var(--s-5);
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+    background: transparent;
   }
 
   .im__croqui-nota {
@@ -512,6 +513,7 @@ const breadcrumb = {
     margin-top: var(--s-5);
     padding-block: var(--s-5);
     border-block: var(--borda);
+    border-top: var(--borda-2);
   }
 
   .im__area {
@@ -554,9 +556,15 @@ const breadcrumb = {
   }
 
   .im__tag {
-    border: var(--borda);
-    padding: var(--s-2) var(--s-3);
+    border: 0;
+    padding: 0;
     color: var(--grafite-70);
+  }
+
+  .im__tag + .im__tag::before {
+    content: '·';
+    margin-right: var(--s-2);
+    color: var(--terra);
   }
 
   .im__preco-bloco {
@@ -691,8 +699,8 @@ const breadcrumb = {
 
   .im__similares {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
-    gap: var(--gutter);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-8) var(--gutter);
   }
 
   @media (max-width: 1100px) {
@@ -718,6 +726,11 @@ const breadcrumb = {
   }
 
   @media (max-width: 760px) {
+    .im__similares {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-7);
+    }
+
     .im__falta,
     .im__notas {
       grid-template-columns: minmax(0, 1fr);

@@ -222,8 +222,8 @@ const jsonLd = [
 
   .hero__grade {
     display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-    gap: var(--s-8);
+    grid-template-columns: minmax(0, 7fr) minmax(340px, 4fr);
+    gap: clamp(var(--s-7), 6vw, var(--s-9));
     align-items: start;
   }
 
@@ -273,6 +273,8 @@ const jsonLd = [
     /* empurra a ficha para baixo da primeira linha do título, assimetria
        deliberada, não alinhamento automático */
     padding-top: var(--s-6);
+    padding-left: var(--s-6);
+    border-left: var(--borda);
   }
 
   .hero__faixa {
@@ -287,6 +289,8 @@ const jsonLd = [
 
     .hero__painel {
       padding-top: 0;
+      padding-left: 0;
+      border-left: 0;
       max-width: 420px;
     }
   }
@@ -307,8 +311,8 @@ const jsonLd = [
 
   .carteira__grade {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
-    gap: var(--gutter);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-8) var(--gutter);
   }
 
   .carteira__rodape {
@@ -335,8 +339,9 @@ const jsonLd = [
   }
 
   .sobre__moldura {
-    border: var(--borda);
-    background: var(--papel);
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+    background: transparent;
     padding: var(--s-6);
     display: grid;
     justify-items: center;
@@ -354,6 +359,11 @@ const jsonLd = [
   }
 
   @media (max-width: 900px) {
+    .carteira__grade {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-7);
+    }
+
     .sobre {
       grid-template-columns: minmax(0, 1fr);
     }

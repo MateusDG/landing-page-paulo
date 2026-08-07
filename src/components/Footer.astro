@@ -100,7 +100,7 @@ const ano = new Date().getFullYear();
 
 <style>
   .rod {
-    border-top: var(--borda-2);
+    border-top: 3px solid var(--conilon);
     padding-top: var(--s-8);
     padding-bottom: var(--s-7);
     background: var(--papel);
@@ -121,17 +121,17 @@ const ano = new Date().getFullYear();
   .rod__logo-quadro {
     display: block;
     flex: none;
-    width: 88px;
-    height: 88px;
+    width: 76px;
+    height: 76px;
     overflow: hidden;
-    border: var(--borda);
-    background: var(--marmore);
+    background: transparent;
   }
 
   .rod__logo {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transform: scale(1.1);
   }
 
   .rod__identidade-texto {

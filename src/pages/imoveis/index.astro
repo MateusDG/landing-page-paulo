@@ -158,7 +158,7 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="secao--compacta">
+  <section class="secao--compacta ct__resultados">
     <div class="env">
       <div class="ct__grade" data-grade>
         {imoveis.map((imovel) => <FichaImovel imovel={imovel} nivel={2} />)}
@@ -218,6 +218,11 @@ const jsonLd = {
   .ct__cab-env {
     border-bottom: var(--borda);
     padding-top: var(--s-7);
+    padding-bottom: var(--s-6);
+  }
+
+  .ct__resultados {
+    padding-top: var(--s-7);
   }
 
   .ct__intro {
@@ -229,9 +234,9 @@ const jsonLd = {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--s-6);
-    padding: var(--s-5);
+    padding-block: var(--s-5);
     border-top: var(--borda-f);
-    background: var(--papel-2);
+    background: transparent;
   }
 
   .ct__grupo {
@@ -264,9 +269,9 @@ const jsonLd = {
     justify-content: space-between;
     gap: var(--s-5);
     flex-wrap: wrap;
-    margin-top: var(--s-4);
-    padding-top: var(--s-4);
-    border-top: var(--borda);
+    margin-top: var(--s-5);
+    padding-block: var(--s-4);
+    border-block: var(--borda);
   }
 
   .ct__contagem {
@@ -285,8 +290,8 @@ const jsonLd = {
 
   .ct__avancados {
     margin-top: var(--s-4);
-    border: var(--borda);
-    background: var(--papel);
+    border-block: var(--borda);
+    background: transparent;
   }
 
   .ct__avancados summary {
@@ -295,7 +300,7 @@ const jsonLd = {
     justify-content: space-between;
     gap: var(--s-4);
     min-height: 48px;
-    padding: var(--s-3) var(--s-4);
+    padding: var(--s-3) 0;
     cursor: pointer;
     font-weight: 600;
     list-style: none;
@@ -325,8 +330,8 @@ const jsonLd = {
 
   .ct__grade {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
-    gap: var(--gutter);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-8) var(--gutter);
   }
 
   .ct__vazio {
@@ -386,6 +391,11 @@ const jsonLd = {
   }
 
   @media (max-width: 900px) {
+    .ct__grade {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-7);
+    }
+
     .ct__guia {
       grid-template-columns: minmax(0, 1fr);
     }
@@ -394,7 +404,7 @@ const jsonLd = {
   @media (max-width: 700px) {
     .ct__filtros {
       grid-template-columns: minmax(0, 1fr);
-      padding: var(--s-4);
+      padding-block: var(--s-4);
     }
 
     .ct__avancados-nota {

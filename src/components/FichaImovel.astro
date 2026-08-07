@@ -193,21 +193,18 @@ function rotuloFinalidade(f: string) {
   .fi {
     display: flex;
     flex-direction: column;
-    border: var(--borda);
-    background: var(--papel);
-    padding: var(--s-5);
+    border-top: var(--borda-2);
+    background: transparent;
+    padding: 0;
     position: relative;
-    transition:
-      background-color var(--dur-rapida) var(--ease),
-      border-color var(--dur-rapida) var(--ease);
+    transition: color var(--dur-rapida) var(--ease);
     /* sem transform, sem scale, sem sombra, decisão do sistema */
   }
 
   .fi__foto {
     position: relative;
-    margin: calc(var(--s-5) * -1) calc(var(--s-5) * -1) var(--s-5);
+    margin: var(--s-4) 0 var(--s-4);
     overflow: hidden;
-    border-bottom: var(--borda);
     background: var(--papel-2);
   }
 
@@ -218,7 +215,7 @@ function rotuloFinalidade(f: string) {
   .fi__foto img {
     display: block;
     width: 100%;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 16 / 10;
     object-fit: cover;
     transition: transform var(--dur-media) var(--ease);
   }
@@ -230,11 +227,11 @@ function rotuloFinalidade(f: string) {
 
   .fi__tipo {
     position: absolute;
-    left: var(--s-3);
-    bottom: var(--s-3);
-    padding: var(--s-1) var(--s-2);
-    background: rgb(36 37 31 / 86%);
-    color: var(--papel);
+    left: 0;
+    bottom: 0;
+    padding: var(--s-2) var(--s-3);
+    background: color-mix(in srgb, var(--papel) 94%, transparent);
+    color: var(--grafite);
     font-family: var(--f-mono);
     font-size: var(--t-micro);
     letter-spacing: var(--tracking-rotulo);
@@ -244,8 +241,7 @@ function rotuloFinalidade(f: string) {
 
   .fi:has(.fi__link:hover),
   .fi:has(.fi__link:focus-visible) {
-    background: var(--marmore);
-    border-color: var(--grafite);
+    color: var(--conilon);
   }
 
   /* Card inteiro clicável, mantendo um único alvo real de foco/leitura. */
@@ -262,15 +258,20 @@ function rotuloFinalidade(f: string) {
   .fi__topo {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    gap: var(--s-4);
+    gap: var(--s-3);
     align-items: start;
-    padding-bottom: var(--s-4);
+    padding-bottom: var(--s-3);
     border-bottom: var(--borda-f);
   }
 
   .fi__croqui {
     flex: none;
     color: var(--grafite);
+  }
+
+  .fi__croqui :global(svg) {
+    width: 62px;
+    height: 62px;
   }
 
   .fi__id {
@@ -294,7 +295,7 @@ function rotuloFinalidade(f: string) {
   .fi__carimbo,
   .fi__reservada {
     position: absolute;
-    top: var(--s-5);
+    top: var(--s-6);
     left: 50%;
     transform: translateX(-50%) rotate(-8deg);
   }
@@ -308,8 +309,8 @@ function rotuloFinalidade(f: string) {
   }
 
   .fi__area {
-    font-size: clamp(2.75rem, 5vw, 3.75rem);
-    margin-top: var(--s-5);
+    font-size: clamp(2.35rem, 4vw, 3.2rem);
+    margin-top: var(--s-4);
     display: flex;
     align-items: baseline;
     gap: 0.12em;
@@ -325,10 +326,10 @@ function rotuloFinalidade(f: string) {
   }
 
   .fi__titulo {
-    font-size: var(--t-h3);
+    font-size: clamp(1.35rem, 1.8vw, 1.75rem);
     font-weight: 500;
     margin-top: var(--s-2);
-    margin-bottom: var(--s-5);
+    margin-bottom: var(--s-4);
     max-width: 26ch;
   }
 
@@ -342,7 +343,7 @@ function rotuloFinalidade(f: string) {
     grid-template-columns: 8.5rem minmax(0, 1fr);
     gap: var(--s-3);
     align-items: baseline;
-    padding-block: var(--s-3);
+    padding-block: var(--s-2);
     border-bottom: var(--borda-f);
   }
 
@@ -364,7 +365,9 @@ function rotuloFinalidade(f: string) {
     gap: var(--s-4);
     flex-wrap: wrap;
     margin-top: auto;
-    padding-top: var(--s-5);
+    padding-top: var(--s-4);
+    padding-bottom: var(--s-2);
+    border-bottom: var(--borda);
   }
 
   .fi__preco {
@@ -396,8 +399,9 @@ function rotuloFinalidade(f: string) {
   /* Vendida: a ficha continua no site (prova social real), mas recua
      visualmente e ganha o carimbo. Nunca apagar imóvel vendido. */
   .fi--vendida {
-    background: var(--papel-2);
-    border-color: var(--filete-fraco);
+    background: transparent;
+    border-color: var(--filete);
+    opacity: 0.78;
   }
 
   .fi--vendida .fi__area,

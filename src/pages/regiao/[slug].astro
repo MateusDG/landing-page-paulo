@@ -281,9 +281,10 @@ const jsonLd = [
   }
 
   .rg__mapa {
-    border: var(--borda);
-    background: var(--marmore);
-    padding: var(--s-5);
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+    background: transparent;
+    padding-block: var(--s-5);
     display: grid;
     justify-items: center;
   }
@@ -335,8 +336,8 @@ const jsonLd = [
 
   .rg__grade {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
-    gap: var(--gutter);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-8) var(--gutter);
   }
 
   .rg__fecho-env {
@@ -363,6 +364,11 @@ const jsonLd = [
   }
 
   @media (max-width: 900px) {
+    .rg__grade {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-7);
+    }
+
     .rg__topo,
     .rg__fecho {
       grid-template-columns: minmax(0, 1fr);

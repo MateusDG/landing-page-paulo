@@ -131,15 +131,18 @@ const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
 
 <style>
   .busca {
-    border: var(--borda);
-    background: var(--marmore);
-    padding: clamp(var(--s-4), 3vw, var(--s-5));
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+    background: transparent;
+    padding-block: var(--s-5);
   }
 
   .busca__cab {
     display: grid;
-    gap: var(--s-2);
-    margin-bottom: var(--s-4);
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--s-3) var(--s-5);
+    align-items: baseline;
+    margin-bottom: var(--s-5);
   }
 
   .busca__alternar {
@@ -150,12 +153,13 @@ const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
     color: var(--grafite-70);
     font-size: var(--t-peq);
     line-height: 1.5;
+    max-width: 48ch;
   }
 
   .busca__campos {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-3);
+    gap: var(--s-4) var(--s-5);
   }
 
   .busca__campos--com-texto {
@@ -170,24 +174,35 @@ const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
 
   .busca__campo > span {
     color: var(--grafite-70);
-    font-size: var(--t-peq);
-    font-weight: 600;
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    font-weight: 500;
+    letter-spacing: 0.045em;
+    line-height: 1.4;
+    text-transform: uppercase;
   }
 
   .busca__campo input,
   .busca__campo select {
     width: 100%;
-    min-height: 48px;
-    border: var(--borda);
-    border-radius: var(--raio-sm);
-    background: var(--papel);
-    padding: 0 var(--s-3);
+    min-height: 46px;
+    border: 0;
+    border-bottom: var(--borda);
+    border-radius: 0;
+    background: transparent;
+    padding: 0 var(--s-1);
     color: var(--grafite);
+    transition: border-color var(--dur-rapida) var(--ease);
   }
 
   .busca__campo input:hover,
   .busca__campo select:hover {
-    border-color: var(--grafite-70);
+    border-color: var(--grafite);
+  }
+
+  .busca__campo input::placeholder {
+    color: var(--grafite-40);
+    opacity: 0.8;
   }
 
   .busca__campo--texto {
@@ -206,6 +221,11 @@ const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
   }
 
   @media (max-width: 560px) {
+    .busca--recolhivel {
+      border: 0;
+      padding-block: 0;
+    }
+
     .busca__campos,
     .busca__campos--com-texto {
       grid-template-columns: minmax(0, 1fr);
@@ -215,6 +235,10 @@ const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
       grid-column: auto;
     }
 
+    .busca__cab {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
     .busca--recolhivel .busca__alternar {
       display: flex;
       align-items: center;
@@ -222,6 +246,8 @@ const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
       gap: var(--s-4);
       width: 100%;
       min-height: 48px;
+      padding: 0;
+      border-block: var(--borda);
       font-weight: 600;
       text-align: left;
     }
@@ -234,7 +260,7 @@ const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
     .busca--recolhivel[data-aberta='true'] .busca__alternar {
       margin-bottom: var(--s-4);
       padding-bottom: var(--s-3);
-      border-bottom: var(--borda);
+      border-top: 0;
     }
   }
 </style>

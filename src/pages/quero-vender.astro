@@ -135,9 +135,10 @@ const jsonLd = {
   .qv__regiao {
     display: grid;
     gap: var(--s-2);
-    border: var(--borda);
-    background: var(--papel);
-    padding: var(--s-5);
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+    background: transparent;
+    padding-block: var(--s-5);
     text-decoration: none;
     transition:
       border-color var(--dur-rapida) var(--ease),
@@ -145,8 +146,8 @@ const jsonLd = {
   }
 
   .qv__regiao:hover {
-    border-color: var(--grafite);
-    background: var(--marmore);
+    color: var(--terra);
+    background: transparent;
   }
 
   .qv__regiao-nome {
