@@ -10,7 +10,7 @@ interface Props {
   class?: string;
 }
 
-const { linhas = 15, altura = 300, class: classe = '' } = Astro.props;
+const { linhas = 15, altura = 220, class: classe = '' } = Astro.props;
 
 const L = 1400;
 /* 56 passos, x inteiro e y com uma casa: o traço continua liso porque o SVG
@@ -91,7 +91,7 @@ const curvas = Array.from({ length: linhas }, (_, i) => {
   .top__svg {
     display: block;
     width: 100%;
-    height: clamp(180px, 26vw, 320px);
+    height: clamp(150px, 16vw, 220px);
   }
 
 </style>
