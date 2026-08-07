@@ -6,7 +6,7 @@ import CabecalhoSecao from '../components/CabecalhoSecao.astro';
 import FaixaTerritorios from '../components/FaixaTerritorios.astro';
 import FaixaTopografica from '../components/FaixaTopografica.astro';
 import FichaImovel from '../components/FichaImovel.astro';
-import FichaTecnica from '../components/FichaTecnica.astro';
+import BuscaImoveis from '../components/BuscaImoveis.astro';
 import MapaTerritorios from '../components/MapaTerritorios.astro';
 import ToggleUnidade from '../components/ToggleUnidade.astro';
 import Croqui from '../components/Croqui.astro';
@@ -15,8 +15,9 @@ import { corretor, meta } from '../data/site';
 import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
 import { dataCurta, areas as fmtAreas } from '../lib/format';
 import { formatarArea } from '../lib/unidades';
+import { imovelPublicado } from '../lib/publicacao';
 
-const imoveis = (await getCollection('imoveis')).sort(
+const imoveis = (await getCollection('imoveis')).filter(imovelPublicado).sort(
   (a, b) => b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime(),
 );
 /* `naCarteira` = tudo que ainda não foi vendido (inclui reservadas, que
@@ -35,27 +36,17 @@ const vitrine = [
 ].slice(0, 5);
 const vitrineFinal = [...vitrine, ...vendidos.slice(0, 1)];
 
-/* Números do painel do hero: verdadeiros, vindos do conteúdo, mudam sozinhos. */
+/* Números do hero: verdadeiros, vindos do conteúdo, mudam sozinhos. */
 const municipios = new Set(naCarteira.map((i) => i.data.municipio)).size;
+const listaMunicipios = [...new Set(ativas.map((i) => i.data.municipio))].sort((a, b) =>
+  a.localeCompare(b, 'pt-BR'),
+);
 const areas = naCarteira
   .map((i) => i.data.areaHa)
   .filter((area): area is number => area != null);
 const ultimaAtualizacao = imoveis
   .map((i) => i.data.atualizadoEm)
   .sort((a, b) => b.getTime() - a.getTime())[0];
-
-const painelHero = [
-  { rotulo: 'Áreas ativas', valor: String(ativas.length), destaque: true },
-  { rotulo: 'Reservadas', valor: String(naCarteira.length - ativas.length) },
-  { rotulo: 'Municípios', valor: String(municipios) },
-  ...(areas.length
-    ? [
-        { rotulo: 'Menor área', valor: `${formatarArea(Math.min(...areas))} ha` },
-        { rotulo: 'Maior área', valor: `${formatarArea(Math.max(...areas))} ha` },
-      ]
-    : []),
-  { rotulo: 'Regiões', valor: `${territorios.length} de 4` },
-];
 
 const contagemPorRegiao = Object.fromEntries(
   territorios.map((t) => [t.slug, ativas.filter((i) => i.data.regiao === t.slug).length]),
@@ -66,7 +57,7 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: `${corretor.nome} Imóveis`,
-    alternateName: 'Valdecir Imóveis',
+    alternateName: 'Valdecir Francisco Imóveis Rurais',
     url: Astro.site?.href,
     description: meta.descricao,
     publisher: { '@id': `${Astro.site}#corretor` },
@@ -94,27 +85,41 @@ const jsonLd = [
       <div class="hero__grade">
         <div class="hero__texto">
           <h1 class="display" id="hero-titulo">
-            Compra e venda de imóveis rurais no Espírito Santo.
+            Imóveis rurais à venda no Espírito Santo.
           </h1>
           <p class="lead hero__sub">
-            Fazendas, chácaras, sítios e terrenos rurais nas quatro regiões do
-            estado, com atendimento direto e informações claras.
+            Encontre fazendas, chácaras, sítios e terrenos rurais com fotos reais,
+            preço, acesso e informações claras para escolher melhor.
           </p>
 
           <div class="hero__acoes">
             <a class="botao botao--primario" href="#carteira">Ver imóveis à venda</a>
-            <a class="link-seta" href="/sobre/">
-              Conheça meu trabalho
+            <a class="link-seta" href="/quero-vender/">
+              Quero vender uma área
               <span class="link-seta__seta" aria-hidden="true">→</span>
             </a>
           </div>
+
+          <ul class="hero__fatos" aria-label="Resumo da carteira">
+            <li><strong>{ativas.length}</strong><span>áreas ativas</span></li>
+            <li><strong>{municipios}</strong><span>municípios</span></li>
+            {
+              areas.length > 0 && (
+                <li>
+                  <strong>{formatarArea(Math.min(...areas))}–{formatarArea(Math.max(...areas))} ha</strong>
+                  <span>faixa de áreas</span>
+                </li>
+              )
+            }
+          </ul>
         </div>
 
         <aside class="hero__painel">
-          <FichaTecnica
-            titulo="Em carteira hoje"
-            linhas={painelHero}
-            nota={ultimaAtualizacao ? `Atualizado em ${dataCurta(ultimaAtualizacao)}` : undefined}
+          <BuscaImoveis
+            municipios={listaMunicipios}
+            titulo="Comece por aqui"
+            nota={`Escolha o que procura. Carteira atualizada ${ultimaAtualizacao ? `em ${dataCurta(ultimaAtualizacao)}` : 'recentemente'}.`}
+            origem="home-hero"
           />
         </aside>
       </div>
@@ -237,6 +242,31 @@ const jsonLd = [
     gap: var(--s-5);
     flex-wrap: wrap;
     margin-top: var(--s-7);
+  }
+
+  .hero__fatos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4) var(--s-6);
+    margin-top: var(--s-7);
+    padding-top: var(--s-4);
+    border-top: var(--borda);
+  }
+
+  .hero__fatos li {
+    display: grid;
+    gap: 1px;
+  }
+
+  .hero__fatos strong {
+    font-family: var(--f-mono);
+    font-size: var(--t-peq);
+    font-weight: 600;
+  }
+
+  .hero__fatos span {
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
   }
 
   .hero__painel {

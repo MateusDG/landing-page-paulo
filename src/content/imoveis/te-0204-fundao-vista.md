@@ -1,6 +1,7 @@
 ---
 codigo: 'TE-0204'
 titulo: 'Terreno com vista para a serra em Fundão'
+tipo: 'terreno-rural'
 municipio: 'Fundão'
 regiao: 'litoral-e-franja'
 areaHa: null
@@ -26,7 +27,7 @@ oQueFalta:
   - 'A origem e a regularização do espelho d’água precisam ser verificadas.'
   - 'A condição da estrada e as possibilidades de uso da área serão detalhadas durante a visita.'
 status: 'ativa'
-rascunho: true
+rascunho: false
 fotos:
   - src: '/imoveis/fundao-vista/01.jpg'
     alt: 'Vista ampla da serra a partir do terreno em Fundão'

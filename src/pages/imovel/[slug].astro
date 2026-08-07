@@ -10,11 +10,13 @@ import FichaImovel from '../../components/FichaImovel.astro';
 import CotaDimensional from '../../components/CotaDimensional.astro';
 
 import { rotuloTerritorio } from '../../data/territorios';
+import { rotuloTipoImovel } from '../../data/imoveis';
 import { formatarArea, converter } from '../../lib/unidades';
 import { preco, precoPorHa, descreverAcesso, dataCurta, mesAno } from '../../lib/format';
+import { imovelPublicado } from '../../lib/publicacao';
 
 export async function getStaticPaths() {
-  const imoveis = await getCollection('imoveis');
+  const imoveis = (await getCollection('imoveis')).filter(imovelPublicado);
   return imoveis.map((imovel) => ({ params: { slug: imovel.id }, props: { imovel } }));
 }
 
@@ -28,7 +30,7 @@ const vendida = d.status === 'vendida';
 
 /* Sugestões: mesma região primeiro, depois faixa de área parecida.
    Imóvel vendido nunca vira beco sem saída, sempre aponta para similares. */
-const todos = await getCollection('imoveis');
+const todos = (await getCollection('imoveis')).filter(imovelPublicado);
 const similares = todos
   .filter((i) => i.id !== imovel.id && i.data.status !== 'vendida')
   .sort((a, b) => {
@@ -39,10 +41,17 @@ const similares = todos
   .slice(0, 3);
 
 const linhasFicha = [
-  { rotulo: 'Código', valor: d.codigo },
+  { rotulo: 'Código / SKU', valor: d.codigo },
+  { rotulo: 'Tipo', valor: rotuloTipoImovel(d.tipo) },
   { rotulo: 'Município', valor: `${d.municipio}/ES` },
+  ...(d.localidade ? [{ rotulo: 'Localidade', valor: d.localidade }] : []),
   { rotulo: 'Região', valor: rotuloTerritorio(d.regiao) },
-  { rotulo: 'Área', valor: areaConhecida ? `${formatarArea(areaHa)} ha` : 'Área total a confirmar' },
+  {
+    rotulo: 'Área',
+    valor: areaConhecida
+      ? `${formatarArea(areaHa)} ha · ${(areaHa * 10000).toLocaleString('pt-BR')} m²`
+      : 'Área total a confirmar',
+  },
   ...(areaConhecida
     ? [{
         rotulo: 'Equivalente',
@@ -78,9 +87,7 @@ const rotuloFinalidade: Record<string, string> = {
 
 const paginaUrl = new URL(Astro.url.pathname, Astro.site).href;
 const imagens = d.fotos.map((foto) => new URL(foto.src, Astro.site).href);
-const nomeSeo = areaConhecida
-  ? `${d.titulo}, ${formatarArea(areaHa)} ha`
-  : d.titulo;
+const nomeSeo = d.titulo;
 const descricaoSeo = d.resumo;
 
 const jsonLd = {
@@ -92,10 +99,14 @@ const jsonLd = {
   sku: d.codigo,
   description: d.resumo,
   image: imagens,
-  category: 'Imóvel rural',
+  category: `${rotuloTipoImovel(d.tipo)} rural`,
+  brand: { '@type': 'Brand', name: 'Valdecir Francisco Imóveis Rurais' },
+  seller: { '@id': `${Astro.site}#corretor` },
   additionalProperty: [
+    { '@type': 'PropertyValue', name: 'Tipo de imóvel', value: rotuloTipoImovel(d.tipo) },
     ...(areaConhecida ? [{ '@type': 'PropertyValue', name: 'Área (ha)', value: areaHa }] : []),
     { '@type': 'PropertyValue', name: 'Município', value: d.municipio },
+    ...(d.localidade ? [{ '@type': 'PropertyValue', name: 'Localidade', value: d.localidade }] : []),
     { '@type': 'PropertyValue', name: 'Água', value: d.agua },
     { '@type': 'PropertyValue', name: 'Acesso', value: d.acesso.nota },
   ],
@@ -152,6 +163,20 @@ const breadcrumb = {
   og={`/og/imovel-${imovel.id}.png`}
   ogTipo="product"
   jsonLd={[paginaLd, jsonLd, breadcrumb]}
+  produto={{
+    sku: d.codigo,
+    preco: d.preco,
+    disponibilidade: vendida ? 'out of stock' : d.status === 'reservada' ? 'pending' : 'in stock',
+    categoria: `${rotuloTipoImovel(d.tipo)} rural`,
+    atualizadoEm: d.atualizadoEm,
+  }}
+  barraMobile={{
+    imovel: d.codigo,
+    titulo: d.titulo,
+    areaHa: areaHa ?? undefined,
+    municipio: d.municipio,
+    origem: `barra-mobile:${d.codigo}`,
+  }}
 >
   <article class="im">
     {/* --- Cabeçalho da ficha -------------------------------------------- */}
@@ -166,25 +191,7 @@ const breadcrumb = {
         </nav>
 
         <div class="im__topo">
-          <div class="im__identidade">
-            <div class="im__croqui">
-              <Croqui
-                path={d.croqui}
-                viewBox={d.croquiViewBox}
-                tamanho={200}
-                desenhar
-                norte
-                rotulo={`Perímetro aproximado da área ${d.codigo}`}
-              />
-              <CotaDimensional
-                valor={areaConhecida ? `${formatarArea(areaHa)} ha` : 'Área sob consulta'}
-                class="im__cota"
-              />
-              <p class="rotulo rotulo--fraco im__croqui-nota">
-                {d.croquiVerificado ? 'Perímetro simplificado' : 'Perímetro aproximado'}
-              </p>
-            </div>
-
+          <div class="im__principal">
             <div class="im__cabecalho-texto">
               {
                 vendida && d.vendidaEm ? (
@@ -196,24 +203,34 @@ const breadcrumb = {
                 )
               }
 
-              <h1 class="im__titulo">{d.titulo}</h1>
+              <p class="im__localidade">
+                {rotuloTipoImovel(d.tipo)} à venda
+                {' · '}
+                {d.localidade ? `${d.localidade}, ` : ''}{d.municipio}/ES
+              </p>
 
+              <h1 class="im__titulo">{d.titulo}</h1>
+            </div>
+
+            <section class="im__galeria" id="fotos" aria-labelledby="fotos-titulo">
+              <h2 class="so-leitor" id="fotos-titulo">Fotos do imóvel {d.codigo}</h2>
+              <GaleriaImovel fotos={[...d.fotos]} municipio={d.municipio} prioridade />
+            </section>
+
+            <div class="im__decisao">
+              <div class="im__area-bloco">
+                <p class="rotulo rotulo--fraco">Área total</p>
               <p class="im__area numero-chave">
                 {areaConhecida ? formatarArea(areaHa) : 'Sob consulta'}
                 {areaConhecida && <span class="im__unidade">ha</span>}
               </p>
-
-              <p class="lead im__resumo">{d.resumo}</p>
-
-              <ul class="im__tags">
-                {
-                  d.finalidade.map((f) => (
-                    <li class="rotulo im__tag">{rotuloFinalidade[f] ?? f}</li>
-                  ))
-                }
-              </ul>
+                {areaConhecida && (
+                  <p class="im__metros mono">{(areaHa * 10000).toLocaleString('pt-BR')} m²</p>
+                )}
+              </div>
 
               <div class="im__preco-bloco">
+                <p class="rotulo rotulo--fraco">Valor pedido</p>
                 <p class:list={['im__preco', 'mono', d.preco === null && 'im__preco--consulta']}>
                   {preco(d.preco)}
                 </p>
@@ -229,35 +246,57 @@ const breadcrumb = {
                   <div class="im__acoes">
                     <BotaoWhats
                       imovel={d.codigo}
+                      titulo={d.titulo}
                       areaHa={areaHa ?? undefined}
                       municipio={d.municipio}
                       origem={`imovel:${d.codigo}`}
-                      rotulo="Perguntar sobre esta área"
+                      rotulo="Perguntar sobre este imóvel"
                     />
                   </div>
                 )
               }
             </div>
+
+            <p class="lead im__resumo">{d.resumo}</p>
+
+            <ul class="im__tags">
+              {d.finalidade.map((f) => (
+                <li class="rotulo im__tag">{rotuloFinalidade[f] ?? f}</li>
+              ))}
+            </ul>
           </div>
 
           <aside class="im__lateral">
+            <div class="im__croqui">
+              <Croqui
+                path={d.croqui}
+                viewBox={d.croquiViewBox}
+                tamanho={200}
+                desenhar
+                norte
+                rotulo={`Croqui aproximado da área ${d.codigo}`}
+              />
+              <CotaDimensional
+                valor={areaConhecida ? `${formatarArea(areaHa)} ha` : 'Área sob consulta'}
+                class="im__cota"
+              />
+              <p class="rotulo rotulo--fraco im__croqui-nota">
+                {d.croquiVerificado
+                  ? 'Perímetro simplificado a partir de referência verificada'
+                  : 'Croqui ilustrativo · limites a confirmar'}
+              </p>
+            </div>
             <FichaTecnica
               titulo="Ficha"
               linhas={linhasFicha}
-              nota={`Conferido em campo · atualizado em ${dataCurta(d.atualizadoEm)}`}
+              nota={d.verificadoEmCampo
+                ? `Dados conferidos em campo · atualizados em ${dataCurta(d.atualizadoEm)}`
+                : `Informações fornecidas pelo proprietário · atualizadas em ${dataCurta(d.atualizadoEm)}`}
             />
           </aside>
         </div>
       </div>
     </header>
-
-    {/* --- Fotografia: contexto visual antes dos detalhes ---------------- */}
-    <section class="secao--compacta" aria-labelledby="fotos-titulo">
-      <div class="env">
-        <h2 class="im__h2" id="fotos-titulo">Fotografia</h2>
-        <GaleriaImovel fotos={[...d.fotos]} municipio={d.municipio} />
-      </div>
-    </section>
 
     {/* --- Dados de campo + benfeitorias ---------------------------------- */}
     <section class="secao--compacta" aria-labelledby="campo-titulo">
@@ -280,6 +319,27 @@ const breadcrumb = {
             </div>
           )
         }
+      </div>
+    </section>
+
+    {/* --- Transparência: pontos que ainda precisam de confirmação ------- */}
+    <section class="secao--compacta im__falta-env" aria-labelledby="confirmar-titulo">
+      <div class="env im__falta">
+        <div>
+          <p class="rotulo rotulo--terra">Transparência</p>
+          <h2 class="im__h2" id="confirmar-titulo">O que confirmar antes de negociar</h2>
+          <p class="peq secundario im__falta-intro">
+            Estes pontos são apresentados para orientar a visita e a conferência documental.
+          </p>
+        </div>
+        <ol class="im__falta-lista">
+          {d.oQueFalta.map((item, indice) => (
+            <li>
+              <span class="mono">{String(indice + 1).padStart(2, '0')}</span>
+              <p>{item}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
 
@@ -326,6 +386,7 @@ const breadcrumb = {
               <div class="im__acoes">
                 <BotaoWhats
                   imovel={d.codigo}
+                  titulo={d.titulo}
                   areaHa={areaHa ?? undefined}
                   municipio={d.municipio}
                   origem={`imovel-fecho:${d.codigo}`}
@@ -395,17 +456,18 @@ const breadcrumb = {
     align-items: start;
   }
 
-  .im__identidade {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: var(--s-7);
-    align-items: start;
+  .im__principal {
+    min-width: 0;
   }
 
   .im__croqui {
     display: grid;
     gap: var(--s-4);
-    width: 200px;
+    justify-items: center;
+    width: 100%;
+    padding: var(--s-5);
+    border: var(--borda);
+    background: var(--marmore);
   }
 
   .im__croqui-nota {
@@ -423,18 +485,51 @@ const breadcrumb = {
     padding: var(--s-1) var(--s-3);
   }
 
+  .im__localidade {
+    margin-top: var(--s-3);
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    font-weight: 600;
+  }
+
   .im__titulo {
     font-size: var(--t-h1);
-    margin-top: var(--s-4);
-    max-width: 18ch;
+    margin-top: var(--s-3);
+    max-width: 22ch;
+  }
+
+  .im__galeria {
+    margin-top: var(--s-6);
+    scroll-margin-top: var(--s-6);
+  }
+
+  .im__decisao {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.15fr) auto;
+    grid-template-areas: 'area price action';
+    gap: var(--s-5);
+    align-items: end;
+    margin-top: var(--s-5);
+    padding-block: var(--s-5);
+    border-block: var(--borda);
   }
 
   .im__area {
-    font-size: clamp(3.5rem, 7vw, 5.5rem);
-    margin-top: var(--s-5);
+    font-size: clamp(3rem, 6vw, 4.75rem);
+    margin-top: var(--s-2);
     display: flex;
     align-items: baseline;
     gap: 0.1em;
+  }
+
+  .im__metros {
+    margin-top: var(--s-2);
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+  }
+
+  .im__area-bloco {
+    grid-area: area;
   }
 
   .im__unidade {
@@ -465,13 +560,9 @@ const breadcrumb = {
   }
 
   .im__preco-bloco {
-    margin-top: var(--s-6);
-    padding-top: var(--s-5);
-    border-top: var(--borda);
-    display: flex;
-    align-items: baseline;
-    gap: var(--s-4);
-    flex-wrap: wrap;
+    display: grid;
+    grid-area: price;
+    gap: var(--s-2);
   }
 
   .im__preco {
@@ -488,9 +579,10 @@ const breadcrumb = {
 
   .im__acoes {
     display: flex;
+    grid-area: action;
     gap: var(--s-3);
     flex-wrap: wrap;
-    margin-top: var(--s-6);
+    margin-top: 0;
   }
 
   .im__lateral {
@@ -527,6 +619,43 @@ const breadcrumb = {
     padding-block: var(--s-3);
     border-bottom: var(--borda-f);
     font-size: var(--t-peq);
+  }
+
+  .im__falta-env {
+    border-top: var(--borda);
+  }
+
+  .im__falta {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .im__falta-intro {
+    max-width: 38ch;
+  }
+
+  .im__falta-lista {
+    border-top: var(--borda-2);
+  }
+
+  .im__falta-lista li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--s-3);
+    padding-block: var(--s-4);
+    border-bottom: var(--borda-f);
+  }
+
+  .im__falta-lista span {
+    color: var(--terra);
+    font-size: var(--t-micro);
+  }
+
+  .im__falta-lista p {
+    font-size: var(--t-peq);
+    line-height: 1.6;
   }
 
   .im__notas-env {
@@ -575,18 +704,58 @@ const breadcrumb = {
       position: static;
       max-width: 420px;
     }
+
+    .im__decisao {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-areas:
+        'price area'
+        'action action';
+    }
+
+    .im__decisao .im__acoes {
+      grid-column: auto;
+    }
   }
 
   @media (max-width: 760px) {
-    .im__identidade,
     .im__falta,
     .im__notas {
       grid-template-columns: minmax(0, 1fr);
       gap: var(--s-6);
     }
 
-    .im__croqui {
-      width: 150px;
+    .im__trilha {
+      margin-bottom: var(--s-5);
+    }
+
+    .im__galeria {
+      margin-top: var(--s-5);
+    }
+
+    .im__decisao {
+      gap: var(--s-4);
+    }
+
+    .im__decisao .im__acoes :global(.botao) {
+      width: 100%;
+    }
+
+    .im__lateral {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .im__decisao {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'price'
+        'action'
+        'area';
+    }
+
+    .im__decisao .im__acoes {
+      grid-column: auto;
     }
   }
 </style>

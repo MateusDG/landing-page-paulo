@@ -10,6 +10,7 @@ import CabecalhoSecao from '../../components/CabecalhoSecao.astro';
 import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../../data/territorios';
 import { formatarArea } from '../../lib/unidades';
 import { areas as fmtAreas, municipios as fmtMunicipios } from '../../lib/format';
+import { imovelPublicado } from '../../lib/publicacao';
 
 export function getStaticPaths() {
   return territorios.map((t) => ({ params: { slug: t.slug }, props: { t } }));
@@ -17,7 +18,7 @@ export function getStaticPaths() {
 
 const { t } = Astro.props;
 
-const todos = await getCollection('imoveis');
+const todos = (await getCollection('imoveis')).filter(imovelPublicado);
 const daRegiao = todos
   .filter((i) => i.data.regiao === t.slug)
   .sort((a, b) => {

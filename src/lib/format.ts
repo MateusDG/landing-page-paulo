@@ -9,29 +9,30 @@ const MESES = [
 
 /** 2026-07-12 → "12.jul.2026", formato de carimbo, não de post de blog. */
 export function dataCurta(d: Date | string): string {
-  const data = typeof d === 'string' ? new Date(`${d}T12:00:00`) : d;
-  const dia = String(data.getDate()).padStart(2, '0');
-  return `${dia}.${MESES[data.getMonth()]}.${data.getFullYear()}`;
+  const data = typeof d === 'string' ? new Date(`${d}T00:00:00Z`) : d;
+  const dia = String(data.getUTCDate()).padStart(2, '0');
+  return `${dia}.${MESES[data.getUTCMonth()]}.${data.getUTCFullYear()}`;
 }
 
 /** 2024-11-05 → "11/2024", usado no carimbo VENDIDA. */
 export function mesAno(d: Date | string): string {
-  const data = typeof d === 'string' ? new Date(`${d}T12:00:00`) : d;
-  return `${String(data.getMonth() + 1).padStart(2, '0')}/${data.getFullYear()}`;
+  const data = typeof d === 'string' ? new Date(`${d}T00:00:00Z`) : d;
+  return `${String(data.getUTCMonth() + 1).padStart(2, '0')}/${data.getUTCFullYear()}`;
 }
 
 export function dataLonga(d: Date | string): string {
-  const data = typeof d === 'string' ? new Date(`${d}T12:00:00`) : d;
+  const data = typeof d === 'string' ? new Date(`${d}T00:00:00Z`) : d;
   return data.toLocaleDateString('pt-BR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
+    timeZone: 'UTC',
   });
 }
 
 /** ISO puro para <time datetime> e JSON-LD. */
 export function iso(d: Date | string): string {
-  const data = typeof d === 'string' ? new Date(`${d}T12:00:00`) : d;
+  const data = typeof d === 'string' ? new Date(`${d}T00:00:00Z`) : d;
   return data.toISOString().slice(0, 10);
 }
 
@@ -80,6 +81,16 @@ export function plural(n: number, singular: string, plural: string): string {
 
 export const areas = (n: number) => plural(n, 'área', 'áreas');
 export const municipios = (n: number) => plural(n, 'município', 'municípios');
+
+/** Valor estável para parâmetros de busca e atributos de filtro. */
+export function slugBusca(valor: string): string {
+  return valor
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
 /** "7 km de asfalto + 4 km de terra" a partir dos dois números. */
 export function descreverAcesso(asfaltoKm: number, terraKm: number): string {

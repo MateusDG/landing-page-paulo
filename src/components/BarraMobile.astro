@@ -7,12 +7,28 @@
  */
 import { linkWhats } from '../lib/whatsapp';
 
-const href = linkWhats({ origem: 'barra-mobile' });
+interface Props {
+  imovel?: string;
+  titulo?: string;
+  areaHa?: number;
+  municipio?: string;
+  origem?: string;
+}
+
+const {
+  imovel,
+  titulo,
+  areaHa,
+  municipio,
+  origem = imovel ? `barra-mobile:${imovel}` : 'barra-mobile',
+} = Astro.props;
+const contextual = Boolean(imovel);
+const href = linkWhats({ origem, imovel, titulo, areaHa, municipio });
 ---
 
 <div class="bm">
-  <a class="bm__item" href="/imoveis/">
-    <span class="rotulo">Ver carteira</span>
+  <a class="bm__item" href={contextual ? '#fotos' : '/imoveis/'}>
+    <span class="rotulo">{contextual ? 'Ver fotos' : 'Ver imóveis'}</span>
   </a>
   <a
     class="bm__item bm__item--whats"
@@ -20,7 +36,8 @@ const href = linkWhats({ origem: 'barra-mobile' });
     target="_blank"
     rel="noopener"
     data-evento="whats_clique"
-    data-origem="barra-mobile"
+    data-origem={origem}
+    data-imovel={imovel}
   >
     <span class="rotulo">WhatsApp</span>
   </a>

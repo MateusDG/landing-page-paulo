@@ -8,8 +8,9 @@ import { corretor, navRodape } from '../data/site';
 import { dataCurta } from '../lib/format';
 import { getCollection } from 'astro:content';
 import ContatoWhats from './ContatoWhats.astro';
+import { imovelPublicado } from '../lib/publicacao';
 
-const imoveis = await getCollection('imoveis');
+const imoveis = (await getCollection('imoveis')).filter(imovelPublicado);
 const ativas = imoveis.filter((i) => i.data.status === 'ativa').length;
 const ultima = imoveis
   .map((i) => i.data.atualizadoEm)
@@ -21,13 +22,23 @@ const ano = new Date().getFullYear();
   <div class="env">
     <div class="rod__grade">
       <div class="rod__marca">
-        <img
-          class="rod__logo"
-          src="/logo.svg"
-          alt={`${corretor.nome} — ${corretor.papel}`}
-          width="300"
-          height="71"
-        />
+        <div class="rod__identidade">
+          <picture class="rod__logo-quadro">
+            <source type="image/webp" srcset="/logo-160.webp 1x, /logo-320.webp 2x" />
+            <img
+              class="rod__logo"
+              src="/logo-1200.png"
+              alt=""
+              width="1200"
+              height="1200"
+              loading="lazy"
+            />
+          </picture>
+          <div class="rod__identidade-texto">
+            <p>{corretor.nome}</p>
+            <span>{corretor.papel} · Espírito Santo</span>
+          </div>
+        </div>
 
         <div class="rod__contato" id="contato-whatsapp">
           <ContatoWhats origem="rodape" />
@@ -72,7 +83,7 @@ const ano = new Date().getFullYear();
         vinculante.
       </p>
       <p class="rotulo rotulo--fraco">
-        © {ano} {corretor.nome} · Fotos autorais
+        © {ano} {corretor.nome} · Imóveis rurais no Espírito Santo
       </p>
       <p class="rod__credito">
         Feito e administrado por
@@ -101,10 +112,47 @@ const ano = new Date().getFullYear();
     gap: var(--s-7) var(--gutter);
   }
 
-  .rod__logo {
+  .rod__identidade {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+  }
+
+  .rod__logo-quadro {
     display: block;
-    width: min(300px, 100%);
-    height: auto;
+    flex: none;
+    width: 88px;
+    height: 88px;
+    overflow: hidden;
+    border: var(--borda);
+    background: var(--marmore);
+  }
+
+  .rod__logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rod__identidade-texto {
+    display: grid;
+    gap: var(--s-1);
+  }
+
+  .rod__identidade-texto p {
+    font-family: var(--f-display);
+    font-size: var(--t-h3);
+    font-weight: 600;
+    line-height: var(--lh-titulo);
+  }
+
+  .rod__identidade-texto span {
+    color: var(--grafite-70);
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    letter-spacing: 0.04em;
+    line-height: 1.45;
+    text-transform: uppercase;
   }
 
   .rod__contato {

@@ -23,13 +23,23 @@ const ativo = (href: string) => {
 <header class="cab" data-cabecalho>
   <div class="env cab__int">
     <a class="cab__marca" href="/">
-      <img
-        class="cab__logo"
-        src="/logo.svg"
-        alt={`${corretor.nome} — ${corretor.papel}`}
-        width="244"
-        height="58"
-      />
+      <picture class="cab__logo-quadro">
+        <source
+          type="image/webp"
+          srcset="/logo-160.webp 1x, /logo-320.webp 2x"
+        />
+        <img
+          class="cab__logo"
+          src="/logo-1200.png"
+          alt=""
+          width="1200"
+          height="1200"
+        />
+      </picture>
+      <span class="cab__marca-texto">
+        <strong>{corretor.nome}</strong>
+        <span>{corretor.papel} · ES</span>
+      </span>
     </a>
 
     <nav class="cab__nav" aria-label="Navegação principal">
@@ -74,16 +84,49 @@ const ativo = (href: string) => {
   }
 
   .cab__marca {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
     text-decoration: none;
     flex: none;
   }
 
+  .cab__logo-quadro {
+    display: block;
+    flex: none;
+    width: 54px;
+    height: 54px;
+    overflow: hidden;
+    border: var(--borda-f);
+    background: var(--marmore);
+  }
+
   .cab__logo {
     display: block;
-    width: 244px;
-    height: 58px;
-    aspect-ratio: 122 / 29;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cab__marca-texto {
+    display: grid;
+    gap: 1px;
+    line-height: 1.2;
+  }
+
+  .cab__marca-texto strong {
+    font-family: var(--f-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .cab__marca-texto span {
+    color: var(--grafite-70);
+    font-family: var(--f-mono);
+    font-size: 0.67rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
   .cab__lista {
@@ -131,6 +174,16 @@ const ativo = (href: string) => {
 
     .cab__int {
       min-height: 64px;
+      padding-block: var(--s-2);
+    }
+
+    .cab__logo-quadro {
+      width: 48px;
+      height: 48px;
+    }
+
+    .cab__marca-texto span {
+      display: none;
     }
 
     :global(.js) .cab {

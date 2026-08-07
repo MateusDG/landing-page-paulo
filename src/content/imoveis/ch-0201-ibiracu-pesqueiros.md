@@ -1,6 +1,7 @@
 ---
 codigo: 'CH-0201'
 titulo: 'Chácara com pesqueiros e nascente em Ibiraçu'
+tipo: 'chacara'
 municipio: 'Ibiraçu'
 regiao: 'montanhas-capixabas'
 areaHa: 1
@@ -25,7 +26,7 @@ oQueFalta:
   - 'A distância e o tipo de estrada até a porteira precisam ser confirmados.'
   - 'As condições de uso da nascente e dos pesqueiros serão apresentadas durante a visita.'
 status: 'ativa'
-rascunho: true
+rascunho: false
 fotos:
   - src: '/imoveis/ibiracu-pesqueiros/01.jpg'
     alt: 'Área de convivência com pomar ao lado do pesqueiro'

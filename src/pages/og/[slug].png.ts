@@ -6,6 +6,7 @@ import { svgOg } from '../../lib/og';
 import { territorios, CONTORNO_ES, VIEWBOX_ES, rotuloTerritorio } from '../../data/territorios';
 import { formatarArea } from '../../lib/unidades';
 import { preco, mesAno, areas as fmtAreas } from '../../lib/format';
+import { imovelPublicado } from '../../lib/publicacao';
 
 /* Uma rota, três famílias de imagem: a padrão do site, uma por imóvel e uma
    por região. Todas rasterizadas no build, nenhuma requisição em runtime. */
@@ -22,14 +23,14 @@ interface Params {
 }
 
 export async function getStaticPaths() {
-  const imoveis = await getCollection('imoveis');
+  const imoveis = (await getCollection('imoveis')).filter(imovelPublicado);
 
   const rotas: { params: { slug: string }; props: Params }[] = [
     {
       params: { slug: 'padrao' },
       props: {
-        kicker: 'Compra e venda de imóveis · Espírito Santo',
-        titulo: 'Compra e venda de imóveis rurais no Espírito Santo.',
+        kicker: 'Fazendas, sítios, chácaras e terrenos · ES',
+        titulo: 'Imóveis rurais à venda no Espírito Santo.',
         croqui: CONTORNO_ES,
         croquiViewBox: VIEWBOX_ES,
         meta: [

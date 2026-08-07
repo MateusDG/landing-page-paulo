@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import { imovelPublicado } from '../lib/publicacao';
 
 const escaparXml = (valor: string) =>
   valor
@@ -11,7 +12,7 @@ const escaparXml = (valor: string) =>
 
 export const GET: APIRoute = async ({ site }) => {
   const origem = site ?? new URL('https://valdecimoveis.com.br');
-  const imoveis = await getCollection('imoveis');
+  const imoveis = (await getCollection('imoveis')).filter(imovelPublicado);
 
   const urls = imoveis
     .filter((imovel) => imovel.data.fotos.length > 0)

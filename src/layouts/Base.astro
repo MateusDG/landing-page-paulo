@@ -30,6 +30,20 @@ interface Props {
   noindex?: boolean;
   ogTipo?: 'website' | 'article' | 'product';
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  produto?: {
+    sku: string;
+    preco: number | null;
+    disponibilidade: 'in stock' | 'pending' | 'out of stock';
+    categoria: string;
+    atualizadoEm?: Date;
+  };
+  barraMobile?: {
+    imovel?: string;
+    titulo?: string;
+    areaHa?: number;
+    municipio?: string;
+    origem?: string;
+  };
   class?: string;
 }
 
@@ -40,6 +54,8 @@ const {
   noindex = false,
   ogTipo = 'website',
   jsonLd,
+  produto,
+  barraMobile,
   class: classe = '',
 } = Astro.props;
 
@@ -96,7 +112,7 @@ const jsonLdBase = {
   url: Astro.site?.href,
   telephone: `+${numeroWhats}`,
   image: new URL('/og/padrao.png', Astro.site).href,
-  logo: new URL('/favicon.svg', Astro.site).href,
+  logo: new URL('/logo-1200.png', Astro.site).href,
   contactPoint: {
     '@type': 'ContactPoint',
     telephone: `+${numeroWhats}`,
@@ -157,8 +173,29 @@ const jsonLdBase = {
     <meta name="twitter:description" content={descricao} />
     <meta name="twitter:image" content={ogUrl} />
 
+    {
+      produto && (
+        <>
+          <meta property="product:retailer_item_id" content={produto.sku} />
+          <meta property="product:brand" content={corretor.nome} />
+          <meta property="product:category" content={produto.categoria} />
+          <meta property="product:availability" content={produto.disponibilidade} />
+          {produto.preco != null && (
+            <>
+              <meta property="product:price:amount" content={String(produto.preco)} />
+              <meta property="product:price:currency" content="BRL" />
+            </>
+          )}
+          {produto.atualizadoEm && (
+            <meta property="og:updated_time" content={produto.atualizadoEm.toISOString()} />
+          )}
+        </>
+      )
+    }
+
     <meta name="theme-color" content="#f5f3ee" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     {!DADOS_DE_EXEMPLO && <link rel="sitemap" href="/sitemap-index.xml" />}
 
     {/* Só a display é pré-carregada: ela é a fonte do LCP. */}
@@ -224,7 +261,7 @@ const jsonLdBase = {
     </main>
 
     <Footer />
-    <BarraMobile />
+    <BarraMobile {...barraMobile} />
 
     <script>
       /* Revelação ao entrar na viewport + desenho do croqui.

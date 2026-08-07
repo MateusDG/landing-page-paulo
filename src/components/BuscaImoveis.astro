@@ -1,0 +1,253 @@
+---
+import { tiposImovel, caracteristicasImovel } from '../data/imoveis';
+import { slugBusca } from '../lib/format';
+
+interface Props {
+  municipios: string[];
+  mostrarTexto?: boolean;
+  titulo?: string;
+  nota?: string;
+  origem?: string;
+  recolhivel?: boolean;
+}
+
+const {
+  municipios,
+  mostrarTexto = false,
+  titulo = 'Encontre sua área',
+  nota,
+  origem = 'busca',
+  recolhivel = false,
+} = Astro.props;
+
+const selecionado = (nome: string) => Astro.url.searchParams.get(nome) ?? '';
+---
+
+<form
+  class:list={['busca', recolhivel && 'busca--recolhivel']}
+  action="/imoveis/"
+  method="get"
+  data-busca-form
+  data-busca-recolhivel={recolhivel || undefined}
+  data-aberta="false"
+  data-origem={origem}
+>
+  {
+    recolhivel && (
+      <button class="busca__alternar" type="button" aria-expanded="false" data-busca-alternar>
+        <span>Filtrar imóveis</span>
+        <span aria-hidden="true" data-busca-sinal>+</span>
+      </button>
+    )
+  }
+
+  <div class="busca__cab">
+    <p class="rotulo rotulo--terra">{titulo}</p>
+    {nota && <p class="busca__nota">{nota}</p>}
+  </div>
+
+  <div class:list={['busca__campos', mostrarTexto && 'busca__campos--com-texto']}>
+    {
+      mostrarTexto && (
+        <label class="busca__campo busca__campo--texto">
+          <span>Palavra-chave</span>
+          <input
+            type="search"
+            name="busca"
+            value={selecionado('busca')}
+            placeholder="Ex.: café, nascente ou lagoa"
+            autocomplete="off"
+            data-busca-texto
+          />
+        </label>
+      )
+    }
+
+    <label class="busca__campo">
+      <span>Tipo de imóvel</span>
+      <select name="tipo" data-busca-select>
+        <option value="">Todos os tipos</option>
+        {tiposImovel.map((tipo) => (
+          <option value={tipo.valor} selected={selecionado('tipo') === tipo.valor}>
+            {tipo.rotulo}
+          </option>
+        ))}
+      </select>
+    </label>
+
+    <label class="busca__campo">
+      <span>Município</span>
+      <select name="municipio" data-busca-select>
+        <option value="">Todo o Espírito Santo</option>
+        {municipios.map((municipio) => (
+          <option value={slugBusca(municipio)} selected={selecionado('municipio') === slugBusca(municipio)}>
+            {municipio}
+          </option>
+        ))}
+      </select>
+    </label>
+
+    <label class="busca__campo">
+      <span>Preço máximo</span>
+      <select name="preco-max" data-busca-select>
+        <option value="">Qualquer valor</option>
+        <option value="300000" selected={selecionado('preco-max') === '300000'}>Até R$ 300 mil</option>
+        <option value="500000" selected={selecionado('preco-max') === '500000'}>Até R$ 500 mil</option>
+        <option value="750000" selected={selecionado('preco-max') === '750000'}>Até R$ 750 mil</option>
+        <option value="1000000" selected={selecionado('preco-max') === '1000000'}>Até R$ 1 milhão</option>
+        <option value="2000000" selected={selecionado('preco-max') === '2000000'}>Até R$ 2 milhões</option>
+      </select>
+    </label>
+
+    {
+      mostrarTexto && (
+        <label class="busca__campo">
+          <span>Característica</span>
+          <select name="caracteristica" data-busca-select>
+            <option value="">Todas</option>
+            {caracteristicasImovel.map((item) => (
+              <option
+                value={item.valor}
+                selected={selecionado('caracteristica') === item.valor}
+              >
+                {item.rotulo}
+              </option>
+            ))}
+          </select>
+        </label>
+      )
+    }
+
+    <button
+      class="botao botao--primario busca__enviar"
+      type="submit"
+      data-evento="busca_imoveis"
+      data-origem={origem}
+    >
+      Buscar imóveis
+    </button>
+  </div>
+</form>
+
+<style>
+  .busca {
+    border: var(--borda);
+    background: var(--marmore);
+    padding: clamp(var(--s-4), 3vw, var(--s-5));
+  }
+
+  .busca__cab {
+    display: grid;
+    gap: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+
+  .busca__alternar {
+    display: none;
+  }
+
+  .busca__nota {
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    line-height: 1.5;
+  }
+
+  .busca__campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+
+  .busca__campos--com-texto {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .busca__campo {
+    display: grid;
+    gap: var(--s-2);
+    min-width: 0;
+  }
+
+  .busca__campo > span {
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    font-weight: 600;
+  }
+
+  .busca__campo input,
+  .busca__campo select {
+    width: 100%;
+    min-height: 48px;
+    border: var(--borda);
+    border-radius: var(--raio-sm);
+    background: var(--papel);
+    padding: 0 var(--s-3);
+    color: var(--grafite);
+  }
+
+  .busca__campo input:hover,
+  .busca__campo select:hover {
+    border-color: var(--grafite-70);
+  }
+
+  .busca__campo--texto {
+    grid-column: span 2;
+  }
+
+  .busca__enviar {
+    align-self: end;
+    width: 100%;
+  }
+
+  @media (max-width: 1100px) {
+    .busca__campos--com-texto {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .busca__campos,
+    .busca__campos--com-texto {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .busca__campo--texto {
+      grid-column: auto;
+    }
+
+    .busca--recolhivel .busca__alternar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-4);
+      width: 100%;
+      min-height: 48px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .busca--recolhivel[data-aberta='false'] .busca__cab,
+    .busca--recolhivel[data-aberta='false'] .busca__campos {
+      display: none;
+    }
+
+    .busca--recolhivel[data-aberta='true'] .busca__alternar {
+      margin-bottom: var(--s-4);
+      padding-bottom: var(--s-3);
+      border-bottom: var(--borda);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-busca-recolhivel]').forEach((formulario) => {
+    const botao = formulario.querySelector<HTMLButtonElement>('[data-busca-alternar]');
+    const sinal = formulario.querySelector<HTMLElement>('[data-busca-sinal]');
+    botao?.addEventListener('click', () => {
+      const aberta = formulario.dataset.aberta !== 'true';
+      formulario.dataset.aberta = String(aberta);
+      botao.setAttribute('aria-expanded', String(aberta));
+      if (sinal) sinal.textContent = aberta ? '−' : '+';
+    });
+  });
+</script>

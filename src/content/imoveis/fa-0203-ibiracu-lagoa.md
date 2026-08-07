@@ -1,6 +1,7 @@
 ---
 codigo: 'FA-0203'
 titulo: 'Área com lagoa, nascente e casa em Ibiraçu'
+tipo: 'fazenda'
 municipio: 'Ibiraçu'
 regiao: 'montanhas-capixabas'
 areaHa: 35
@@ -25,7 +26,7 @@ oQueFalta:
   - 'A área da casa e suas condições de uso ainda não foram levantadas.'
   - 'A distância e o tipo de estrada até a porteira precisam ser confirmados.'
 status: 'ativa'
-rascunho: true
+rascunho: false
 fotos:
   - src: '/imoveis/ibiracu-lagoa/01.jpg'
     alt: 'Pequena casa com varanda e piscina na área rural'

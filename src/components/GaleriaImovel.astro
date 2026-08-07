@@ -17,9 +17,10 @@ interface Foto {
 interface Props {
   fotos: Foto[];
   municipio: string;
+  prioridade?: boolean;
 }
 
-const { fotos, municipio } = Astro.props;
+const { fotos, municipio, prioridade = false } = Astro.props;
 
 const urlWebp = (src: string, largura: number) =>
   src.replace(/\.(?:jpe?g|png|webp)$/i, `-${largura}.webp`);
@@ -67,9 +68,9 @@ const shotList = [
               alt={fotos[0].alt}
               width={fotos[0].largura ?? 1600}
               height={fotos[0].altura ?? 1067}
-              loading="lazy"
+              loading={prioridade ? 'eager' : 'lazy'}
               decoding="async"
-              fetchpriority="low"
+              fetchpriority={prioridade ? 'high' : 'low'}
             />
           </picture>
           <span class="gal__abrir-hint">Abrir galeria</span>
@@ -164,8 +165,8 @@ const shotList = [
         <p class="rotulo rotulo--terra">Fotografia pendente</p>
         <p class="shot__intro">
           Esta área ainda não foi fotografada. Quando for, entram estas doze
-          fotos e nenhuma imagem de banco. As fotos de {municipio} são feitas por mim,
-          na área, no dia da vistoria.
+          fotos e nenhuma imagem de banco. As fotos de {municipio} serão registradas
+          na própria área antes da publicação definitiva.
         </p>
       </div>
 
@@ -509,13 +510,13 @@ const shotList = [
 
   @media (max-width: 700px) {
     .gal__abrir img {
-      max-height: 68vw;
+      max-height: 62vw;
       min-height: 220px;
     }
 
-    .gal__info {
-      grid-template-columns: auto 1fr;
-      gap: var(--s-2) var(--s-4);
+    .gal__info,
+    .gal__thumbs {
+      display: none;
     }
 
     .gal__info .secundario {

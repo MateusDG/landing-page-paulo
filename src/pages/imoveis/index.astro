@@ -6,11 +6,13 @@ import FichaImovel from '../../components/FichaImovel.astro';
 import ToggleUnidade from '../../components/ToggleUnidade.astro';
 import CabecalhoSecao from '../../components/CabecalhoSecao.astro';
 import BotaoWhats from '../../components/BotaoWhats.astro';
+import BuscaImoveis from '../../components/BuscaImoveis.astro';
 
 import { territorios } from '../../data/territorios';
 import { dataCurta, areas as fmtAreas } from '../../lib/format';
+import { imovelPublicado } from '../../lib/publicacao';
 
-const imoveis = (await getCollection('imoveis')).sort((a, b) => {
+const imoveis = (await getCollection('imoveis')).filter(imovelPublicado).sort((a, b) => {
   const ordem = { ativa: 0, reservada: 1, vendida: 2 } as const;
   const d = ordem[a.data.status] - ordem[b.data.status];
   return d !== 0 ? d : b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime();
@@ -20,6 +22,9 @@ const ativas = imoveis.filter((i) => i.data.status === 'ativa');
 const ultima = imoveis
   .map((i) => i.data.atualizadoEm)
   .sort((a, b) => b.getTime() - a.getTime())[0];
+const municipiosDisponiveis = [...new Set(ativas.map((i) => i.data.municipio))].sort((a, b) =>
+  a.localeCompare(b, 'pt-BR'),
+);
 
 const finalidades = [
   { valor: 'produzir', rotulo: 'Produção' },
@@ -59,7 +64,7 @@ const jsonLd = {
 ---
 
 <Base
-  titulo="Fazendas, sítios e chácaras à venda no Espírito Santo"
+  titulo="Imóveis rurais à venda no Espírito Santo"
   descricao={`Veja ${ativas.length} imóveis rurais à venda no Espírito Santo. Consulte fotos, área, preço, acesso e características de fazendas, sítios, chácaras e terrenos.`}
   jsonLd={jsonLd}
 >
@@ -67,105 +72,88 @@ const jsonLd = {
     <div class="env">
       <CabecalhoSecao
         kicker="A carteira"
-        titulo="Fazendas, sítios e chácaras à venda no Espírito Santo"
-        subtitulo="Consulte as propriedades disponíveis e filtre por finalidade, região ou tamanho da área."
+        titulo="Imóveis rurais à venda no Espírito Santo"
+        subtitulo="Busque fazendas, sítios, chácaras e terrenos rurais por município, preço e características da propriedade."
         as="h1"
       />
 
-      <p class="ct__intro peq secundario">
-        Veja imóveis nas <a href="/regiao/montanhas-capixabas/">Montanhas Capixabas</a>,
-        no <a href="/regiao/norte-capixaba/">Norte Capixaba</a>, no{' '}
-        <a href="/regiao/sul-e-caparao/">Sul e Caparaó</a> e no{' '}
-        <a href="/regiao/litoral-e-franja/">Litoral e entorno da Grande Vitória</a>.
-      </p>
+      <div data-controles-carteira>
+        <BuscaImoveis
+          municipios={municipiosDisponiveis}
+          mostrarTexto
+          titulo="Busque na carteira"
+          nota="Os resultados aparecem logo abaixo e a busca fica salva na URL para você compartilhar."
+          origem="carteira-topo"
+          recolhivel
+        />
 
-      <div class="ct__controles">
-        <div class="ct__filtros" data-filtros>
-          <fieldset class="ct__grupo">
-            <legend class="rotulo rotulo--fraco">Finalidade</legend>
-            <div class="ct__chips">
-              {
-                finalidades.map((f) => (
-                  <button
-                    type="button"
-                    class="chip"
-                    data-filtro="finalidade"
-                    data-valor={f.valor}
-                    aria-pressed="false"
-                  >
+        <div class="ct__estado">
+          <div>
+            <p class="rotulo rotulo--fraco">Resultado</p>
+            <p class="ct__contagem" data-contagem aria-live="polite">
+              {fmtAreas(imoveis.length)} encontradas
+            </p>
+          </div>
+          <div class="ct__estado-acoes">
+            <button type="button" class="link-seta" data-limpar hidden>Limpar filtros</button>
+          </div>
+        </div>
+
+        <details class="ct__avancados" data-filtros>
+          <summary>
+            <span>Mais filtros</span>
+            <span class="ct__avancados-nota">finalidade, região, área e situação</span>
+          </summary>
+
+          <div class="ct__filtros">
+            <fieldset class="ct__grupo">
+              <legend class="rotulo rotulo--fraco">Finalidade</legend>
+              <div class="ct__chips">
+                {finalidades.map((f) => (
+                  <button type="button" class="chip" data-filtro="finalidade" data-valor={f.valor} aria-pressed="false">
                     {f.rotulo}
                   </button>
-                ))
-              }
-            </div>
-          </fieldset>
+                ))}
+              </div>
+            </fieldset>
 
-          <fieldset class="ct__grupo">
-            <legend class="rotulo rotulo--fraco">Região</legend>
-            <div class="ct__chips">
-              {
-                territorios.map((t) => (
-                  <button
-                    type="button"
-                    class="chip"
-                    data-filtro="regiao"
-                    data-valor={t.slug}
-                    aria-pressed="false"
-                  >
+            <fieldset class="ct__grupo">
+              <legend class="rotulo rotulo--fraco">Região</legend>
+              <div class="ct__chips">
+                {territorios.map((t) => (
+                  <button type="button" class="chip" data-filtro="regiao" data-valor={t.slug} aria-pressed="false">
                     {t.nomeCurto}
                   </button>
-                ))
-              }
-            </div>
-          </fieldset>
+                ))}
+              </div>
+            </fieldset>
 
-          <fieldset class="ct__grupo">
-            <legend class="rotulo rotulo--fraco">Área</legend>
-            <div class="ct__chips">
-              {
-                faixas.map((f) => (
-                  <button
-                    type="button"
-                    class="chip"
-                    data-filtro="faixa"
-                    data-valor={f.valor}
-                    data-min={f.min}
-                    data-max={f.max}
-                    aria-pressed="false"
-                  >
+            <fieldset class="ct__grupo">
+              <legend class="rotulo rotulo--fraco">Área</legend>
+              <div class="ct__chips">
+                {faixas.map((f) => (
+                  <button type="button" class="chip" data-filtro="faixa" data-valor={f.valor} data-min={f.min} data-max={f.max} aria-pressed="false">
                     {f.rotulo}
                   </button>
-                ))
-              }
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset class="ct__grupo">
+              <legend class="rotulo rotulo--fraco">Situação</legend>
+              <div class="ct__chips">
+                <button type="button" class="chip" data-filtro="status" data-valor="nao-vendida" aria-pressed="false">
+                  Ocultar vendidas
+                </button>
+              </div>
+            </fieldset>
+
+            <div class="ct__unidade">
+              <p class="rotulo rotulo--fraco">Unidade de área</p>
+              <ToggleUnidade />
             </div>
-          </fieldset>
-
-          <fieldset class="ct__grupo">
-            <legend class="rotulo rotulo--fraco">Situação</legend>
-            <div class="ct__chips">
-              <button
-                type="button"
-                class="chip"
-                data-filtro="status"
-                data-valor="nao-vendida"
-                aria-pressed="false"
-              >
-                Ocultar vendidas
-              </button>
-            </div>
-          </fieldset>
-        </div>
-
-        <div class="ct__unidade">
-          <ToggleUnidade />
-        </div>
-      </div>
-
-      <div class="ct__estado">
-        <p class="rotulo" data-contagem aria-live="polite">
-          {fmtAreas(imoveis.length)}
-        </p>
-        <button type="button" class="link-seta" data-limpar hidden>Limpar filtros</button>
+          </div>
+        </details>
       </div>
     </div>
   </section>
@@ -177,8 +165,15 @@ const jsonLd = {
       </div>
 
       <p class="ct__vazio" data-vazio hidden>
-        Nenhuma área da carteira bate com esses filtros hoje. Me diga o que
-        você procura, boa parte sai antes de eu anunciar.
+        Nenhum imóvel da carteira corresponde a esses filtros agora. Limpe a
+        busca ou me diga o que você procura para eu orientar o atendimento.
+      </p>
+
+      <p class="ct__intro peq secundario">
+        Explore também por região: <a href="/regiao/montanhas-capixabas/">Montanhas Capixabas</a>,
+        <a href="/regiao/norte-capixaba/">Norte Capixaba</a>,{' '}
+        <a href="/regiao/sul-e-caparao/">Sul e Caparaó</a> e{' '}
+        <a href="/regiao/litoral-e-franja/">Litoral e entorno da Grande Vitória</a>.
       </p>
 
       <div class="ct__rodape">
@@ -194,6 +189,29 @@ const jsonLd = {
       </div>
     </div>
   </section>
+
+  <section class="secao--compacta ct__guia-env" aria-labelledby="guia-compra-titulo">
+    <div class="env">
+      <div class="ct__guia-cab">
+        <p class="rotulo rotulo--terra">Antes da visita</p>
+        <h2 id="guia-compra-titulo">O que comparar em um imóvel rural</h2>
+      </div>
+      <div class="ct__guia">
+        <article>
+          <h3>Água e produção</h3>
+          <p>Observe a origem da água, a disponibilidade ao longo do ano e se a estrutura atende ao uso pretendido.</p>
+        </article>
+        <article>
+          <h3>Acesso e distância</h3>
+          <p>Compare o trecho de terra, a condição da estrada e o tempo real até os serviços usados no dia a dia.</p>
+        </article>
+        <article>
+          <h3>Limites e documentos</h3>
+          <p>Confirme área, divisas e documentação com os profissionais responsáveis antes de concluir a negociação.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -202,23 +220,18 @@ const jsonLd = {
     padding-top: var(--s-7);
   }
 
-  .ct__controles {
-    display: grid;
-    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
-    gap: var(--s-7);
-    align-items: start;
-    padding-top: var(--s-5);
-    border-top: var(--borda);
-  }
-
   .ct__intro {
     max-width: 72ch;
-    margin-top: var(--s-5);
+    margin-block: var(--s-5);
   }
 
   .ct__filtros {
     display: grid;
-    gap: var(--s-5);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-6);
+    padding: var(--s-5);
+    border-top: var(--borda-f);
+    background: var(--papel-2);
   }
 
   .ct__grupo {
@@ -233,6 +246,12 @@ const jsonLd = {
     padding: 0;
   }
 
+  .ct__unidade {
+    display: grid;
+    align-content: start;
+    gap: var(--s-3);
+  }
+
   .ct__chips {
     display: flex;
     gap: var(--s-2);
@@ -245,9 +264,63 @@ const jsonLd = {
     justify-content: space-between;
     gap: var(--s-5);
     flex-wrap: wrap;
-    margin-top: var(--s-6);
+    margin-top: var(--s-4);
     padding-top: var(--s-4);
     border-top: var(--borda);
+  }
+
+  .ct__contagem {
+    margin-top: var(--s-1);
+    font-family: var(--f-display);
+    font-size: var(--t-h3);
+    font-weight: 600;
+  }
+
+  .ct__estado-acoes {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  .ct__avancados {
+    margin-top: var(--s-4);
+    border: var(--borda);
+    background: var(--papel);
+  }
+
+  .ct__avancados summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    min-height: 48px;
+    padding: var(--s-3) var(--s-4);
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+  }
+
+  .ct__avancados summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ct__avancados summary::after {
+    content: '+';
+    margin-left: auto;
+    font-family: var(--f-mono);
+    font-size: var(--t-h3);
+    font-weight: 400;
+  }
+
+  .ct__avancados[open] summary::after {
+    content: '−';
+  }
+
+  .ct__avancados-nota {
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    font-weight: 400;
   }
 
   .ct__grade {
@@ -276,19 +349,63 @@ const jsonLd = {
     border-top: var(--borda);
   }
 
+  .ct__guia-env {
+    border-top: var(--borda);
+    background: var(--papel-2);
+  }
+
+  .ct__guia-cab {
+    display: grid;
+    gap: var(--s-3);
+    margin-bottom: var(--s-6);
+  }
+
+  .ct__guia-cab h2 {
+    max-width: 20ch;
+  }
+
+  .ct__guia {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gutter);
+  }
+
+  .ct__guia article {
+    padding-top: var(--s-4);
+    border-top: var(--borda-2);
+  }
+
+  .ct__guia h3 {
+    margin-bottom: var(--s-3);
+  }
+
+  .ct__guia p {
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    line-height: 1.6;
+  }
+
   @media (max-width: 900px) {
-    .ct__controles {
+    .ct__guia {
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--s-6);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .ct__filtros {
+      grid-template-columns: minmax(0, 1fr);
+      padding: var(--s-4);
+    }
+
+    .ct__avancados-nota {
+      display: none;
     }
   }
 </style>
 
 <script>
-  /* Filtros no cliente: a carteira inteira já veio no HTML, então filtrar é
-     esconder, sem requisição, sem estado de carregamento, funciona offline.
-     Com 200+ imóveis isso mudaria; até lá, é a solução mais simples que
-     resolve. */
+  /* A carteira inteira vem no HTML. O estado é refletido na URL para que a
+     busca seja compartilhável sem criar páginas indexáveis por combinação. */
   function iniciar(
     raiz: HTMLElement,
     grade: HTMLElement,
@@ -297,12 +414,35 @@ const jsonLd = {
     limpar: HTMLButtonElement,
   ) {
     const fichas = [...grade.querySelectorAll<HTMLElement>('[data-regiao]')];
-    const botoesFaixa = [
-      ...raiz.querySelectorAll<HTMLButtonElement>('[data-filtro="faixa"]'),
-    ];
+    const formulario = raiz.querySelector<HTMLFormElement>('[data-busca-form]');
+    const texto = raiz.querySelector<HTMLInputElement>('[data-busca-texto]');
+    const selects = [...raiz.querySelectorAll<HTMLSelectElement>('[data-busca-select]')];
+    const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-filtro]')];
+    const botoesFaixa = botoes.filter((b) => b.dataset.filtro === 'faixa');
     const ativos = new Map<string, Set<string>>();
+    const nomesSimples = ['busca', 'tipo', 'municipio', 'preco-max', 'caracteristica'];
+    const nomesMultiplos = ['finalidade', 'regiao', 'faixa', 'status'];
 
-    const plural = (n: number) => `${n} ${n === 1 ? 'área' : 'áreas'}`;
+    const plural = (n: number) => `${n} ${n === 1 ? 'imóvel encontrado' : 'imóveis encontrados'}`;
+    const normalizar = (valor: string) =>
+      valor.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').trim();
+
+    const parametros = new URLSearchParams(window.location.search);
+    if (texto) texto.value = parametros.get('busca') ?? '';
+    for (const select of selects) {
+      const valor = parametros.get(select.name);
+      if (valor && [...select.options].some((opcao) => opcao.value === valor)) {
+        select.value = valor;
+      }
+    }
+    for (const nome of nomesMultiplos) {
+      const valores = parametros.getAll(nome).filter(Boolean);
+      if (valores.length) ativos.set(nome, new Set(valores));
+    }
+    for (const botao of botoes) {
+      const ligado = ativos.get(botao.dataset.filtro!)?.has(botao.dataset.valor!) ?? false;
+      botao.setAttribute('aria-pressed', String(ligado));
+    }
 
     const faixaBate = (area: number | null): boolean => {
       const sel = ativos.get('faixa');
@@ -313,14 +453,47 @@ const jsonLd = {
         .some((b) => area > Number(b.dataset.min) && area <= Number(b.dataset.max));
     };
 
-    const aplicar = () => {
+    const atualizarUrl = () => {
+      const novos = new URLSearchParams(window.location.search);
+      [...nomesSimples, ...nomesMultiplos].forEach((nome) => novos.delete(nome));
+
+      if (formulario) {
+        const dados = new FormData(formulario);
+        for (const nome of nomesSimples) {
+          const valor = String(dados.get(nome) ?? '').trim();
+          if (valor) novos.set(nome, valor);
+        }
+      }
+
+      for (const nome of nomesMultiplos) {
+        for (const valor of ativos.get(nome) ?? []) novos.append(nome, valor);
+      }
+
+      const busca = novos.toString();
+      history.replaceState(null, '', `${window.location.pathname}${busca ? `?${busca}` : ''}`);
+    };
+
+    const aplicar = (sincronizarUrl = true) => {
       const regiao = ativos.get('regiao');
       const finalidade = ativos.get('finalidade');
       const status = ativos.get('status');
+      const tipo = formulario?.elements.namedItem('tipo') as HTMLSelectElement | null;
+      const municipio = formulario?.elements.namedItem('municipio') as HTMLSelectElement | null;
+      const precoMax = formulario?.elements.namedItem('preco-max') as HTMLSelectElement | null;
+      const caracteristica = formulario?.elements.namedItem('caracteristica') as HTMLSelectElement | null;
+      const termo = normalizar(texto?.value ?? '');
       let visiveis = 0;
 
       for (const ficha of fichas) {
+        const preco = ficha.dataset.preco ? Number(ficha.dataset.preco) : null;
+        const buscaFicha = normalizar(ficha.dataset.busca ?? '');
+        const caracteristicas = ficha.dataset.caracteristicas?.split(' ') ?? [];
         const ok =
+          (!termo || buscaFicha.includes(termo)) &&
+          (!tipo?.value || ficha.dataset.tipo === tipo.value) &&
+          (!municipio?.value || ficha.dataset.municipio === municipio.value) &&
+          (!precoMax?.value || (preco != null && preco <= Number(precoMax.value))) &&
+          (!caracteristica?.value || caracteristicas.includes(caracteristica.value)) &&
           (!regiao?.size || regiao.has(ficha.dataset.regiao!)) &&
           (!finalidade?.size ||
             ficha.dataset.finalidade!.split(' ').some((f) => finalidade.has(f))) &&
@@ -334,7 +507,11 @@ const jsonLd = {
       contagem.textContent = plural(visiveis);
       vazio.hidden = visiveis > 0;
       grade.hidden = visiveis === 0;
-      limpar.hidden = ![...ativos.values()].some((s) => s.size > 0);
+      const buscaBasicaAtiva = Boolean(
+        texto?.value.trim() || selects.some((select) => select.value),
+      );
+      limpar.hidden = !buscaBasicaAtiva && ![...ativos.values()].some((s) => s.size > 0);
+      if (sincronizarUrl) atualizarUrl();
     };
 
     raiz.addEventListener('click', (ev) => {
@@ -351,18 +528,32 @@ const jsonLd = {
       aplicar();
     });
 
+    formulario?.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      aplicar();
+      grade.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    selects.forEach((select) => select.addEventListener('change', () => aplicar()));
+
+    let espera: number | undefined;
+    texto?.addEventListener('input', () => {
+      window.clearTimeout(espera);
+      espera = window.setTimeout(() => aplicar(), 180);
+    });
+
     limpar.addEventListener('click', () => {
       ativos.clear();
-      raiz
-        .querySelectorAll<HTMLButtonElement>('[data-filtro]')
-        .forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      botoes.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      if (texto) texto.value = '';
+      selects.forEach((select) => { select.value = ''; });
       aplicar();
     });
 
-    aplicar();
+    aplicar(false);
   }
 
-  const raiz = document.querySelector<HTMLElement>('[data-filtros]');
+  const raiz = document.querySelector<HTMLElement>('[data-controles-carteira]');
   const grade = document.querySelector<HTMLElement>('[data-grade]');
   const contagem = document.querySelector<HTMLElement>('[data-contagem]');
   const vazio = document.querySelector<HTMLElement>('[data-vazio]');

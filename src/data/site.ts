@@ -19,6 +19,10 @@ export const navPrincipal = [
 export const navRodape = {
   carteira: [
     { rotulo: 'Imóveis rurais à venda', href: '/imoveis/' },
+    { rotulo: 'Chácaras à venda', href: '/imoveis/?tipo=chacara' },
+    { rotulo: 'Sítios à venda', href: '/imoveis/?tipo=sitio' },
+    { rotulo: 'Fazendas à venda', href: '/imoveis/?tipo=fazenda' },
+    { rotulo: 'Terrenos rurais à venda', href: '/imoveis/?tipo=terreno-rural' },
     { rotulo: 'Montanhas Capixabas', href: '/regiao/montanhas-capixabas/' },
     { rotulo: 'Norte Capixaba', href: '/regiao/norte-capixaba/' },
     { rotulo: 'Sul e Caparaó', href: '/regiao/sul-e-caparao/' },

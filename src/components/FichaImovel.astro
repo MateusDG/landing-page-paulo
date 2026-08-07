@@ -16,7 +16,9 @@
 import Croqui from './Croqui.astro';
 import { formatarArea, sufixoUnidade, type Unidade } from '../lib/unidades';
 import { preco as fmtPreco, mesAno, descreverAcesso } from '../lib/format';
+import { slugBusca } from '../lib/format';
 import { rotuloTerritorio } from '../data/territorios';
+import { rotuloTipoImovel } from '../data/imoveis';
 
 interface Props {
   imovel: {
@@ -24,7 +26,9 @@ interface Props {
     data: {
       codigo: string;
       titulo: string;
+      tipo: string;
       municipio: string;
+      localidade?: string;
       regiao: string;
       areaHa?: number | null;
       croqui: string;
@@ -32,6 +36,11 @@ interface Props {
       croquiVerificado?: boolean;
       finalidade: string[];
       agua: string;
+      energia: string;
+      solo?: string;
+      resumo: string;
+      benfeitorias: string[];
+      fotos: { src: string; alt: string; largura?: number; altura?: number }[];
       acesso: { asfaltoKm: number; terraKm: number; nota: string };
       tempoDeVitoria: string;
       preco: number | null;
@@ -51,6 +60,31 @@ const Titulo = nivel === 2 ? 'h2' : 'h3';
 const d = imovel.data;
 const href = `/imovel/${imovel.id}/`;
 const areaHa = d.areaHa;
+const capa = d.fotos[0];
+const textoCaracteristicas = [
+  d.titulo,
+  d.resumo,
+  d.agua,
+  d.energia,
+  d.solo ?? '',
+  ...d.benfeitorias,
+].join(' ').toLocaleLowerCase('pt-BR');
+const caracteristicas = [
+  ...(d.agua && !/não|sem água/i.test(d.agua) ? ['agua'] : []),
+  ...(textoCaracteristicas.includes('nascente') ? ['nascente'] : []),
+  ...(/energia disponível|energia elétrica/i.test(d.energia) ? ['energia'] : []),
+  ...(d.benfeitorias.some((item) => /casa|sede|moradia/i.test(item)) ? ['casa'] : []),
+  ...(textoCaracteristicas.includes('café') ? ['cafe'] : []),
+];
+const busca = [
+  d.titulo,
+  d.tipo,
+  rotuloTipoImovel(d.tipo),
+  d.municipio,
+  d.localidade ?? '',
+  d.resumo,
+  ...caracteristicas,
+].join(' ');
 
 const linhas = [
   { rotulo: 'Finalidade', valor: d.finalidade.map((f) => rotuloFinalidade(f)).join(' · ') },
@@ -76,17 +110,45 @@ function rotuloFinalidade(f: string) {
 <article
   class:list={['fi', d.status !== 'ativa' && `fi--${d.status}`]}
   data-regiao={d.regiao}
+  data-tipo={d.tipo}
+  data-municipio={slugBusca(d.municipio)}
   data-finalidade={d.finalidade.join(' ')}
+  data-caracteristicas={caracteristicas.join(' ')}
+  data-busca={busca}
   data-area={d.areaHa ?? ''}
+  data-preco={d.preco ?? ''}
   data-status={d.status}
 >
+  {
+    capa && (
+      <div class="fi__foto">
+        <picture>
+          <source
+            type="image/webp"
+            srcset={`${capa.src.replace(/\.(?:jpe?g|png|webp)$/i, '-320.webp')} 320w, ${capa.src.replace(/\.(?:jpe?g|png|webp)$/i, '-640.webp')} 640w`}
+            sizes="(max-width: 700px) calc(100vw - 40px), 390px"
+          />
+          <img
+            src={capa.src}
+            alt={capa.alt}
+            width={capa.largura ?? 1200}
+            height={capa.altura ?? 800}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <span class="fi__tipo">{rotuloTipoImovel(d.tipo)}</span>
+      </div>
+    )
+  }
+
   <header class="fi__topo">
     <div class="fi__croqui">
       <Croqui path={d.croqui} viewBox={d.croquiViewBox} tamanho={78} />
     </div>
     <div class="fi__id">
       <p class="rotulo fi__codigo">{d.codigo}</p>
-      <p class="rotulo rotulo--fraco">{d.municipio}/ES</p>
+      <p class="rotulo rotulo--fraco">{d.localidade ? `${d.localidade} · ` : ''}{d.municipio}/ES</p>
       <p class="rotulo rotulo--fraco fi__territorio">{rotuloTerritorio(d.regiao)}</p>
     </div>
     {
@@ -139,6 +201,45 @@ function rotuloFinalidade(f: string) {
       background-color var(--dur-rapida) var(--ease),
       border-color var(--dur-rapida) var(--ease);
     /* sem transform, sem scale, sem sombra, decisão do sistema */
+  }
+
+  .fi__foto {
+    position: relative;
+    margin: calc(var(--s-5) * -1) calc(var(--s-5) * -1) var(--s-5);
+    overflow: hidden;
+    border-bottom: var(--borda);
+    background: var(--papel-2);
+  }
+
+  .fi__foto picture {
+    display: block;
+  }
+
+  .fi__foto img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    transition: transform var(--dur-media) var(--ease);
+  }
+
+  .fi:has(.fi__link:hover) .fi__foto img,
+  .fi:has(.fi__link:focus-visible) .fi__foto img {
+    transform: scale(1.015);
+  }
+
+  .fi__tipo {
+    position: absolute;
+    left: var(--s-3);
+    bottom: var(--s-3);
+    padding: var(--s-1) var(--s-2);
+    background: rgb(36 37 31 / 86%);
+    color: var(--papel);
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    letter-spacing: var(--tracking-rotulo);
+    line-height: 1.4;
+    text-transform: uppercase;
   }
 
   .fi:has(.fi__link:hover),

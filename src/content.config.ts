@@ -13,9 +13,9 @@ import { glob } from 'astro/loaders';
         faz cada ficha ser única e a carteira não virar galeria de estoque.
      2. Todo imóvel precisa de pelo menos um item em `oQueFalta`. Anúncio
         sem defeito é anúncio mentindo, e o comprador rural sente isso.
-     3. Imóvel com `status: ativa` precisa de 6 fotos. Enquanto não houver,
-        marque `rascunho: true`, assim ele aparece no site com a ficha e o
-        croqui, mas o sistema deixa claro que falta a foto.
+     3. Imóvel com `status: ativa` precisa de 5 fotos. Enquanto não houver,
+        marque `rascunho: true`; a regra central de publicação impede que ele
+        entre em vitrines, rota, sitemap e imagem social.
 
    Qualidade forçada pelo sistema, não pela disciplina.
    ========================================================================== */
@@ -28,6 +28,7 @@ const REGIOES = [
 ] as const;
 
 const FINALIDADES = ['produzir', 'morar', 'lazer', 'investir', 'turismo'] as const;
+const TIPOS_IMOVEL = ['chacara', 'sitio', 'fazenda', 'terreno-rural'] as const;
 
 const caminhoFoto = z
   .string()
@@ -67,7 +68,9 @@ const imoveis = defineCollection({
         .string()
         .regex(/^[A-Z]{2}-\d{4}$/, 'formato do código: XX-0000, ex. FA-0142'),
       titulo: z.string().min(8),
+      tipo: z.enum(TIPOS_IMOVEL),
       municipio: z.string(),
+      localidade: z.string().optional(),
       regiao: z.enum(REGIOES),
       /* null = área total ainda não informada pelo proprietário. */
       areaHa: z.number().positive().nullable().default(null),
@@ -77,6 +80,7 @@ const imoveis = defineCollection({
       croqui: caminhoSvg,
       croquiViewBox: viewBoxSvg.default('0 0 100 100'),
       croquiVerificado: z.boolean().default(false),
+      verificadoEmCampo: z.boolean().default(false),
 
       finalidade: z.array(z.enum(FINALIDADES)).min(1),
       resumo: z.string().min(60).max(400),
@@ -118,12 +122,12 @@ const imoveis = defineCollection({
       atualizadoEm: z.coerce.date(),
     })
     .superRefine((v, ctx) => {
-      if (v.status === 'ativa' && !v.rascunho && v.fotos.length < 6) {
+      if (v.status === 'ativa' && !v.rascunho && v.fotos.length < 5) {
         ctx.addIssue({
           code: 'custom',
           path: ['fotos'],
           message:
-            `imóvel ativo precisa de 6 fotos (tem ${v.fotos.length}). ` +
+            `imóvel ativo precisa de 5 fotos (tem ${v.fotos.length}). ` +
             'Complete a shot list ou marque `rascunho: true` enquanto isso.',
         });
       }

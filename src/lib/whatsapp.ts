@@ -17,6 +17,7 @@ if (!/^55\d{10,11}$/.test(NUMERO)) {
 export interface ContextoWhats {
   /** Código interno do imóvel, ex.: FA-0142 */
   imovel?: string;
+  titulo?: string;
   areaHa?: number;
   municipio?: string;
   /** De onde na página o clique veio, vira a ref rastreável. */
@@ -35,11 +36,10 @@ function montarTexto(ctx: ContextoWhats): string {
       ? `${ctx.areaHa.toLocaleString('pt-BR')} ha`
       : null;
     const local = [area, ctx.municipio].filter(Boolean).join(' em ');
-    linhas.push(
-      local
-        ? `Quero falar sobre a área ${ctx.imovel}, ${local}.`
-        : `Quero falar sobre a área ${ctx.imovel}.`,
-    );
+    const identificacao = ctx.titulo
+      ? `“${ctx.titulo}” (${ctx.imovel})`
+      : `a área ${ctx.imovel}`;
+    linhas.push(local ? `Quero falar sobre ${identificacao}, ${local}.` : `Quero falar sobre ${identificacao}.`);
   } else {
     linhas.push('Queria conversar sobre área rural.');
   }
