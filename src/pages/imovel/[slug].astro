@@ -89,6 +89,9 @@ const paginaUrl = new URL(Astro.url.pathname, Astro.site).href;
 const imagens = d.fotos.map((foto) => new URL(foto.src, Astro.site).href);
 const nomeSeo = d.titulo;
 const descricaoSeo = d.resumo;
+const categoriaSeo = d.tipo === 'terreno-rural'
+  ? 'Terreno rural'
+  : `${rotuloTipoImovel(d.tipo)} rural`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -99,7 +102,7 @@ const jsonLd = {
   sku: d.codigo,
   description: d.resumo,
   image: imagens,
-  category: `${rotuloTipoImovel(d.tipo)} rural`,
+  category: categoriaSeo,
   brand: { '@type': 'Brand', name: 'Valdecir Francisco Imóveis Rurais' },
   seller: { '@id': `${Astro.site}#corretor` },
   additionalProperty: [
@@ -167,7 +170,7 @@ const breadcrumb = {
     sku: d.codigo,
     preco: d.preco,
     disponibilidade: vendida ? 'out of stock' : d.status === 'reservada' ? 'pending' : 'in stock',
-    categoria: `${rotuloTipoImovel(d.tipo)} rural`,
+    categoria: categoriaSeo,
     atualizadoEm: d.atualizadoEm,
   }}
   barraMobile={{

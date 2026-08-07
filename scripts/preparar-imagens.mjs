@@ -9,6 +9,21 @@ const grupos = [
   { origem: 'terreno3', destino: 'santa-teresa-cafe' },
   { origem: 'terreno4', destino: 'ibiracu-lagoa' },
   { origem: 'terreno5', destino: 'fundao-vista' },
+  {
+    origem: 'terreno6',
+    destino: 'aracruz-10-mil-m2',
+    ordem: [
+      'WhatsApp Image 2026-08-07 at 18.49.31 (2).jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.31 (1).jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.32 (1).jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.32.jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.31.jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.29.jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.29 (2).jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.29 (1).jpeg',
+      'WhatsApp Image 2026-08-07 at 18.49.30.jpeg',
+    ],
+  },
 ];
 
 for (const grupo of grupos) {
@@ -16,7 +31,7 @@ for (const grupo of grupos) {
   const destino = path.join(raiz, 'public', 'imoveis', grupo.destino);
   await mkdir(destino, { recursive: true });
 
-  const nomes = (await readdir(origem))
+  const nomes = grupo.ordem ?? (await readdir(origem))
     .filter((nome) => /\.(jpe?g|png|webp)$/i.test(nome))
     .sort((a, b) => a.localeCompare(b, 'pt-BR', { numeric: true }));
 

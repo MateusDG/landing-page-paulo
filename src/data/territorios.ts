@@ -157,7 +157,7 @@ export const territorios: Territorio[] = [
     municipios: [
       'Guarapari', 'Anchieta', 'Piúma', 'Iconha', 'Rio Novo do Sul',
       'Itapemirim', 'Marataízes', 'Presidente Kennedy', 'Viana',
-      'Santa Leopoldina', 'Fundão',
+      'Santa Leopoldina', 'Fundão', 'Aracruz',
     ],
     municipioReferencia: 'Guarapari',
     producao: [
