@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://valdecimoveis.com.br/sitemap-index.xml

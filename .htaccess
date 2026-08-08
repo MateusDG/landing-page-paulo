@@ -1,0 +1,43 @@
+# Este arquivo e copiado para dist e finalizado por
+# scripts/finalizar-build-seguro.mjs. Nao remova o marcador da CSP.
+
+Options -Indexes
+ServerSignature Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Aceita uma unica origem publica. Tambem neutraliza Host headers estranhos.
+  RewriteCond %{HTTP_HOST} !^valdecimoveis\.com\.br$ [NC]
+  RewriteRule ^ https://valdecimoveis.com.br%{REQUEST_URI} [R=301,L]
+
+  # Endereco legado mantido apenas como redirecionamento permanente.
+  RewriteRule ^sitemap\.xml$ /sitemap-index.xml [R=301,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'sha256-+TZ78y70+fDuPUhN+ScpWfjFbkTR0u1TJtajysxDNXM=' 'sha256-/LnR83q1E1dgWhulzIaomTnFYVISmH68e5sC6dqId98=' 'sha256-0kLexrxJJJHpsKmdkheEHyOTSh0kSVG8CL7koFqlG+Q=' 'sha256-4mHJGpYh/BGf4wuNemzWorYKW2tcJsejRh2zrgzCMC4=' 'sha256-7Glma8EKTotERxNXGbbi339nsKOkjtjV5ENKlAeRpzY=' 'sha256-9fIYB27ENT2z9SfXPvvToRDskeQwU81eF5u7LeAFlWk=' 'sha256-At38aXjuTHh7cuqi3rmYvvkMF70kcXoNZ65HkeWmDD4=' 'sha256-BH6u7Fa9Ntwyrxdpv2ep6rcFdERjHoyvtRMY2GFK6js=' 'sha256-C1iMHlUkbJgG2qEu8KPN+S9t9i50EdrFlamK8oQ2H80=' 'sha256-GmpTYi403hYlmSE6FvFfIQhp4tCYAsr9eLzn9IyD9o4=' 'sha256-H6CJbtc/1IW89GC5SoqpRnmo8sa+7XEy/cHYZ3zRQEA=' 'sha256-Pt7GOVTSPfvnpcUmhSY2WQ/k6norWq/zbXCrsaeizBI=' 'sha256-TRH9yAQyXdU7ZbMaXeaCFhwiL6SvyHc2Vb17yy4Pz5k=' 'sha256-U9t6xV2TsUY0cOtyNZ8catXkjR6Q7pPYU7aOj5p6FLk=' 'sha256-WS/d8JjylsH0S6d/O6s+cWQ3G2p0x2Z9K6a+jfNnubE=' 'sha256-WequHUHxLAcIun4wesa6JdlQrI8OilUFwBnJgEX2uK4=' 'sha256-ZsPA7waxA2043JhqfpQn9UqSU4bBL+Kks3aW3NJoYlE=' 'sha256-iM21CBUrYjt9fOuTteq5PeN84Wi46HFt52o7ZB37ooc=' 'sha256-iMFTKvni4wnycyf3bDlrqNO0p2zDAoIpWK0JParWbk8=' 'sha256-iRvCvGWgcpdxvRuLHmNTkbfnjXQVA8I466hcUk5tR4Y=' 'sha256-kaaP5LAye6I0XAauF3GwSqKQ147SBKjO2mYvPBmNKY0=' 'sha256-kd5BV00RVsblJJoV1uiuIZLSk099WCgQJZ7X7A9+F3g=' 'sha256-rPe8bQCg9rJF9/wQtPiGX4u+PxLHowy0iqHwvWGwSOs=' 'sha256-sYraH2h+q0DZ4WsD8l0zKJwGtI5NJyvoIsMZDsoPqao=' 'sha256-sa2BD07tH4oO53uT1B5vNSLM2+gcrREM4WTXttKp6oU=' 'sha256-vfCwiu6CV2798ApCPSGny4SjrgBZ48RXrXw0l+JXmmY=' 'sha256-x1Dj3ddym+5xjnDTQYDytipK7lbmHj0IBCKc5CVA/Nc=' 'sha256-yLOclVWYj40M99ubdil+WIdjuquvq5VR5L70KarFrcs=' https://www.googletagmanager.com https://www.googleadservices.com https://www.google.com https://www.google.com.br https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://*.g.doubleclick.net https://googleads.g.doubleclick.net https://www.googleadservices.com https://pagead2.googlesyndication.com https://www.google.com https://google.com https://www.google.com.br https://google.com.br; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net https://googleads.g.doubleclick.net https://ad.doubleclick.net https://www.googleadservices.com https://pagead2.googlesyndication.com https://www.google.com https://google.com https://www.google.com.br https://google.com.br; frame-src https://www.googletagmanager.com; media-src 'self'; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+  Header always set X-Permitted-Cross-Domain-Policies "none"
+  Header always set X-XSS-Protection "0"
+  Header always unset X-Powered-By
+
+  # HTML pode ser reutilizado brevemente pelo navegador/CDN. Os arquivos do
+  # Astro levam hash no nome e podem permanecer em cache por um ano.
+  <FilesMatch "\.html?$">
+    Header set Cache-Control "public, max-age=300, stale-while-revalidate=86400"
+  </FilesMatch>
+  <FilesMatch "\.(?:woff2|jpe?g|png|webp|avif|svg)$">
+    Header set Cache-Control "public, max-age=2592000, stale-while-revalidate=86400"
+  </FilesMatch>
+
+  <IfModule mod_setenvif.c>
+    SetEnvIf Request_URI "^/_astro/" RECURSO_COM_HASH=1
+    Header set Cache-Control "public, max-age=31536000, immutable" env=RECURSO_COM_HASH
+  </IfModule>
+</IfModule>
