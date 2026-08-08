@@ -163,7 +163,7 @@ const urlFonte = z
     }
   }, 'a fonte precisa ter uma URL HTTPS válida');
 
-/* Guias educativos têm rota própria, resumo de busca e fontes obrigatórias.
+/* Artigos do blog têm rota própria, resumo de busca e fontes obrigatórias.
    Isso evita publicar texto genérico ou orientação sensível sem referência. */
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '**/*.md' }),
@@ -186,7 +186,7 @@ const blog = defineCollection({
             url: urlFonte,
           }),
         )
-        .min(2, 'todo guia precisa citar pelo menos duas fontes verificáveis'),
+        .min(2, 'todo artigo precisa citar pelo menos duas fontes verificáveis'),
     })
     .refine((v) => v.atualizadoEm >= v.publicadoEm, {
       path: ['atualizadoEm'],

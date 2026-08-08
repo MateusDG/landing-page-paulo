@@ -16,8 +16,8 @@ const jsonLd = {
   '@type': 'Blog',
   '@id': `${new URL('/blog/', Astro.site).href}#blog`,
   url: new URL('/blog/', Astro.site).href,
-  name: 'Guias para comprar imóveis rurais',
-  description: 'Orientações práticas e verificadas para pesquisar, visitar e comprar imóveis rurais no Espírito Santo.',
+  name: 'Blog sobre imóveis rurais no Espírito Santo',
+  description: 'Artigos práticos e verificados para pesquisar, visitar e comprar imóveis rurais no Espírito Santo.',
   publisher: { '@id': `${Astro.site}#corretor` },
   blogPost: posts.map((post) => ({
     '@type': 'BlogPosting',
@@ -34,17 +34,17 @@ const jsonLd = {
 ---
 
 <Base
-  titulo="Guias para comprar imóveis rurais no Espírito Santo"
-  descricao="Guias para pesquisar, visitar e comprar sítios, chácaras, fazendas e terrenos rurais com mais clareza sobre documentos, acesso, água e uso da área."
+  titulo="Blog sobre imóveis rurais no Espírito Santo"
+  descricao="Artigos para pesquisar, visitar e comprar sítios, chácaras, fazendas e terrenos rurais com clareza sobre medidas, documentos, acesso, água e uso da área."
   og="/og/blog.png"
-  ogAlt="Guias para compradores de imóveis rurais no Espírito Santo"
+  ogAlt="Blog sobre imóveis rurais no Espírito Santo"
   jsonLd={jsonLd}
 >
   <section class="secao--compacta bl__cab-env">
     <div class="env">
       <CabecalhoSecao
         kicker="Caderno do comprador"
-        titulo="Guias para escolher uma área rural"
+        titulo="Blog para escolher uma área rural"
         subtitulo="Conteúdo direto para organizar a busca, preparar a visita e saber o que ainda precisa ser confirmado antes de negociar."
         as="h1"
       />
@@ -82,7 +82,7 @@ const jsonLd = {
               <div class="bl__meta">
                 <span>Atualizado em {dataCurta(post.data.atualizadoEm)}</span>
                 <span>{tempoLeitura(post.body)} min de leitura</span>
-                <span class="link-seta">Ler o guia <span class="link-seta__seta" aria-hidden="true">→</span></span>
+                <span class="link-seta">Ler o artigo <span class="link-seta__seta" aria-hidden="true">→</span></span>
               </div>
             </article>
           ))
@@ -98,7 +98,7 @@ const jsonLd = {
         <h2 id="criterio-titulo">Informação útil, com limite claro</h2>
       </div>
       <div class="bl__criterio-itens">
-        <p><span class="mono">01</span> Fontes públicas são indicadas no fim de cada guia.</p>
+        <p><span class="mono">01</span> Fontes públicas são indicadas no fim de cada artigo.</p>
         <p><span class="mono">02</span> Cadastro, certidão e visita são tratados como verificações diferentes.</p>
         <p><span class="mono">03</span> O conteúdo orienta perguntas; profissionais e órgãos competentes validam cada caso.</p>
       </div>
@@ -109,7 +109,7 @@ const jsonLd = {
     <div class="env bl__fecho">
       <div>
         <p class="rotulo rotulo--terra">Depois da leitura</p>
-        <h2>Compare o checklist com áreas reais</h2>
+        <h2>Leve a leitura para áreas reais</h2>
         <p class="lead">Veja fotos, preço, acesso e os pontos que ainda precisam ser confirmados em cada ficha.</p>
       </div>
       <div class="bl__acoes">
@@ -119,7 +119,7 @@ const jsonLd = {
           evento="blog_lead"
           variante="secundario"
           rotulo="Tirar uma dúvida"
-          mensagem="Oi, vim pela área de guias do site e tenho uma dúvida sobre a busca por imóvel rural."
+          mensagem="Oi, vim pelo blog do site e tenho uma dúvida sobre a busca por imóvel rural."
         />
       </div>
     </div>

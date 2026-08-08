@@ -46,12 +46,12 @@ export async function getStaticPaths() {
       params: { slug: 'blog' },
       props: {
         kicker: 'Caderno do comprador · Espírito Santo',
-        titulo: 'Guias para escolher um imóvel rural.',
+        titulo: 'Blog para escolher um imóvel rural.',
         referencia: 'Informação prática',
         croqui: CONTORNO_ES,
         croquiViewBox: VIEWBOX_ES,
         meta: [
-          { rotulo: 'Temas', valor: 'visita e documentos' },
+          { rotulo: 'Temas', valor: 'medidas e documentos' },
           { rotulo: 'Fontes', valor: 'indicadas' },
         ],
       },
@@ -109,7 +109,7 @@ export async function getStaticPaths() {
       params: { slug: `blog-${post.id}` },
       props: {
         kicker: rotuloCategoriaBlog(post.data.categoria),
-        referencia: 'Guia do comprador',
+        referencia: 'Blog rural',
         titulo: post.data.tituloSeo,
         croqui: CONTORNO_ES,
         croquiViewBox: VIEWBOX_ES,

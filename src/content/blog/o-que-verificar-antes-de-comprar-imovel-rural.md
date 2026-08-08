@@ -36,7 +36,7 @@ fontes:
 
 Comprar uma área rural exige olhar para duas coisas ao mesmo tempo: **o imóvel que existe no campo** e **o imóvel descrito nos documentos**. Fotos bonitas, preço e tamanho ajudam a selecionar opções, mas não bastam para decidir.
 
-Este guia organiza a análise em quatro momentos: antes da visita, durante a visita, na conferência dos documentos e antes da proposta. Ele serve para sítios, chácaras, fazendas e terrenos rurais, mas não substitui a análise do cartório nem a orientação de advogado, engenheiro agrimensor, contador ou profissional ambiental quando forem necessárias.
+Este artigo organiza a análise em quatro momentos: antes da visita, durante a visita, na conferência dos documentos e antes da proposta. Ele serve para sítios, chácaras, fazendas e terrenos rurais, mas não substitui a análise do cartório nem a orientação de advogado, engenheiro agrimensor, contador ou profissional ambiental quando forem necessárias.
 
 ## Resposta curta: o que conferir primeiro
 
@@ -93,6 +93,8 @@ Veja se a energia está instalada na área ou apenas próxima. Em casas, galpõe
 ### Relevo, solo e área aproveitável
 
 Área total e área útil não são a mesma coisa. Inclinação, vegetação, cursos d’água, acessos internos e áreas ambientalmente protegidas podem influenciar o uso possível. Para decisão produtiva ou construtiva, impressão visual não substitui avaliação técnica.
+
+Se os anúncios usam unidades diferentes, converta os valores antes de comparar. O artigo sobre [hectare, alqueire e metro quadrado](/blog/hectare-alqueire-metro-quadrado-como-converter/) mostra as fórmulas e explica por que a palavra “alqueire” precisa vir acompanhada da referência adotada.
 
 ### Limites e ocupação
 

@@ -48,7 +48,7 @@ const breadcrumb = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', Astro.site).href },
-    { '@type': 'ListItem', position: 2, name: 'Guias', item: new URL('/blog/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: new URL('/blog/', Astro.site).href },
     { '@type': 'ListItem', position: 3, name: d.titulo, item: paginaUrl },
   ],
 };
@@ -58,7 +58,7 @@ const breadcrumb = {
   titulo={d.tituloSeo}
   descricao={d.descricao}
   og={og}
-  ogAlt={`Guia: ${d.titulo}`}
+  ogAlt={`Artigo: ${d.titulo}`}
   ogTipo="article"
   artigo={{
     publicadoEm: d.publicadoEm,
@@ -73,9 +73,9 @@ const breadcrumb = {
         <nav class="art__trilha" aria-label="Você está em">
           <a href="/">Início</a>
           <span aria-hidden="true">/</span>
-          <a href="/blog/">Guias</a>
+          <a href="/blog/">Blog</a>
           <span aria-hidden="true">/</span>
-          <span>Checklist de compra</span>
+          <span aria-current="page">{d.titulo}</span>
         </nav>
 
         <div class="art__cab">
@@ -91,15 +91,15 @@ const breadcrumb = {
       </div>
     </header>
 
-    <section class="secao--compacta" aria-label="Conteúdo do guia">
+    <section class="secao--compacta" aria-label="Conteúdo do artigo">
       <div class="env art__grade">
         <div class="prosa art__prosa">
           <Content />
         </div>
 
-        <aside class="art__lateral" aria-label="Atalhos do guia">
+        <aside class="art__lateral" aria-label="Atalhos do artigo">
           <div class="art__check">
-            <p class="rotulo rotulo--terra">Use este guia</p>
+            <p class="rotulo rotulo--terra">Use este artigo</p>
             <h2>Leve perguntas, não suposições</h2>
             <p>Nas fichas, use o código do imóvel para pedir localização, disponibilidade, documentos e visita.</p>
             <a class="botao botao--primario" href="/imoveis/">Ver imóveis à venda</a>
@@ -112,7 +112,7 @@ const breadcrumb = {
               evento="blog_lead"
               variante="secundario"
               rotulo="Conversar pelo WhatsApp"
-              mensagem={`Oi, li o guia “${d.titulo}” e tenho uma dúvida sobre a busca por imóvel rural.`}
+              mensagem={`Oi, li o artigo “${d.titulo}” e tenho uma dúvida sobre a busca por imóvel rural.`}
             />
           </div>
         </aside>
@@ -144,11 +144,11 @@ const breadcrumb = {
 
     {
       imoveis.length > 0 && (
-        <section class="secao--compacta art__imoveis-env" aria-labelledby="imoveis-guia-titulo">
+        <section class="secao--compacta art__imoveis-env" aria-labelledby="imoveis-artigo-titulo">
           <div class="env">
             <div class="art__imoveis-cab">
-              <p class="rotulo rotulo--terra">Aplique o checklist</p>
-              <h2 id="imoveis-guia-titulo">Compare áreas disponíveis</h2>
+              <p class="rotulo rotulo--terra">Veja na prática</p>
+              <h2 id="imoveis-artigo-titulo">Compare áreas disponíveis</h2>
               <p class="peq secundario">Cada ficha identifica o que foi informado e o que ainda precisa ser confirmado.</p>
             </div>
             <div class="art__imoveis">

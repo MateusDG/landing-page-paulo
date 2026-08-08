@@ -102,7 +102,7 @@ cp .env.example .env
 
 ### 4. Jurídico — obrigatório
 
-- [ ] **Revisão por advogado** de `/privacidade`, `/termos`, dos guias e do
+- [ ] **Revisão por advogado** de `/privacidade`, `/termos`, dos artigos do blog e do
       glossário. O que está escrito descreve a prática corrente, mas prazos e
       obrigatoriedades mudam.
 - [ ] Autorização por escrito dos proprietários para publicar foto e
