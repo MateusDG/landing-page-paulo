@@ -3,11 +3,9 @@ import Editorial from '../layouts/Editorial.astro';
 import { corretor } from '../data/site';
 import { linkWhats } from '../lib/whatsapp';
 
-/* ▸ REVISAR com advogado antes de publicar. O texto abaixo descreve o que o
-   site EFETIVAMENTE faz, que é pouco, de propósito: não há cookie de
-   rastreio, não há pixel de rede social e não há formulário de contato. Se
-   você adicionar GA4, remarketing ou qualquer pixel, esta página precisa
-   mudar E um banner de consentimento passa a ser necessário. */
+/* ▸ REVISAR com advogado antes de publicar. O texto abaixo descreve o
+   rastreamento atualmente ativado: Google Tag Manager/Ads com consentimento,
+   cookie de preferência e métricas opcionais. */
 ---
 
 <Editorial
@@ -24,13 +22,18 @@ import { linkWhats } from '../lib/whatsapp';
   <h2>Quem é o responsável</h2>
   <p>
     {corretor.nome}, com atuação no Espírito Santo. Para assuntos de dados
-    pessoais, <a href={linkWhats({ origem: 'privacidade' })}>fale pelo WhatsApp</a>.
+    pessoais,
+    <a href={linkWhats({ origem: 'privacidade' })} data-evento="whats_legal" data-tipo="whatsapp" data-origem="privacidade">
+      fale pelo WhatsApp
+    </a>.
   </p>
 
   <h2>Que dados este site coleta</h2>
   <p>
-    O site não tem cadastro, login ou formulário de contato e não usa cookie
-    de rastreamento ou pixel de rede social.
+    O site não tem cadastro, login ou formulário de contato. Ele usa o Google
+    Tag Manager para carregar a medição do Google Ads e, quando configurado,
+    uma ferramenta de métricas. Essas tecnologias só são ativadas para
+    medição depois da escolha do visitante.
   </p>
   <ul>
     <li>
@@ -40,8 +43,20 @@ import { linkWhats } from '../lib/whatsapp';
     </li>
     <li>
       <strong>Métricas de uso agregadas e anônimas</strong>, quando a
-      ferramenta de análise estiver ativa. Sem cookie e sem identificação
-      individual.
+      ferramenta de análise estiver ativa e autorizada. O site registra eventos
+      como páginas acessadas, busca, compartilhamento e clique para iniciar uma
+      conversa no WhatsApp.
+    </li>
+    <li>
+      <strong>Cookie de preferência</strong>, chamado <code>valdecir_consent</code>,
+      usado para lembrar se o visitante aceitou ou recusou a medição. Ele não
+      identifica a pessoa.
+    </li>
+    <li>
+      <strong>Informações de clique de anúncios</strong>, quando a medição é
+      autorizada. O Google pode usar cookies e armazenamento local próprios,
+      como o Conversion Linker, para relacionar o clique no anúncio ao acesso
+      ao site e às ações marcadas como conversão.
     </li>
   </ul>
 
@@ -68,9 +83,10 @@ import { linkWhats } from '../lib/whatsapp';
 
   <h2>Por quanto tempo</h2>
   <p>
-    O site não armazena contatos. Conversas iniciadas no WhatsApp permanecem
-    no aplicativo até serem apagadas pelo usuário ou pelo responsável pelo
-    atendimento.
+    O site não armazena contatos em banco de dados. Conversas iniciadas no
+    WhatsApp permanecem no aplicativo até serem apagadas pelo usuário ou pelo
+    responsável pelo atendimento. O cookie de preferência permanece por até um
+    ano ou até ser removido pelo visitante.
   </p>
 
   <h2>Seus direitos</h2>

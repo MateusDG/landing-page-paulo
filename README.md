@@ -305,12 +305,25 @@ configurados com cache imutável na plataforma de hospedagem.
 
 ### Analytics
 
-O site sai sem nenhum rastreador. Se ligar o Umami (`PUBLIC_UMAMI_*`), ele não
-usa cookie e **dispensa banner de consentimento** — foi por isso que ele foi
-escolhido em vez do GA4. Se trocar por GA4 ou adicionar qualquer pixel, a
-página `/privacidade` precisa mudar **e** um banner passa a ser necessário.
+O site carrega o Google Tag Manager (`PUBLIC_GTM_ID`) em todas as páginas, mas
+inicia as categorias de anúncios e análise como `denied`. O visitante escolhe
+no banner se aceita a medição; a preferência fica no cookie técnico
+`valdecir_consent` por até um ano. O Conversion Linker e os cookies de anúncio
+só podem funcionar depois de uma escolha aceita.
 
-Evento já instrumentado: `whats_clique`.
+O evento editorial de cada CTA continua preservado (`lead_imovel`, `blog_lead`,
+`ficha_compartilhar` etc.). Elementos que levam a uma conversa comercial levam
+também `data-conversao="whats_clique"`, que emite um único evento canônico no
+`dataLayer`. O GTM usa esse evento para a conversão do Google Ads, evitando
+duplicidade entre os nomes de origem.
+
+O site mede a intenção de abrir o WhatsApp. Isso não confirma que a mensagem
+foi enviada. Para medir contato recebido, lead qualificado, visita e venda, é
+necessária uma integração posterior com WhatsApp Business/CRM e importação de
+conversões offline.
+
+Ao ativar ou alterar qualquer ferramenta de análise, atualize também
+`src/pages/privacidade.astro` e revise o comportamento de consentimento.
 
 O agregado de `briefing_envio` é inteligência de mercado: mostra qual
 finalidade e qual região têm demanda reprimida — ou seja, **onde captar**.

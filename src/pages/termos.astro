@@ -51,6 +51,9 @@ import { linkWhats } from '../lib/whatsapp';
 
   <h2>Contato</h2>
   <p>
-    Dúvidas sobre estes termos: <a href={linkWhats({ origem: 'termos' })}>fale pelo WhatsApp</a>.
+    Dúvidas sobre estes termos:
+    <a href={linkWhats({ origem: 'termos' })} data-evento="whats_legal" data-tipo="whatsapp" data-origem="termos">
+      fale pelo WhatsApp
+    </a>.
   </p>
 </Editorial>

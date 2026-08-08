@@ -19,6 +19,10 @@ const {
   href={linkWhats({ origem, mensagem })}
   target="_blank"
   rel="noopener"
+  data-evento="whats_clique"
+  data-conversao="whats_clique"
+  data-tipo="whatsapp"
+  data-origem={origem}
   aria-label={`Falar no WhatsApp pelo número ${numeroWhatsVisivel}`}
 >
   <span class="contato-whats__icone" aria-hidden="true">

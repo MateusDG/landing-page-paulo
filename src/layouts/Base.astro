@@ -102,6 +102,7 @@ const RUIDO =
 const umamiSrc = urlHttpsOpcional(PUBLIC_UMAMI_SRC, 'PUBLIC_UMAMI_SRC');
 const umamiId = PUBLIC_UMAMI_ID;
 const gtmId = PUBLIC_GTM_ID;
+const temRastreamento = Boolean(gtmId || (umamiSrc && umamiId));
 
 if (Boolean(umamiSrc) !== Boolean(umamiId)) {
   throw new Error('PUBLIC_UMAMI_SRC e PUBLIC_UMAMI_ID precisam ser preenchidos juntos.');
@@ -230,26 +231,73 @@ const jsonLdBase = {
     <JsonLd dados={jsonLd ? [jsonLdBase, ...(Array.isArray(jsonLd) ? jsonLd : [jsonLd])] : jsonLdBase} />
 
     {
-      umamiSrc && umamiId && (
-        <script defer src={umamiSrc} data-website-id={umamiId} is:inline />
+      temRastreamento && (
+        <script
+          is:inline
+          define:vars={{
+            gtmId: gtmId ?? '',
+            umamiSrc: umamiSrc ?? '',
+            umamiId: umamiId ?? '',
+          }}
+        >
+          (function () {
+            var CONSENT_COOKIE = 'valdecir_consent';
+            var consentCookie = document.cookie
+              .split('; ')
+              .find(function (item) { return item.indexOf(CONSENT_COOKIE + '=') === 0; });
+            var consentStatus = consentCookie ? consentCookie.split('=')[1] : '';
+            var consentGranted = consentStatus === 'accepted';
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function () {
+              window.dataLayer.push(arguments);
+            };
+            window.gtag('consent', 'default', {
+              ad_storage: consentGranted ? 'granted' : 'denied',
+              analytics_storage: consentGranted ? 'granted' : 'denied',
+              ad_user_data: consentGranted ? 'granted' : 'denied',
+              ad_personalization: consentGranted ? 'granted' : 'denied',
+              wait_for_update: 500,
+            });
+            window.gtag('js', new Date());
+
+            function loadUmami() {
+              if (!umamiSrc || !umamiId || document.querySelector('script[data-website-id="' + umamiId + '"]')) return;
+              var script = document.createElement('script');
+              script.defer = true;
+              script.src = umamiSrc;
+              script.dataset.websiteId = umamiId;
+              document.head.appendChild(script);
+            }
+
+            if (gtmId) {
+              window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+              var firstScript = document.getElementsByTagName('script')[0];
+              var gtmScript = document.createElement('script');
+              gtmScript.async = true;
+              gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
+              firstScript.parentNode.insertBefore(gtmScript, firstScript);
+            }
+
+            if (consentGranted) loadUmami();
+
+            window.__setSiteConsent = function (status) {
+              var granted = status === 'accepted';
+              var secureCookie = window.location.protocol === 'https:' ? '; Secure' : '';
+              document.cookie = CONSENT_COOKIE + '=' + status + '; Max-Age=31536000; Path=/; SameSite=Lax' + secureCookie;
+              window.gtag('consent', 'update', {
+                ad_storage: granted ? 'granted' : 'denied',
+                analytics_storage: granted ? 'granted' : 'denied',
+                ad_user_data: granted ? 'granted' : 'denied',
+                ad_personalization: granted ? 'granted' : 'denied',
+              });
+              window.dataLayer.push({ event: 'consent_update', consent_status: status });
+              if (granted) loadUmami();
+            };
+          })();
+        </script>
       )
     }
-
-    {/* O contêiner centraliza tags futuras no Google Tag Manager. */}
-    {gtmId && (
-      <script is:inline define:vars={{ gtmId }}>
-        (function (w, d, s, l, i) {
-          w[l] = w[l] || [];
-          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-          var f = d.getElementsByTagName(s)[0];
-          var j = d.createElement(s);
-          var dl = l !== 'dataLayer' ? '&l=' + l : '';
-          j.async = true;
-          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-          f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', gtmId);
-      </script>
-    )}
 
     {/* Marca a página como "com JS" antes da primeira pintura, para que as
         revelações não pisquem. Único script bloqueante do site. */}
@@ -259,17 +307,27 @@ const jsonLdBase = {
   </head>
 
   <body class={classe}>
-    {gtmId && (
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
-          height="0"
-          width="0"
-          style="display:none;visibility:hidden"
-          title="Google Tag Manager"
-        ></iframe>
-      </noscript>
-    )}
+    {
+      temRastreamento && (
+        <aside class="consentimento" data-consent-banner hidden aria-labelledby="consentimento-titulo">
+          <div class="consentimento__texto">
+            <p class="rotulo rotulo--terra" id="consentimento-titulo">Privacidade e medição</p>
+            <p>
+              Usamos um cookie para lembrar sua escolha e, se você permitir, medir acessos e resultados dos anúncios.
+              <a href="/privacidade/">Saiba como os dados são tratados.</a>
+            </p>
+          </div>
+          <div class="consentimento__acoes">
+            <button type="button" class="botao botao--secundario" data-consent-choice="rejected">
+              Recusar
+            </button>
+            <button type="button" class="botao botao--primario" data-consent-choice="accepted">
+              Aceitar medição
+            </button>
+          </div>
+        </aside>
+      )
+    }
     <div class="ruido" aria-hidden="true"></div>
     <a class="pular-para-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
@@ -309,22 +367,112 @@ const jsonLdBase = {
       }
 
       /* Analytics: um listener delegado para todo elemento com data-evento.
-         Funciona com Umami, GA4 ou qualquer coisa que exponha um global. */
+         Mantém o evento editorial e emite uma conversão comercial canônica para
+         o GTM quando o elemento representa uma saída para o WhatsApp. */
       document.addEventListener('click', (ev) => {
         const alvo = (ev.target as HTMLElement)?.closest<HTMLElement>('[data-evento]');
         if (!alvo) return;
         const nome = alvo.dataset.evento!;
         const dados = { ...alvo.dataset };
         delete dados.evento;
+        dados.pagina = window.location.pathname;
+        dados.tituloPagina = document.title;
+        dados.eventId = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
         (window as any).umami?.track?.(nome, dados);
         (window as any).gtag?.('event', nome, dados);
-        // O GTM escuta eventos personalizados diretamente no dataLayer.
-        // Assim, cliques de WhatsApp podem disparar conversões sem duplicar
-        // o carregamento da tag base do Google Ads.
         const dataLayer = ((window as any).dataLayer = (window as any).dataLayer || []);
         dataLayer.push({ event: nome, ...dados });
+
+        const conversao = alvo.dataset.conversao;
+        if (conversao && conversao !== nome) {
+          dataLayer.push({ event: conversao, eventoOrigem: nome, ...dados });
+        }
+      });
+
+      const banner = document.querySelector<HTMLElement>('[data-consent-banner]');
+      if (banner && !document.cookie.split('; ').some((item) => item.startsWith('valdecir_consent='))) {
+        banner.hidden = false;
+      }
+      banner?.addEventListener('click', (ev) => {
+        const alvo = (ev.target as HTMLElement).closest<HTMLElement>('[data-consent-choice]');
+        if (!alvo) return;
+        const escolha = alvo.dataset.consentChoice;
+        if (escolha !== 'accepted' && escolha !== 'rejected') return;
+        (window as any).__setSiteConsent?.(escolha);
+        banner.hidden = true;
       });
     </script>
+
+    <style>
+      .consentimento {
+        position: fixed;
+        inset-inline: var(--gutter);
+        bottom: var(--s-4);
+        z-index: var(--z-modal);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--s-5);
+        width: min(56rem, calc(100% - 2 * var(--gutter)));
+        margin-inline: auto;
+        padding: var(--s-4) var(--s-5);
+        border: var(--borda-forte);
+        background: color-mix(in srgb, var(--papel) 96%, transparent);
+        box-shadow: 0 1rem 3rem rgb(31 38 35 / 0.14);
+        backdrop-filter: blur(14px);
+      }
+
+      .consentimento[hidden] {
+        display: none;
+      }
+
+      .consentimento__texto {
+        display: grid;
+        gap: var(--s-1);
+      }
+
+      .consentimento__texto p {
+        margin: 0;
+      }
+
+      .consentimento__texto p:last-child {
+        max-width: 68ch;
+        color: var(--grafite-70);
+        font-size: var(--t-peq);
+        line-height: 1.45;
+      }
+
+      .consentimento__texto a {
+        color: var(--grafite);
+        text-underline-offset: 0.2em;
+      }
+
+      .consentimento__acoes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: var(--s-2);
+      }
+
+      @media (max-width: 700px) {
+        .consentimento {
+          inset-inline: var(--s-3);
+          bottom: var(--s-3);
+          grid-template-columns: 1fr;
+          gap: var(--s-3);
+          width: auto;
+          padding: var(--s-4);
+        }
+
+        .consentimento__acoes {
+          justify-content: stretch;
+        }
+
+        .consentimento__acoes .botao {
+          flex: 1;
+        }
+      }
+    </style>
 
   </body>
 </html>
