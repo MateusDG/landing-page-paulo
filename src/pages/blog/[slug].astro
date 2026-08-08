@@ -1,0 +1,350 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import Base from '../../layouts/Base.astro';
+import BotaoWhats from '../../components/BotaoWhats.astro';
+import FichaImovel from '../../components/FichaImovel.astro';
+import { dataCurta } from '../../lib/format';
+import { rotuloCategoriaBlog, tempoLeitura } from '../../lib/blog';
+import { imovelPublicado } from '../../lib/publicacao';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const leitura = tempoLeitura(post.body);
+const paginaUrl = new URL(Astro.url.pathname, Astro.site).href;
+const og = `/og/blog-${post.id}.png`;
+
+const imoveis = (await getCollection('imoveis'))
+  .filter((item) => imovelPublicado(item) && item.data.status === 'ativa')
+  .sort((a, b) => b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime())
+  .slice(0, 3);
+
+const artigoLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  '@id': `${paginaUrl}#artigo`,
+  url: paginaUrl,
+  mainEntityOfPage: paginaUrl,
+  headline: d.titulo,
+  description: d.descricao,
+  datePublished: d.publicadoEm.toISOString(),
+  dateModified: d.atualizadoEm.toISOString(),
+  author: { '@id': `${Astro.site}#corretor` },
+  publisher: { '@id': `${Astro.site}#corretor` },
+  image: new URL(og, Astro.site).href,
+  articleSection: rotuloCategoriaBlog(d.categoria),
+  keywords: d.palavrasChave.join(', '),
+  inLanguage: 'pt-BR',
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Guias', item: new URL('/blog/', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: d.titulo, item: paginaUrl },
+  ],
+};
+---
+
+<Base
+  titulo={d.tituloSeo}
+  descricao={d.descricao}
+  og={og}
+  ogAlt={`Guia: ${d.titulo}`}
+  ogTipo="article"
+  artigo={{
+    publicadoEm: d.publicadoEm,
+    atualizadoEm: d.atualizadoEm,
+    secao: rotuloCategoriaBlog(d.categoria),
+  }}
+  jsonLd={[artigoLd, breadcrumb]}
+>
+  <article class="art">
+    <header class="secao--compacta art__cab-env">
+      <div class="env">
+        <nav class="art__trilha" aria-label="Você está em">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <a href="/blog/">Guias</a>
+          <span aria-hidden="true">/</span>
+          <span>Checklist de compra</span>
+        </nav>
+
+        <div class="art__cab">
+          <p class="rotulo rotulo--terra">{rotuloCategoriaBlog(d.categoria)}</p>
+          <h1>{d.titulo}</h1>
+          <p class="lead">{d.resumo}</p>
+          <div class="art__meta rotulo rotulo--fraco">
+            <span>Publicado em <time datetime={d.publicadoEm.toISOString()}>{dataCurta(d.publicadoEm)}</time></span>
+            <span>Atualizado em <time datetime={d.atualizadoEm.toISOString()}>{dataCurta(d.atualizadoEm)}</time></span>
+            <span>{leitura} min de leitura</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="secao--compacta" aria-label="Conteúdo do guia">
+      <div class="env art__grade">
+        <div class="prosa art__prosa">
+          <Content />
+        </div>
+
+        <aside class="art__lateral" aria-label="Atalhos do guia">
+          <div class="art__check">
+            <p class="rotulo rotulo--terra">Use este guia</p>
+            <h2>Leve perguntas, não suposições</h2>
+            <p>Nas fichas, use o código do imóvel para pedir localização, disponibilidade, documentos e visita.</p>
+            <a class="botao botao--primario" href="/imoveis/">Ver imóveis à venda</a>
+          </div>
+
+          <div class="art__contato">
+            <p class="rotulo rotulo--fraco">Dúvida sobre a busca?</p>
+            <BotaoWhats
+              origem={`blog:${post.id}`}
+              evento="blog_lead"
+              variante="secundario"
+              rotulo="Conversar pelo WhatsApp"
+              mensagem={`Oi, li o guia “${d.titulo}” e tenho uma dúvida sobre a busca por imóvel rural.`}
+            />
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="secao--compacta art__fontes-env" aria-labelledby="fontes-titulo">
+      <div class="env art__fontes">
+        <div>
+          <p class="rotulo rotulo--terra">Referências</p>
+          <h2 id="fontes-titulo">Fontes consultadas</h2>
+          <p class="peq secundario">Links oficiais conferidos na atualização indicada neste artigo.</p>
+        </div>
+        <ol>
+          {
+            d.fontes.map((fonte, indice) => (
+              <li>
+                <span class="mono">{String(indice + 1).padStart(2, '0')}</span>
+                <p>
+                  <a href={fonte.url} target="_blank" rel="noopener noreferrer">{fonte.titulo}</a>
+                  <small>{fonte.orgao}</small>
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    {
+      imoveis.length > 0 && (
+        <section class="secao--compacta art__imoveis-env" aria-labelledby="imoveis-guia-titulo">
+          <div class="env">
+            <div class="art__imoveis-cab">
+              <p class="rotulo rotulo--terra">Aplique o checklist</p>
+              <h2 id="imoveis-guia-titulo">Compare áreas disponíveis</h2>
+              <p class="peq secundario">Cada ficha identifica o que foi informado e o que ainda precisa ser confirmado.</p>
+            </div>
+            <div class="art__imoveis">
+              {imoveis.map((imovel) => <FichaImovel imovel={imovel} />)}
+            </div>
+          </div>
+        </section>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .art__cab-env {
+    padding-top: var(--s-6);
+    border-bottom: var(--borda);
+  }
+
+  .art__trilha {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    margin-bottom: var(--s-7);
+    color: var(--grafite-40);
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    letter-spacing: var(--tracking-rotulo);
+    text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+
+  .art__trilha a {
+    color: var(--grafite-70);
+    text-decoration: none;
+  }
+
+  .art__trilha a:hover {
+    color: var(--terra);
+  }
+
+  .art__cab {
+    display: grid;
+    gap: var(--s-4);
+    max-width: 58rem;
+  }
+
+  .art__cab h1 {
+    max-width: 22ch;
+    font-size: var(--t-h1);
+  }
+
+  .art__cab .lead {
+    max-width: 54ch;
+  }
+
+  .art__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    padding-top: var(--s-4);
+    border-top: var(--borda);
+  }
+
+  .art__grade {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(260px, 3fr);
+    gap: clamp(var(--s-7), 7vw, var(--s-9));
+    align-items: start;
+  }
+
+  .art__prosa {
+    max-width: 66ch;
+    font-size: clamp(1.04rem, 0.35vw + 0.98rem, 1.13rem);
+  }
+
+  .art__prosa :global(h2) {
+    scroll-margin-top: var(--s-7);
+  }
+
+  .art__lateral {
+    display: grid;
+    gap: var(--s-6);
+    position: sticky;
+    top: var(--s-6);
+  }
+
+  .art__check {
+    display: grid;
+    gap: var(--s-4);
+    padding-block: var(--s-5);
+    border-block: var(--borda);
+    border-top: var(--borda-2);
+  }
+
+  .art__check h2 {
+    font-size: var(--t-h3);
+    max-width: 18ch;
+  }
+
+  .art__check p:not(.rotulo) {
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    line-height: 1.6;
+  }
+
+  .art__check .botao,
+  .art__contato :global(.botao) {
+    width: 100%;
+  }
+
+  .art__contato {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .art__fontes-env {
+    border-block: var(--borda);
+    background: var(--papel-2);
+  }
+
+  .art__fontes {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .art__fontes h2 {
+    margin-block: var(--s-3);
+  }
+
+  .art__fontes ol {
+    border-top: var(--borda-2);
+  }
+
+  .art__fontes li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--s-3);
+    padding-block: var(--s-4);
+    border-bottom: var(--borda-f);
+  }
+
+  .art__fontes li > span {
+    color: var(--terra);
+    font-size: var(--t-micro);
+  }
+
+  .art__fontes li p {
+    display: grid;
+    gap: var(--s-1);
+  }
+
+  .art__fontes a {
+    font-weight: 600;
+  }
+
+  .art__fontes small {
+    color: var(--grafite-70);
+    font-size: var(--t-micro);
+  }
+
+  .art__imoveis-env {
+    border-bottom: var(--borda);
+  }
+
+  .art__imoveis-cab {
+    display: grid;
+    gap: var(--s-3);
+    margin-bottom: var(--s-7);
+  }
+
+  .art__imoveis-cab h2 {
+    max-width: 18ch;
+  }
+
+  .art__imoveis {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-7) var(--gutter);
+  }
+
+  @media (max-width: 1000px) {
+    .art__grade,
+    .art__fontes {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-7);
+    }
+
+    .art__lateral {
+      position: static;
+      max-width: 420px;
+    }
+
+    .art__imoveis {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

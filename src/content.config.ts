@@ -153,4 +153,45 @@ const diario = defineCollection({
   }),
 });
 
-export const collections = { imoveis, diario };
+const urlFonte = z
+  .string()
+  .refine((valor) => {
+    try {
+      return new URL(valor).protocol === 'https:';
+    } catch {
+      return false;
+    }
+  }, 'a fonte precisa ter uma URL HTTPS válida');
+
+/* Guias educativos têm rota própria, resumo de busca e fontes obrigatórias.
+   Isso evita publicar texto genérico ou orientação sensível sem referência. */
+const blog = defineCollection({
+  loader: glob({ base: './src/content/blog', pattern: '**/*.md' }),
+  schema: z
+    .object({
+      titulo: z.string().min(24).max(90),
+      tituloSeo: z.string().min(35).max(62),
+      descricao: z.string().min(120).max(170),
+      resumo: z.string().min(80).max(260),
+      categoria: z.enum(['compra', 'documentacao', 'visita', 'uso-da-terra']),
+      publicadoEm: z.coerce.date(),
+      atualizadoEm: z.coerce.date(),
+      destaque: z.boolean().default(false),
+      palavrasChave: z.array(z.string().min(3)).min(2).max(8),
+      fontes: z
+        .array(
+          z.object({
+            titulo: z.string().min(8),
+            orgao: z.string().min(2),
+            url: urlFonte,
+          }),
+        )
+        .min(2, 'todo guia precisa citar pelo menos duas fontes verificáveis'),
+    })
+    .refine((v) => v.atualizadoEm >= v.publicadoEm, {
+      path: ['atualizadoEm'],
+      message: 'a atualização não pode ser anterior à publicação',
+    }),
+});
+
+export const collections = { imoveis, diario, blog };

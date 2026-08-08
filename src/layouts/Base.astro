@@ -26,6 +26,8 @@ interface Props {
   descricao?: string;
   /** Caminho relativo da imagem OG. Padrão: a OG genérica do site. */
   og?: string;
+  /** Descrição da imagem social; específica por imóvel ou artigo. */
+  ogAlt?: string;
   /** Some da indexação (páginas legais, obrigado). */
   noindex?: boolean;
   ogTipo?: 'website' | 'article' | 'product';
@@ -36,6 +38,11 @@ interface Props {
     disponibilidade: 'in stock' | 'pending' | 'out of stock';
     categoria: string;
     atualizadoEm?: Date;
+  };
+  artigo?: {
+    publicadoEm: Date;
+    atualizadoEm: Date;
+    secao: string;
   };
   barraMobile?: {
     imovel?: string;
@@ -51,10 +58,12 @@ const {
   titulo,
   descricao = meta.descricao,
   og = '/og/padrao.png',
+  ogAlt = `Imóveis rurais com ${corretor.nome}`,
   noindex = false,
   ogTipo = 'website',
   jsonLd,
   produto,
+  artigo,
   barraMobile,
   class: classe = '',
 } = Astro.props;
@@ -165,7 +174,7 @@ const jsonLdBase = {
     <meta property="og:image" content={ogUrl} />
     <meta property="og:image:secure_url" content={ogUrl} />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content={`Imóveis rurais com ${corretor.nome}`} />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -189,6 +198,16 @@ const jsonLdBase = {
           {produto.atualizadoEm && (
             <meta property="og:updated_time" content={produto.atualizadoEm.toISOString()} />
           )}
+        </>
+      )
+    }
+
+    {
+      artigo && (
+        <>
+          <meta property="article:published_time" content={artigo.publicadoEm.toISOString()} />
+          <meta property="article:modified_time" content={artigo.atualizadoEm.toISOString()} />
+          <meta property="article:section" content={artigo.secao} />
         </>
       )
     }

@@ -165,7 +165,14 @@ function rotuloFinalidade(f: string) {
   </p>
 
   <Titulo class="fi__titulo">
-    <a href={href} class="fi__link">{d.titulo}</a>
+    <a
+      href={href}
+      class="fi__link"
+      data-evento="imovel_abrir"
+      data-origem="card-carteira"
+      data-imovel={d.codigo}
+      data-municipio={d.municipio}
+    >{d.titulo}</a>
   </Titulo>
 
   <dl class="fi__dados">
@@ -184,7 +191,7 @@ function rotuloFinalidade(f: string) {
       {fmtPreco(d.preco)}
     </p>
     <span class="link-seta fi__cta">
-      Ver ficha <span class="link-seta__seta" aria-hidden="true">→</span>
+      Ver fotos e detalhes <span class="link-seta__seta" aria-hidden="true">→</span>
     </span>
   </footer>
 </article>

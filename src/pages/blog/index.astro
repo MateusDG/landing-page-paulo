@@ -1,0 +1,293 @@
+---
+import { getCollection } from 'astro:content';
+
+import Base from '../../layouts/Base.astro';
+import CabecalhoSecao from '../../components/CabecalhoSecao.astro';
+import BotaoWhats from '../../components/BotaoWhats.astro';
+import { dataCurta } from '../../lib/format';
+import { rotuloCategoriaBlog, tempoLeitura } from '../../lib/blog';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime(),
+);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  '@id': `${new URL('/blog/', Astro.site).href}#blog`,
+  url: new URL('/blog/', Astro.site).href,
+  name: 'Guias para comprar imóveis rurais',
+  description: 'Orientações práticas e verificadas para pesquisar, visitar e comprar imóveis rurais no Espírito Santo.',
+  publisher: { '@id': `${Astro.site}#corretor` },
+  blogPost: posts.map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.data.titulo,
+    description: post.data.descricao,
+    datePublished: post.data.publicadoEm.toISOString(),
+    dateModified: post.data.atualizadoEm.toISOString(),
+    url: new URL(`/blog/${post.id}/`, Astro.site).href,
+    author: { '@id': `${Astro.site}#corretor` },
+    inLanguage: 'pt-BR',
+  })),
+  inLanguage: 'pt-BR',
+};
+---
+
+<Base
+  titulo="Guias para comprar imóveis rurais no Espírito Santo"
+  descricao="Guias para pesquisar, visitar e comprar sítios, chácaras, fazendas e terrenos rurais com mais clareza sobre documentos, acesso, água e uso da área."
+  og="/og/blog.png"
+  ogAlt="Guias para compradores de imóveis rurais no Espírito Santo"
+  jsonLd={jsonLd}
+>
+  <section class="secao--compacta bl__cab-env">
+    <div class="env">
+      <CabecalhoSecao
+        kicker="Caderno do comprador"
+        titulo="Guias para escolher uma área rural"
+        subtitulo="Conteúdo direto para organizar a busca, preparar a visita e saber o que ainda precisa ser confirmado antes de negociar."
+        as="h1"
+      />
+    </div>
+  </section>
+
+  <section class="secao--compacta" aria-labelledby="artigos-titulo">
+    <div class="env">
+      <div class="bl__titulo-lista">
+        <p class="rotulo rotulo--terra">Leitura prática</p>
+        <h2 id="artigos-titulo">Comece pela dúvida mais importante</h2>
+      </div>
+
+      <div class="bl__lista">
+        {
+          posts.map((post, indice) => (
+            <article class:list={['bl__card', indice === 0 && 'bl__card--destaque']}>
+              <div class="bl__numero mono" aria-hidden="true">
+                {String(indice + 1).padStart(2, '0')}
+              </div>
+              <div class="bl__card-corpo">
+                <p class="rotulo rotulo--terra">{rotuloCategoriaBlog(post.data.categoria)}</p>
+                <h3 class="bl__card-titulo">
+                  <a
+                    href={`/blog/${post.id}/`}
+                    data-evento="blog_abrir"
+                    data-origem="blog-lista"
+                    data-artigo={post.id}
+                  >
+                    {post.data.titulo}
+                  </a>
+                </h3>
+                <p class="bl__resumo">{post.data.resumo}</p>
+              </div>
+              <div class="bl__meta">
+                <span>Atualizado em {dataCurta(post.data.atualizadoEm)}</span>
+                <span>{tempoLeitura(post.body)} min de leitura</span>
+                <span class="link-seta">Ler o guia <span class="link-seta__seta" aria-hidden="true">→</span></span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="secao--compacta bl__criterio-env" aria-labelledby="criterio-titulo">
+    <div class="env bl__criterio">
+      <div>
+        <p class="rotulo rotulo--terra">Critério editorial</p>
+        <h2 id="criterio-titulo">Informação útil, com limite claro</h2>
+      </div>
+      <div class="bl__criterio-itens">
+        <p><span class="mono">01</span> Fontes públicas são indicadas no fim de cada guia.</p>
+        <p><span class="mono">02</span> Cadastro, certidão e visita são tratados como verificações diferentes.</p>
+        <p><span class="mono">03</span> O conteúdo orienta perguntas; profissionais e órgãos competentes validam cada caso.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao--compacta bl__fecho-env">
+    <div class="env bl__fecho">
+      <div>
+        <p class="rotulo rotulo--terra">Depois da leitura</p>
+        <h2>Compare o checklist com áreas reais</h2>
+        <p class="lead">Veja fotos, preço, acesso e os pontos que ainda precisam ser confirmados em cada ficha.</p>
+      </div>
+      <div class="bl__acoes">
+        <a class="botao botao--primario" href="/imoveis/">Ver imóveis à venda</a>
+        <BotaoWhats
+          origem="blog-index"
+          evento="blog_lead"
+          variante="secundario"
+          rotulo="Tirar uma dúvida"
+          mensagem="Oi, vim pela área de guias do site e tenho uma dúvida sobre a busca por imóvel rural."
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .bl__cab-env {
+    padding-top: var(--s-7);
+    border-bottom: var(--borda);
+  }
+
+  .bl__titulo-lista {
+    display: grid;
+    gap: var(--s-3);
+    margin-bottom: var(--s-7);
+  }
+
+  .bl__titulo-lista h2 {
+    max-width: 20ch;
+  }
+
+  .bl__lista {
+    border-top: var(--borda-2);
+  }
+
+  .bl__card {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) minmax(190px, 0.32fr);
+    gap: var(--s-5);
+    padding-block: var(--s-6);
+    border-bottom: var(--borda);
+    position: relative;
+  }
+
+  .bl__numero {
+    color: var(--terra);
+    font-size: var(--t-micro);
+    padding-top: var(--s-1);
+  }
+
+  .bl__card-corpo {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .bl__card-titulo {
+    max-width: 28ch;
+    font-size: var(--t-h2);
+  }
+
+  .bl__card-titulo a {
+    text-decoration: none;
+  }
+
+  .bl__card-titulo a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .bl__card:has(a:hover) .bl__card-titulo,
+  .bl__card:has(a:focus-visible) .bl__card-titulo,
+  .bl__card:has(a:hover) .link-seta {
+    color: var(--terra);
+  }
+
+  .bl__resumo {
+    max-width: 58ch;
+    color: var(--grafite-70);
+    line-height: 1.6;
+  }
+
+  .bl__meta {
+    display: grid;
+    align-content: start;
+    gap: var(--s-2);
+    color: var(--grafite-70);
+    font-family: var(--f-mono);
+    font-size: var(--t-micro);
+    line-height: 1.5;
+  }
+
+  .bl__meta .link-seta {
+    margin-top: var(--s-3);
+    font-family: var(--f-texto);
+  }
+
+  .bl__criterio-env {
+    border-block: var(--borda);
+    background: var(--papel-2);
+  }
+
+  .bl__criterio {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--s-8);
+  }
+
+  .bl__criterio h2 {
+    margin-top: var(--s-3);
+    max-width: 15ch;
+  }
+
+  .bl__criterio-itens {
+    border-top: var(--borda-2);
+  }
+
+  .bl__criterio-itens p {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--s-3);
+    padding-block: var(--s-4);
+    border-bottom: var(--borda-f);
+  }
+
+  .bl__criterio-itens span {
+    color: var(--terra);
+    font-size: var(--t-micro);
+  }
+
+  .bl__fecho-env {
+    border-bottom: var(--borda);
+  }
+
+  .bl__fecho {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(280px, 4fr);
+    gap: var(--s-8);
+    align-items: end;
+  }
+
+  .bl__fecho h2 {
+    margin-top: var(--s-3);
+  }
+
+  .bl__fecho .lead {
+    margin-top: var(--s-4);
+    max-width: 48ch;
+  }
+
+  .bl__acoes {
+    display: flex;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 800px) {
+    .bl__card,
+    .bl__criterio,
+    .bl__fecho {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-5);
+    }
+
+    .bl__card {
+      padding-block: var(--s-5);
+    }
+
+    .bl__numero {
+      padding: 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .bl__acoes,
+    .bl__acoes :global(.botao) {
+      width: 100%;
+    }
+  }
+</style>

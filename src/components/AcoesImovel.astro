@@ -1,0 +1,187 @@
+---
+import BotaoWhats from './BotaoWhats.astro';
+import { dataCurta } from '../lib/format';
+
+interface Props {
+  codigo: string;
+  titulo: string;
+  municipio: string;
+  areaHa?: number;
+  atualizadoEm: Date;
+  origem: string;
+  modo?: 'compacto' | 'completo';
+}
+
+const {
+  codigo,
+  titulo,
+  municipio,
+  areaHa,
+  atualizadoEm,
+  origem,
+  modo = 'completo',
+} = Astro.props;
+
+const url = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<div class:list={['ai', `ai--${modo}`]} data-acoes-imovel>
+  {
+    modo === 'completo' && (
+      <div class="ai__cabecalho">
+        <p class="rotulo rotulo--terra">Próximo passo</p>
+        <p class="ai__chamada">Escolha o que você quer confirmar sobre esta área.</p>
+      </div>
+    )
+  }
+
+  <div class="ai__botoes">
+    <BotaoWhats
+      imovel={codigo}
+      titulo={titulo}
+      areaHa={areaHa}
+      municipio={municipio}
+      intencao="detalhes"
+      origem={`${origem}:detalhes`}
+      evento="lead_imovel"
+      rotulo="Pedir localização e detalhes"
+    />
+    <BotaoWhats
+      imovel={codigo}
+      titulo={titulo}
+      areaHa={areaHa}
+      municipio={municipio}
+      intencao="visita"
+      origem={`${origem}:visita`}
+      evento="lead_imovel"
+      variante="secundario"
+      rotulo="Agendar visita"
+    />
+    <button
+      type="button"
+      class="botao botao--secundario ai__compartilhar"
+      data-compartilhar-ficha
+      data-url={url}
+      data-titulo={titulo}
+      data-texto={`${titulo} · ${municipio}/ES · referência ${codigo}`}
+      data-evento="ficha_compartilhar"
+      data-origem={`${origem}:compartilhar`}
+      data-imovel={codigo}
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.2" />
+        <circle cx="11.5" cy="3.5" r="1.5" stroke="currentColor" stroke-width="1.2" />
+        <circle cx="11.5" cy="12.5" r="1.5" stroke="currentColor" stroke-width="1.2" />
+        <path d="m5.3 7.2 4.9-2.9M5.3 8.8l4.9 2.9" stroke="currentColor" stroke-width="1.2" />
+      </svg>
+      <span data-compartilhar-rotulo>Compartilhar ficha</span>
+    </button>
+  </div>
+
+  <p class="ai__nota">
+    A mensagem leva a referência <strong class="mono">{codigo}</strong> para agilizar o atendimento.
+    Anúncio atualizado em <time datetime={atualizadoEm.toISOString()}>{dataCurta(atualizadoEm)}</time>.
+  </p>
+  <p class="so-leitor" role="status" aria-live="polite" data-compartilhar-status></p>
+</div>
+
+<style>
+  .ai {
+    display: grid;
+    gap: var(--s-3);
+    width: 100%;
+  }
+
+  .ai__cabecalho {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .ai__chamada {
+    max-width: 42ch;
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    line-height: 1.5;
+  }
+
+  .ai__botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+
+  .ai__nota {
+    max-width: 68ch;
+    color: var(--grafite-70);
+    font-size: var(--t-micro);
+    line-height: 1.55;
+  }
+
+  .ai__nota strong {
+    color: var(--grafite);
+    font-size: 0.95em;
+  }
+
+  .ai--compacto {
+    gap: var(--s-2);
+  }
+
+  .ai--compacto .ai__nota {
+    max-width: none;
+  }
+
+  @media (max-width: 700px) {
+    .ai__botoes {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ai__botoes :global(.botao),
+    .ai__compartilhar {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  async function copiarTexto(texto: string): Promise<boolean> {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(texto);
+      return true;
+    }
+
+    window.prompt('Copie o link desta ficha:', texto);
+    return false;
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-compartilhar-ficha]').forEach((botao) => {
+    if (botao.dataset.iniciado === 'true') return;
+    botao.dataset.iniciado = 'true';
+
+    botao.addEventListener('click', async () => {
+      const url = botao.dataset.url ?? window.location.href;
+      const title = botao.dataset.titulo ?? document.title;
+      const text = botao.dataset.texto ?? title;
+      const raiz = botao.closest<HTMLElement>('[data-acoes-imovel]');
+      const status = raiz?.querySelector<HTMLElement>('[data-compartilhar-status]');
+      const rotulo = botao.querySelector<HTMLElement>('[data-compartilhar-rotulo]');
+
+      try {
+        if (navigator.share) {
+          await navigator.share({ title, text, url });
+          if (status) status.textContent = 'Opções de compartilhamento abertas.';
+        } else {
+          const copiado = await copiarTexto(url);
+          if (rotulo) rotulo.textContent = copiado ? 'Link copiado' : 'Compartilhar ficha';
+          if (status) status.textContent = copiado ? 'Link da ficha copiado.' : 'Link exibido para cópia.';
+          window.setTimeout(() => {
+            if (rotulo) rotulo.textContent = 'Compartilhar ficha';
+          }, 2400);
+        }
+      } catch (erro) {
+        if (erro instanceof DOMException && erro.name === 'AbortError') return;
+        if (status) status.textContent = 'Não foi possível compartilhar. Copie o endereço desta página.';
+      }
+    });
+  });
+</script>

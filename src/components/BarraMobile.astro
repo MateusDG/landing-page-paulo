@@ -23,7 +23,7 @@ const {
   origem = imovel ? `barra-mobile:${imovel}` : 'barra-mobile',
 } = Astro.props;
 const contextual = Boolean(imovel);
-const href = linkWhats({ origem, imovel, titulo, areaHa, municipio });
+const href = linkWhats({ origem, imovel, titulo, areaHa, municipio, intencao: contextual ? 'interesse' : undefined });
 ---
 
 <div class="bm">
@@ -39,7 +39,7 @@ const href = linkWhats({ origem, imovel, titulo, areaHa, municipio });
     data-origem={origem}
     data-imovel={imovel}
   >
-    <span class="rotulo">WhatsApp</span>
+    <span class="rotulo">{contextual ? 'Tenho interesse' : 'WhatsApp'}</span>
   </a>
 </div>
 

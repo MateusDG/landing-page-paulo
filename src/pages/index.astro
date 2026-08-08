@@ -16,6 +16,7 @@ import { territorios, CONTORNO_ES, VIEWBOX_ES } from '../data/territorios';
 import { dataCurta, areas as fmtAreas } from '../lib/format';
 import { formatarArea } from '../lib/unidades';
 import { imovelPublicado } from '../lib/publicacao';
+import { rotuloCategoriaBlog, tempoLeitura } from '../lib/blog';
 
 const imoveis = (await getCollection('imoveis')).filter(imovelPublicado).sort(
   (a, b) => b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime(),
@@ -47,6 +48,11 @@ const areas = naCarteira
 const ultimaAtualizacao = imoveis
   .map((i) => i.data.atualizadoEm)
   .sort((a, b) => b.getTime() - a.getTime())[0];
+
+const guias = (await getCollection('blog')).sort(
+  (a, b) => b.data.atualizadoEm.getTime() - a.data.atualizadoEm.getTime(),
+);
+const guiaDestaque = guias.find((guia) => guia.data.destaque) ?? guias[0];
 
 const contagemPorRegiao = Object.fromEntries(
   territorios.map((t) => [t.slug, ativas.filter((i) => i.data.regiao === t.slug).length]),
@@ -187,8 +193,43 @@ const jsonLd = [
     </div>
   </section>
 
-  {/* ============================================== 07 · QUEM SOU EU ===== */}
-  <section class="secao secao--papel2 secao--filete" id="sobre" aria-labelledby="sobre-titulo">
+  {/* ========================================= 07 · GUIA DO COMPRADOR ===== */}
+  {
+    guiaDestaque && (
+      <section class="secao secao--papel2 secao--filete" aria-labelledby="guia-titulo">
+        <div class="env guia-home">
+          <div class="guia-home__texto">
+            <p class="rotulo rotulo--terra">Caderno do comprador</p>
+            <h2 id="guia-titulo">{guiaDestaque.data.titulo}</h2>
+            <p class="lead">{guiaDestaque.data.resumo}</p>
+            <div class="guia-home__meta rotulo rotulo--fraco">
+              <span>{rotuloCategoriaBlog(guiaDestaque.data.categoria)}</span>
+              <span>{tempoLeitura(guiaDestaque.body)} min de leitura</span>
+            </div>
+            <a
+              class="botao botao--primario"
+              href={`/blog/${guiaDestaque.id}/`}
+              data-evento="blog_abrir"
+              data-origem="home-guia"
+              data-artigo={guiaDestaque.id}
+            >Ler o checklist</a>
+          </div>
+
+          <aside class="guia-home__perguntas" aria-label="Perguntas respondidas pelo guia">
+            <p class="rotulo rotulo--fraco">O que você vai conferir</p>
+            <ol>
+              <li><span class="mono">01</span><p>O que observar antes e durante a visita.</p></li>
+              <li><span class="mono">02</span><p>Como diferenciar matrícula, CCIR, CAR e Cafir.</p></li>
+              <li><span class="mono">03</span><p>Quais perguntas fazer antes da proposta ou do sinal.</p></li>
+            </ol>
+          </aside>
+        </div>
+      </section>
+    )
+  }
+
+  {/* ============================================== 08 · QUEM SOU EU ===== */}
+  <section class="secao secao--filete" id="sobre" aria-labelledby="sobre-titulo">
     <div class="env sobre">
       <div class="sobre__retrato">
         {/* Placeholder do retrato: enquanto não há foto autoral, um croqui
@@ -374,6 +415,63 @@ const jsonLd = [
   }
 
   /* ---- 07 Sobre --------------------------------------------------------- */
+  .guia-home {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(280px, 4fr);
+    gap: clamp(var(--s-7), 7vw, var(--s-9));
+    align-items: start;
+  }
+
+  .guia-home__texto {
+    display: grid;
+    gap: var(--s-4);
+    justify-items: start;
+  }
+
+  .guia-home__texto h2 {
+    max-width: 22ch;
+  }
+
+  .guia-home__texto .lead {
+    max-width: 52ch;
+  }
+
+  .guia-home__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    padding-top: var(--s-3);
+    border-top: var(--borda);
+  }
+
+  .guia-home__perguntas {
+    padding-top: var(--s-4);
+    border-top: var(--borda-2);
+  }
+
+  .guia-home__perguntas ol {
+    margin-top: var(--s-3);
+  }
+
+  .guia-home__perguntas li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--s-3);
+    padding-block: var(--s-4);
+    border-bottom: var(--borda-f);
+  }
+
+  .guia-home__perguntas span {
+    color: var(--terra);
+    font-size: var(--t-micro);
+  }
+
+  .guia-home__perguntas p {
+    color: var(--grafite-70);
+    font-size: var(--t-peq);
+    line-height: 1.55;
+  }
+
   .sobre {
     display: grid;
     grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
@@ -407,7 +505,8 @@ const jsonLd = [
       gap: var(--s-7);
     }
 
-    .sobre {
+    .sobre,
+    .guia-home {
       grid-template-columns: minmax(0, 1fr);
     }
 

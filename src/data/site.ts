@@ -13,6 +13,7 @@ export const corretor = {
 export const navPrincipal = [
   { rotulo: 'Imóveis', href: '/imoveis/' },
   { rotulo: 'Regiões', href: '/#regioes' },
+  { rotulo: 'Guias', href: '/blog/' },
   { rotulo: 'Quero vender', href: '/quero-vender/' },
 ] as const;
 
@@ -29,6 +30,7 @@ export const navRodape = {
     { rotulo: 'Litoral e Franja', href: '/regiao/litoral-e-franja/' },
   ],
   site: [
+    { rotulo: 'Guias para compradores', href: '/blog/' },
     { rotulo: 'Diário de campo', href: '/diario/' },
     { rotulo: 'Quero vender minha área', href: '/quero-vender/' },
     { rotulo: 'Sobre', href: '/sobre/' },

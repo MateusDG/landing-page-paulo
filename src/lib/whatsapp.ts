@@ -20,6 +20,8 @@ export interface ContextoWhats {
   titulo?: string;
   areaHa?: number;
   municipio?: string;
+  /** Próximo passo escolhido pelo visitante. Padroniza mensagem e medição. */
+  intencao?: 'detalhes' | 'visita' | 'documentos' | 'interesse';
   /** De onde na página o clique veio, vira a ref rastreável. */
   origem: string;
   /** Substitui o corpo padrão quando a mensagem precisa ser outra. */
@@ -40,6 +42,14 @@ function montarTexto(ctx: ContextoWhats): string {
       ? `“${ctx.titulo}” (${ctx.imovel})`
       : `a área ${ctx.imovel}`;
     linhas.push(local ? `Quero falar sobre ${identificacao}, ${local}.` : `Quero falar sobre ${identificacao}.`);
+
+    const porIntencao = {
+      detalhes: 'Quero confirmar a localização aproximada, a disponibilidade e as condições de venda.',
+      visita: 'Quero saber como agendar uma visita e quais horários estão disponíveis.',
+      documentos: 'Quero saber quais documentos e informações já estão disponíveis para conferência.',
+      interesse: 'Tenho interesse e quero entender os próximos passos para conhecer a área.',
+    } as const;
+    if (ctx.intencao) linhas.push(porIntencao[ctx.intencao]);
   } else {
     linhas.push('Queria conversar sobre área rural.');
   }

@@ -135,7 +135,7 @@ export function svgOg(o: BaseOg): string {
   ${(o.meta ?? [])
     .map(
       (m, i) =>
-        `<text x="${M + i * 250}" y="${OG_ALTURA - M - 20}" font-family="${MONO}" font-size="17" letter-spacing="1.6" fill="${COR.grafite40}">${esc(m.rotulo.toUpperCase())}  <tspan fill="${COR.grafite}">${esc(m.valor)}</tspan></text>`,
+        `<text x="${M + i * 330}" y="${OG_ALTURA - M - 20}" font-family="${MONO}" font-size="17" letter-spacing="1.6" fill="${COR.grafite40}">${esc(m.rotulo.toUpperCase())}  <tspan fill="${COR.grafite}">${esc(m.valor)}</tspan></text>`,
     )
     .join('\n  ')}
   ${

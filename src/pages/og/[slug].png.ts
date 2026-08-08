@@ -7,6 +7,8 @@ import { territorios, CONTORNO_ES, VIEWBOX_ES, rotuloTerritorio } from '../../da
 import { formatarArea } from '../../lib/unidades';
 import { preco, mesAno, areas as fmtAreas } from '../../lib/format';
 import { imovelPublicado } from '../../lib/publicacao';
+import { dataCurta } from '../../lib/format';
+import { rotuloCategoriaBlog, tempoLeitura } from '../../lib/blog';
 
 /* Uma rota, três famílias de imagem: a padrão do site, uma por imóvel e uma
    por região. Todas rasterizadas no build, nenhuma requisição em runtime. */
@@ -24,6 +26,7 @@ interface Params {
 
 export async function getStaticPaths() {
   const imoveis = (await getCollection('imoveis')).filter(imovelPublicado);
+  const posts = await getCollection('blog');
 
   const rotas: { params: { slug: string }; props: Params }[] = [
     {
@@ -36,6 +39,20 @@ export async function getStaticPaths() {
         meta: [
           { rotulo: 'Regiões', valor: '4' },
           { rotulo: 'Atendimento', valor: 'direto' },
+        ],
+      },
+    },
+    {
+      params: { slug: 'blog' },
+      props: {
+        kicker: 'Caderno do comprador · Espírito Santo',
+        titulo: 'Guias para escolher um imóvel rural.',
+        referencia: 'Informação prática',
+        croqui: CONTORNO_ES,
+        croquiViewBox: VIEWBOX_ES,
+        meta: [
+          { rotulo: 'Temas', valor: 'visita e documentos' },
+          { rotulo: 'Fontes', valor: 'indicadas' },
         ],
       },
     },
@@ -82,6 +99,23 @@ export async function getStaticPaths() {
         meta: [
           { rotulo: 'Municípios', valor: String(t.municipios.length) },
           { rotulo: 'Em carteira', valor: fmtAreas(daRegiao.length) },
+        ],
+      },
+    });
+  }
+
+  for (const post of posts) {
+    rotas.push({
+      params: { slug: `blog-${post.id}` },
+      props: {
+        kicker: rotuloCategoriaBlog(post.data.categoria),
+        referencia: 'Guia do comprador',
+        titulo: post.data.tituloSeo,
+        croqui: CONTORNO_ES,
+        croquiViewBox: VIEWBOX_ES,
+        meta: [
+          { rotulo: 'Atualizado', valor: dataCurta(post.data.atualizadoEm) },
+          { rotulo: 'Leitura', valor: `${tempoLeitura(post.body)} min` },
         ],
       },
     });

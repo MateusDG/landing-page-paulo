@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Croqui from '../../components/Croqui.astro';
 import FichaTecnica from '../../components/FichaTecnica.astro';
 import BotaoWhats from '../../components/BotaoWhats.astro';
+import AcoesImovel from '../../components/AcoesImovel.astro';
 import GaleriaImovel from '../../components/GaleriaImovel.astro';
 import FichaImovel from '../../components/FichaImovel.astro';
 import CotaDimensional from '../../components/CotaDimensional.astro';
@@ -247,13 +248,14 @@ const breadcrumb = {
               {
                 !vendida && (
                   <div class="im__acoes">
-                    <BotaoWhats
-                      imovel={d.codigo}
+                    <AcoesImovel
+                      codigo={d.codigo}
                       titulo={d.titulo}
                       areaHa={areaHa ?? undefined}
                       municipio={d.municipio}
-                      origem={`imovel:${d.codigo}`}
-                      rotulo="Perguntar sobre este imóvel"
+                      atualizadoEm={d.atualizadoEm}
+                      origem={`imovel-topo:${d.codigo}`}
+                      modo="compacto"
                     />
                   </div>
                 )
@@ -333,6 +335,9 @@ const breadcrumb = {
           <h2 class="im__h2" id="confirmar-titulo">O que confirmar antes de negociar</h2>
           <p class="peq secundario im__falta-intro">
             Estes pontos são apresentados para orientar a visita e a conferência documental.
+            <a href="/blog/o-que-verificar-antes-de-comprar-imovel-rural/">
+              Veja o checklist completo para compradores
+            </a>.
           </p>
         </div>
         <ol class="im__falta-lista">
@@ -386,16 +391,14 @@ const breadcrumb = {
                 Agendo a visita e acompanho você pela área para apresentar suas
                 características e possibilidades.
               </p>
-              <div class="im__acoes">
-                <BotaoWhats
-                  imovel={d.codigo}
-                  titulo={d.titulo}
-                  areaHa={areaHa ?? undefined}
-                  municipio={d.municipio}
-                  origem={`imovel-fecho:${d.codigo}`}
-                  rotulo="Falar sobre esta área"
-                />
-              </div>
+              <AcoesImovel
+                codigo={d.codigo}
+                titulo={d.titulo}
+                areaHa={areaHa ?? undefined}
+                municipio={d.municipio}
+                atualizadoEm={d.atualizadoEm}
+                origem={`imovel-fecho:${d.codigo}`}
+              />
             </div>
           )
         }
@@ -509,8 +512,10 @@ const breadcrumb = {
 
   .im__decisao {
     display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.15fr) auto;
-    grid-template-areas: 'area price action';
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-areas:
+      'area price'
+      'action action';
     gap: var(--s-5);
     align-items: end;
     margin-top: var(--s-5);
@@ -645,6 +650,11 @@ const breadcrumb = {
 
   .im__falta-intro {
     max-width: 38ch;
+  }
+
+  .im__falta-intro a {
+    color: var(--terra);
+    text-underline-offset: 0.2em;
   }
 
   .im__falta-lista {
