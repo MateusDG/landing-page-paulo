@@ -1,1 +1,2 @@
-Terreno avenda com 5 alqueire valor 3 milhão meio    mais informações entre em contato
+Área rural à venda em Fundão/ES, com 5 alqueires e valor pedido de R$ 3.500.000.
+Entre em contato para agendar uma visita e consultar as condições da negociação.
