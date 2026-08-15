@@ -11,13 +11,13 @@ croquiVerificado: false
 finalidade: ['produzir', 'lazer']
 resumo: >-
   Sítio de 20 mil m² (2 ha) à venda em Rio Saltinho, Santa Teresa/ES, com água,
-  energia e cerca de 6 mil pés de café informados pelo proprietário. Valor:
+  energia e cerca de 6 mil pés de café. Valor pedido:
   R$ 500 mil.
 agua: 'Água e nascente'
 energia: 'Energia disponível'
 solo: 'Solo de encosta com plantio de café'
 benfeitorias:
-  - 'Plantio informado de aproximadamente 6 mil pés de café'
+  - 'Plantio de aproximadamente 6 mil pés de café'
 acesso:
   asfaltoKm: 0
   terraKm: 0
@@ -25,7 +25,7 @@ acesso:
 tempoDeVitoria: '1h20'
 preco: 500000
 oQueFalta:
-  - 'A quantidade de café é uma estimativa informada pelo proprietário; conferir a contagem, a idade, a variedade e a produtividade da lavoura.'
+  - 'A quantidade de café é aproximada; conferir a contagem, a idade, a variedade e a produtividade da lavoura.'
   - 'A distância e a condição da estrada até a porteira precisam ser confirmadas.'
   - 'A disponibilidade de água e as condições do plantio serão detalhadas durante a visita.'
 status: 'ativa'
@@ -66,9 +66,8 @@ atualizadoEm: 2026-08-07
 ---
 
 Este sítio fica em Rio Saltinho, no município de Santa Teresa, e possui 20 mil
-metros quadrados — o equivalente a dois hectares. Segundo as informações do
-proprietário, a área conta com água, energia e aproximadamente 6 mil pés de
-café. O valor informado é de R$ 500 mil.
+metros quadrados — o equivalente a dois hectares. A área conta com água,
+energia e aproximadamente 6 mil pés de café. O valor pedido é de R$ 500 mil.
 
 As fotos mostram o plantio em área de encosta e uma lavoura em fase de florada.
 A quantidade, a idade, a variedade e a produtividade dos cafeeiros devem ser

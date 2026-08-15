@@ -25,6 +25,7 @@ const REGIOES = [
   'norte-capixaba',
   'sul-e-caparao',
   'litoral-e-franja',
+  'a-confirmar',
 ] as const;
 
 const FINALIDADES = ['produzir', 'morar', 'lazer', 'investir', 'turismo'] as const;

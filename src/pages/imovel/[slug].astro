@@ -27,6 +27,10 @@ const areaHa = d.areaHa;
 const areaConhecida = areaHa != null;
 const { Content } = await render(imovel);
 
+const rotuloMunicipio = d.municipio === 'Localização a confirmar'
+  ? d.municipio
+  : `${d.municipio}/ES`;
+
 const vendida = d.status === 'vendida';
 
 /* Sugestões: mesma região primeiro, depois faixa de área parecida.
@@ -44,7 +48,7 @@ const similares = todos
 const linhasFicha = [
   { rotulo: 'Código / SKU', valor: d.codigo },
   { rotulo: 'Tipo', valor: rotuloTipoImovel(d.tipo) },
-  { rotulo: 'Município', valor: `${d.municipio}/ES` },
+  { rotulo: 'Município', valor: rotuloMunicipio },
   ...(d.localidade ? [{ rotulo: 'Localidade', valor: d.localidade }] : []),
   { rotulo: 'Região', valor: rotuloTerritorio(d.regiao) },
   {
@@ -150,12 +154,14 @@ const breadcrumb = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', Astro.site).href },
     { '@type': 'ListItem', position: 2, name: 'Imóveis rurais', item: new URL('/imoveis/', Astro.site).href },
-    {
-      '@type': 'ListItem',
-      position: 3,
-      name: rotuloTerritorio(d.regiao),
-      item: new URL(`/regiao/${d.regiao}/`, Astro.site).href,
-    },
+    d.regiao === 'a-confirmar'
+      ? { '@type': 'ListItem', position: 3, name: rotuloTerritorio(d.regiao) }
+      : {
+          '@type': 'ListItem',
+          position: 3,
+          name: rotuloTerritorio(d.regiao),
+          item: new URL(`/regiao/${d.regiao}/`, Astro.site).href,
+        },
     { '@type': 'ListItem', position: 4, name: d.titulo, item: paginaUrl },
   ],
 };
@@ -189,7 +195,11 @@ const breadcrumb = {
         <nav class="im__trilha" aria-label="Você está em">
           <a href="/imoveis/">Imóveis</a>
           <span aria-hidden="true">/</span>
-          <a href={`/regiao/${d.regiao}/`}>{rotuloTerritorio(d.regiao)}</a>
+          {d.regiao === 'a-confirmar' ? (
+            <span>{rotuloTerritorio(d.regiao)}</span>
+          ) : (
+            <a href={`/regiao/${d.regiao}/`}>{rotuloTerritorio(d.regiao)}</a>
+          )}
           <span aria-hidden="true">/</span>
           <span class="im__trilha-atual">{d.codigo}</span>
         </nav>
@@ -210,7 +220,7 @@ const breadcrumb = {
               <p class="im__localidade">
                 {rotuloTipoImovel(d.tipo)} à venda
                 {' · '}
-                {d.localidade ? `${d.localidade}, ` : ''}{d.municipio}/ES
+                {d.localidade ? `${d.localidade}, ` : ''}{rotuloMunicipio}
               </p>
 
               <h1 class="im__titulo">{d.titulo}</h1>
@@ -296,7 +306,7 @@ const breadcrumb = {
               linhas={linhasFicha}
               nota={d.verificadoEmCampo
                 ? `Dados conferidos em campo · atualizados em ${dataCurta(d.atualizadoEm)}`
-                : `Informações fornecidas pelo proprietário · atualizadas em ${dataCurta(d.atualizadoEm)}`}
+                : `Dados sujeitos à conferência documental e em visita · atualizados em ${dataCurta(d.atualizadoEm)}`}
             />
           </aside>
         </div>

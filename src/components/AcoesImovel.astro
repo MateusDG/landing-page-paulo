@@ -23,6 +23,7 @@ const {
 } = Astro.props;
 
 const url = new URL(Astro.url.pathname, Astro.site).href;
+const rotuloMunicipio = municipio === 'Localização a confirmar' ? '' : ` · ${municipio}/ES`;
 ---
 
 <div class:list={['ai', `ai--${modo}`]} data-acoes-imovel>
@@ -63,7 +64,7 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
       data-compartilhar-ficha
       data-url={url}
       data-titulo={titulo}
-      data-texto={`${titulo} · ${municipio}/ES · referência ${codigo}`}
+      data-texto={`${titulo}${rotuloMunicipio} · referência ${codigo}`}
       data-evento="ficha_compartilhar"
       data-origem={`${origem}:compartilhar`}
       data-imovel={codigo}

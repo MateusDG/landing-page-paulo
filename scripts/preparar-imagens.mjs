@@ -24,6 +24,44 @@ const grupos = [
       'WhatsApp Image 2026-08-07 at 18.49.30.jpeg',
     ],
   },
+  {
+    origem: 'terreno7',
+    destino: 'joao-neiva-150-mil-m2',
+    ordem: [
+      'WhatsApp Image 2026-08-14 at 14.29.18.jpeg',
+      'WhatsApp Image 2026-08-14 at 14.29.19.jpeg',
+      'WhatsApp Image 2026-08-14 at 14.29.19 (1).jpeg',
+      'WhatsApp Image 2026-08-14 at 14.29.19 (2).jpeg',
+      'WhatsApp Image 2026-08-14 at 14.29.19 (3).jpeg',
+      'WhatsApp Image 2026-08-14 at 14.29.19 (4).jpeg',
+    ],
+  },
+  {
+    origem: 'terreno8',
+    destino: 'area-rural-5-alqueires',
+    ordem: [
+      'WhatsApp Image 2026-08-14 at 18.48.52.jpeg',
+      'WhatsApp Image 2026-08-14 at 18.48.53.jpeg',
+      'WhatsApp Image 2026-08-14 at 18.48.53 (1).jpeg',
+      'WhatsApp Image 2026-08-14 at 18.48.53 (2).jpeg',
+      'WhatsApp Image 2026-08-14 at 18.48.54.jpeg',
+    ],
+  },
+  {
+    origem: 'terreno9',
+    destino: 'sentido-santa-teresa-48-mil-m2',
+    ordem: [
+      'WhatsApp Image 2026-08-15 at 16.16.08.jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.08 (1).jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.08 (2).jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.09.jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.09 (1).jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.09 (2).jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.09 (3).jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.10.jpeg',
+      'WhatsApp Image 2026-08-15 at 16.16.10 (1).jpeg',
+    ],
+  },
 ];
 
 for (const grupo of grupos) {

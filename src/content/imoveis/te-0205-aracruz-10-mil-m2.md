@@ -10,9 +10,9 @@ croquiVerificado: false
 finalidade: ['morar', 'lazer', 'investir']
 resumo: >-
   Terreno rural de 10 mil m² em Aracruz/ES, com lagoa nas fotos, energia e
-  nascente informada pelo proprietário. Opção para chácara. R$ 500 mil.
-agua: 'Nascente informada pelo proprietário; lagoa registrada nas fotos'
-energia: 'Energia informada pelo proprietário'
+  nascente. Opção para chácara. R$ 500 mil.
+agua: 'Nascente; lagoa registrada nas fotos'
+energia: 'Energia disponível'
 solo: 'Área verde com árvores frutíferas, vegetação e trechos de solo exposto'
 benfeitorias:
   - 'Lagoa registrada nas fotos'
@@ -27,7 +27,7 @@ preco: 500000
 oQueFalta:
   - 'A localização exata, a distância até o asfalto e as condições do acesso precisam ser confirmadas.'
   - 'A área, os limites e a situação documental devem ser conferidos na matrícula, no cadastro municipal e durante a visita.'
-  - 'A nascente e a lagoa aparecem nas informações e fotos recebidas; origem, vazão, regularização e uso da água precisam ser confirmados.'
+  - 'A nascente e a lagoa aparecem na ficha e nas fotos; origem, vazão, regularização e uso da água precisam ser confirmados.'
   - 'O uso permitido para moradia, lazer ou eventual parcelamento depende da consulta ao município.'
 status: 'ativa'
 rascunho: false
@@ -82,14 +82,13 @@ atualizadoEm: 2026-08-07
 ---
 
 Este terreno rural possui 10 mil metros quadrados, o equivalente a um hectare,
-e fica no município de Aracruz, no Espírito Santo. O valor informado para a
-venda é de R$ 500 mil.
+e fica no município de Aracruz, no Espírito Santo. O valor pedido para a venda
+é de R$ 500 mil.
 
-Segundo as informações recebidas, a área conta com energia e uma nascente. As
-fotos mostram uma lagoa, vegetação diversificada, árvores frutíferas, trechos
-de área verde, cercamento e porteira. Esses elementos podem atender a quem
-procura um terreno para formar uma chácara, morar, descansar, cultivar ou
-investir próximo ao litoral capixaba.
+A área conta com energia e uma nascente. As fotos mostram uma lagoa, vegetação
+diversificada, árvores frutíferas, trechos de área verde, cercamento e porteira.
+Esses elementos podem atender a quem procura um terreno para formar uma
+chácara, morar, descansar, cultivar ou investir próximo ao litoral capixaba.
 
 A localização exata, as condições do acesso, os limites do terreno, a situação
 documental, a vazão da nascente, as condições da lagoa e as possibilidades de

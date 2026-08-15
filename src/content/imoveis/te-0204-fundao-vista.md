@@ -10,20 +10,20 @@ croquiVerificado: false
 finalidade: ['lazer', 'investir']
 resumo: >-
   Terreno em Fundão, a 4 km de estrada de chão, com vista para a serra e valor
-  informado de R$ 30 por m². A área total ainda não foi informada, então o
+  de R$ 30 por m². A área total ainda não foi confirmada, então o
   preço final permanece sob consulta.
 agua: 'Espelho d’água'
-energia: 'Energia não informada'
+energia: 'Energia a confirmar'
 solo: 'Pasto, vegetação e relevo'
 benfeitorias: []
 acesso:
   asfaltoKm: 0
   terraKm: 4
-  nota: 'Quatro quilômetros de estrada de chão, conforme a descrição recebida.'
+  nota: 'Quatro quilômetros de estrada de chão; condições do trecho a confirmar.'
 tempoDeVitoria: 'A confirmar'
 preco: null
 oQueFalta:
-  - 'A área total não foi informada. Sem essa medida não é possível calcular o valor final pelo preço de R$ 30 por m².'
+  - 'A área total ainda precisa ser confirmada. Sem essa medida não é possível calcular o valor final pelo preço de R$ 30 por m².'
   - 'A origem e a regularização do espelho d’água precisam ser verificadas.'
   - 'A condição da estrada e as possibilidades de uso da área serão detalhadas durante a visita.'
 status: 'ativa'
@@ -58,9 +58,9 @@ publicadoEm: 2026-08-03
 atualizadoEm: 2026-08-03
 ---
 
-O terreno fica em Fundão, a quatro quilômetros de estrada de chão. A descrição
-recebida informa o valor de R$ 30 por metro quadrado, mas não informa a área
-total. Por isso o valor final está sob consulta.
+O terreno fica em Fundão, a quatro quilômetros de estrada de chão. O preço de
+referência é de R$ 30 por metro quadrado, mas a área total ainda precisa ser
+confirmada. Por isso o valor final está sob consulta.
 
 As fotos mostram uma vista aberta para a serra, área de pasto ou terreno aberto
 e um espelho d’água.

@@ -10,7 +10,7 @@ croquiVerificado: false
 finalidade: ['lazer']
 resumo: >-
   Um hectare em Ibiraçu, com três pesqueiros, energia disponível e nascente
-  informada pelo proprietário. O valor pedido é de R$ 500 mil.
+  indicada na ficha da área. O valor pedido é de R$ 500 mil.
 agua: 'Nascente e três pesqueiros'
 energia: 'Energia disponível'
 benfeitorias:
@@ -22,7 +22,7 @@ acesso:
 tempoDeVitoria: 'A confirmar'
 preco: 500000
 oQueFalta:
-  - 'A metragem informada é total da área; a distribuição entre pesqueiros, apoio e área livre precisa ser levantada.'
+  - 'A metragem corresponde à área total; a distribuição entre pesqueiros, apoio e área livre precisa ser levantada.'
   - 'A distância e o tipo de estrada até a porteira precisam ser confirmados.'
   - 'As condições de uso da nascente e dos pesqueiros serão apresentadas durante a visita.'
 status: 'ativa'
@@ -77,9 +77,8 @@ publicadoEm: 2026-08-03
 atualizadoEm: 2026-08-03
 ---
 
-Esta área foi descrita pelo proprietário como um hectare em Ibiraçu, com três
-pesqueiros, energia disponível e uma nascente. O valor informado é de R$ 500
-mil.
+Área de um hectare em Ibiraçu, com três pesqueiros, energia disponível e uma
+nascente. O valor pedido é de R$ 500 mil.
 
 As fotos mostram uma área de lazer já ocupada por árvores, pomar e estruturas
 de apoio. A nascente e os pesqueiros aparecem como os pontos centrais da área.

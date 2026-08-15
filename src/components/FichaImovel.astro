@@ -70,7 +70,7 @@ const textoCaracteristicas = [
   ...d.benfeitorias,
 ].join(' ').toLocaleLowerCase('pt-BR');
 const caracteristicas = [
-  ...(d.agua && !/não|sem água/i.test(d.agua) ? ['agua'] : []),
+  ...(d.agua && !/não|sem água|a confirmar|sob consulta/i.test(d.agua) ? ['agua'] : []),
   ...(textoCaracteristicas.includes('nascente') ? ['nascente'] : []),
   ...(/energia disponível|energia elétrica/i.test(d.energia) ? ['energia'] : []),
   ...(d.benfeitorias.some((item) => /casa|sede|moradia/i.test(item)) ? ['casa'] : []),
@@ -85,6 +85,10 @@ const busca = [
   d.resumo,
   ...caracteristicas,
 ].join(' ');
+
+const rotuloMunicipio = d.municipio === 'Localização a confirmar'
+  ? d.municipio
+  : `${d.municipio}/ES`;
 
 const linhas = [
   { rotulo: 'Finalidade', valor: d.finalidade.map((f) => rotuloFinalidade(f)).join(' · ') },
@@ -148,7 +152,7 @@ function rotuloFinalidade(f: string) {
     </div>
     <div class="fi__id">
       <p class="rotulo fi__codigo">{d.codigo}</p>
-      <p class="rotulo rotulo--fraco">{d.localidade ? `${d.localidade} · ` : ''}{d.municipio}/ES</p>
+      <p class="rotulo rotulo--fraco">{d.localidade ? `${d.localidade} · ` : ''}{rotuloMunicipio}</p>
       <p class="rotulo rotulo--fraco fi__territorio">{rotuloTerritorio(d.regiao)}</p>
     </div>
     {

@@ -63,7 +63,9 @@ export async function getStaticPaths() {
     rotas.push({
       params: { slug: `imovel-${i.id}` },
       props: {
-        kicker: `${d.municipio} · ${rotuloTerritorio(d.regiao)}`,
+        kicker: d.municipio === 'Localização a confirmar'
+          ? rotuloTerritorio(d.regiao)
+          : `${d.municipio} · ${rotuloTerritorio(d.regiao)}`,
         referencia: d.codigo,
         titulo: d.titulo,
         ...(d.areaHa != null

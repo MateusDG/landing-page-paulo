@@ -18,7 +18,8 @@ export type SlugTerritorio =
   | 'montanhas-capixabas'
   | 'norte-capixaba'
   | 'sul-e-caparao'
-  | 'litoral-e-franja';
+  | 'litoral-e-franja'
+  | 'a-confirmar';
 
 export interface Territorio {
   slug: SlugTerritorio;
@@ -186,4 +187,4 @@ export const porSlug = (slug: string) =>
   territorios.find((t) => t.slug === slug);
 
 export const rotuloTerritorio = (slug: string) =>
-  porSlug(slug)?.nome ?? slug;
+  slug === 'a-confirmar' ? 'Localização a confirmar' : porSlug(slug)?.nome ?? slug;

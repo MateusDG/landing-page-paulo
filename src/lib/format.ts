@@ -97,6 +97,6 @@ export function descreverAcesso(asfaltoKm: number, terraKm: number): string {
   const partes: string[] = [];
   if (asfaltoKm > 0) partes.push(`${numero(asfaltoKm)} km de asfalto`);
   if (terraKm > 0) partes.push(`${numero(terraKm)} km de terra`);
-  if (partes.length === 0) return 'Acesso rural';
+  if (partes.length === 0) return 'Acesso a confirmar';
   return partes.join(' + ');
 }

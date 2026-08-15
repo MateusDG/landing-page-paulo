@@ -57,8 +57,8 @@ publicadoEm: 2026-08-03
 atualizadoEm: 2026-08-03
 ---
 
-A descrição recebida fala em 35 hectares em Ibiraçu, com uma lagoa, nascente,
-energia e uma pequena casa. O valor informado é de R$ 1 milhão.
+Área de 35 hectares em Ibiraçu, com lagoa, nascente, energia e uma pequena
+casa. O valor pedido é de R$ 1 milhão.
 
 As fotos mostram a casa de apoio, a lagoa e o entorno arborizado. É uma área
 com vocação para lazer e moradia.

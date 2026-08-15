@@ -37,7 +37,8 @@ function montarTexto(ctx: ContextoWhats): string {
     const area = ctx.areaHa
       ? `${ctx.areaHa.toLocaleString('pt-BR')} ha`
       : null;
-    const local = [area, ctx.municipio].filter(Boolean).join(' em ');
+    const municipio = ctx.municipio === 'Localização a confirmar' ? null : ctx.municipio;
+    const local = [area, municipio].filter(Boolean).join(' em ');
     const identificacao = ctx.titulo
       ? `“${ctx.titulo}” (${ctx.imovel})`
       : `a área ${ctx.imovel}`;
