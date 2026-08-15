@@ -74,11 +74,6 @@ fotos:
     legenda: 'Área aberta'
     largura: 1204
     altura: 1600
-  - src: '/imoveis/sentido-santa-teresa-48-mil-m2/10.jpg'
-    alt: 'Área aberta com árvores e aves no entorno do terreno'
-    legenda: 'Entorno da área'
-    largura: 1204
-    altura: 1600
 publicadoEm: 2026-08-15
 atualizadoEm: 2026-08-15
 ---
