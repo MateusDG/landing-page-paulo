@@ -176,7 +176,7 @@ const blog = defineCollection({
       tituloSeo: z.string().min(35).max(62),
       descricao: z.string().min(120).max(170),
       resumo: z.string().min(80).max(260),
-      categoria: z.enum(['compra', 'documentacao', 'visita', 'uso-da-terra']),
+      categoria: z.enum(['compra', 'venda', 'documentacao', 'visita', 'uso-da-terra']),
       publicadoEm: z.coerce.date(),
       atualizadoEm: z.coerce.date(),
       destaque: z.boolean().default(false),

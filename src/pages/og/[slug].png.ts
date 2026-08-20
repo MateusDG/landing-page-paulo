@@ -45,13 +45,13 @@ export async function getStaticPaths() {
     {
       params: { slug: 'blog' },
       props: {
-        kicker: 'Caderno do comprador · Espírito Santo',
-        titulo: 'Blog para escolher um imóvel rural.',
+        kicker: 'Caderno rural · Espírito Santo',
+        titulo: 'Blog para comprar ou vender imóvel rural.',
         referencia: 'Informação prática',
         croqui: CONTORNO_ES,
         croquiViewBox: VIEWBOX_ES,
         meta: [
-          { rotulo: 'Temas', valor: 'medidas e documentos' },
+          { rotulo: 'Temas', valor: 'compra, venda e documentos' },
           { rotulo: 'Fontes', valor: 'indicadas' },
         ],
       },

@@ -17,6 +17,7 @@ const { post } = Astro.props;
 const d = post.data;
 const { Content } = await render(post);
 const leitura = tempoLeitura(post.body);
+const artigoVenda = d.categoria === 'venda';
 const paginaUrl = new URL(Astro.url.pathname, Astro.site).href;
 const og = `/og/blog-${post.id}.png`;
 
@@ -100,19 +101,27 @@ const breadcrumb = {
         <aside class="art__lateral" aria-label="Atalhos do artigo">
           <div class="art__check">
             <p class="rotulo rotulo--terra">Use este artigo</p>
-            <h2>Leve perguntas, não suposições</h2>
-            <p>Nas fichas, use o código do imóvel para pedir localização, disponibilidade, documentos e visita.</p>
-            <a class="botao botao--primario" href="/imoveis/">Ver imóveis à venda</a>
+            <h2>{artigoVenda ? 'Organize a área antes do anúncio' : 'Leve perguntas, não suposições'}</h2>
+            <p>
+              {artigoVenda
+                ? 'Apresente município, tamanho, preço, características e a situação conhecida dos documentos para iniciar o atendimento.'
+                : 'Nas fichas, use o código do imóvel para pedir localização, disponibilidade, documentos e visita.'}
+            </p>
+            <a class="botao botao--primario" href={artigoVenda ? '/quero-vender/' : '/imoveis/'}>
+              {artigoVenda ? 'Quero vender minha área' : 'Ver imóveis à venda'}
+            </a>
           </div>
 
           <div class="art__contato">
-            <p class="rotulo rotulo--fraco">Dúvida sobre a busca?</p>
+            <p class="rotulo rotulo--fraco">{artigoVenda ? 'Quer apresentar a área?' : 'Dúvida sobre a busca?'}</p>
             <BotaoWhats
               origem={`blog:${post.id}`}
               evento="blog_lead"
               variante="secundario"
               rotulo="Conversar pelo WhatsApp"
-              mensagem={`Oi, li o artigo “${d.titulo}” e tenho uma dúvida sobre a busca por imóvel rural.`}
+              mensagem={artigoVenda
+                ? `Oi, li o artigo “${d.titulo}” e quero apresentar uma área rural para venda no Espírito Santo.`
+                : `Oi, li o artigo “${d.titulo}” e tenho uma dúvida sobre a busca por imóvel rural.`}
             />
           </div>
         </aside>

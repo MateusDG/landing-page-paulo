@@ -17,7 +17,7 @@ const jsonLd = {
   '@id': `${new URL('/blog/', Astro.site).href}#blog`,
   url: new URL('/blog/', Astro.site).href,
   name: 'Blog sobre imóveis rurais no Espírito Santo',
-  description: 'Artigos práticos e verificados para pesquisar, visitar e comprar imóveis rurais no Espírito Santo.',
+  description: 'Artigos práticos e verificados para pesquisar, comprar e vender imóveis rurais no Espírito Santo.',
   publisher: { '@id': `${Astro.site}#corretor` },
   blogPost: posts.map((post) => ({
     '@type': 'BlogPosting',
@@ -35,7 +35,7 @@ const jsonLd = {
 
 <Base
   titulo="Blog sobre imóveis rurais no Espírito Santo"
-  descricao="Artigos para pesquisar, visitar e comprar sítios, chácaras, fazendas e terrenos rurais com clareza sobre medidas, documentos, acesso, água e uso da área."
+  descricao="Artigos para pesquisar, comprar e vender sítios, chácaras, fazendas e terrenos rurais com clareza sobre documentos, preço, acesso, água e uso da área."
   og="/og/blog.png"
   ogAlt="Blog sobre imóveis rurais no Espírito Santo"
   jsonLd={jsonLd}
@@ -43,9 +43,9 @@ const jsonLd = {
   <section class="secao--compacta bl__cab-env">
     <div class="env">
       <CabecalhoSecao
-        kicker="Caderno do comprador"
-        titulo="Blog para escolher uma área rural"
-        subtitulo="Conteúdo direto para organizar a busca, preparar a visita e saber o que ainda precisa ser confirmado antes de negociar."
+        kicker="Caderno rural"
+        titulo="Blog para comprar ou vender uma área rural"
+        subtitulo="Conteúdo direto para preparar a busca, a venda, a visita e as verificações necessárias antes de negociar."
         as="h1"
       />
     </div>

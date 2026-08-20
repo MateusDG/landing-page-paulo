@@ -6,7 +6,7 @@ resumo: "Um roteiro em quatro etapas para comparar a área, organizar a visita e
 categoria: compra
 publicadoEm: 2026-08-08
 atualizadoEm: 2026-08-08
-destaque: true
+destaque: false
 palavrasChave:
   - o que verificar antes de comprar imóvel rural
   - documentos para comprar terreno rural

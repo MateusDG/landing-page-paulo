@@ -1,5 +1,6 @@
 export const categoriasBlog = {
   compra: 'Compra de imóvel rural',
+  venda: 'Venda de imóvel rural',
   documentacao: 'Documentação rural',
   visita: 'Visita e avaliação',
   'uso-da-terra': 'Uso da terra',
