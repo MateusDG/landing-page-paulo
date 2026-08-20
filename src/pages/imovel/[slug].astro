@@ -92,7 +92,7 @@ const rotuloFinalidade: Record<string, string> = {
 
 const paginaUrl = new URL(Astro.url.pathname, Astro.site).href;
 const imagens = d.fotos.map((foto) => new URL(foto.src, Astro.site).href);
-const nomeSeo = d.titulo;
+const tituloSeo = d.tituloSeo ?? d.titulo;
 const descricaoSeo = d.resumo;
 const categoriaSeo = d.tipo === 'terreno-rural'
   ? 'Terreno rural'
@@ -103,7 +103,7 @@ const jsonLd = {
   '@type': 'Product',
   '@id': `${paginaUrl}#imovel`,
   url: paginaUrl,
-  name: nomeSeo,
+  name: d.titulo,
   sku: d.codigo,
   description: d.resumo,
   image: imagens,
@@ -139,7 +139,7 @@ const paginaLd = {
   '@type': 'RealEstateListing',
   '@id': `${paginaUrl}#anuncio`,
   url: paginaUrl,
-  name: nomeSeo,
+  name: d.titulo,
   description: descricaoSeo,
   datePosted: d.publicadoEm.toISOString(),
   dateModified: d.atualizadoEm.toISOString(),
@@ -168,7 +168,7 @@ const breadcrumb = {
 ---
 
 <Base
-  titulo={nomeSeo}
+  titulo={tituloSeo}
   descricao={descricaoSeo}
   og={`/og/imovel-${imovel.id}.png`}
   ogTipo="product"

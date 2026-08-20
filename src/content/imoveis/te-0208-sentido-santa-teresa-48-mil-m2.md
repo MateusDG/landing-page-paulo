@@ -1,6 +1,7 @@
 ---
 codigo: 'TE-0208'
 titulo: 'Terreno rural de 48.000 m² no sentido de Santa Teresa'
+tituloSeo: 'Terreno rural de 48 mil m² em Santa Teresa'
 tipo: 'terreno-rural'
 municipio: 'Localização a confirmar'
 localidade: 'Sentido Santa Teresa'

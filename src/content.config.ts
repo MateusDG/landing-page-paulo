@@ -69,6 +69,8 @@ const imoveis = defineCollection({
         .string()
         .regex(/^[A-Z]{2}-\d{4}$/, 'formato do código: XX-0000, ex. FA-0142'),
       titulo: z.string().min(8),
+      /* Opcional para títulos visíveis que ficariam longos no resultado de busca. */
+      tituloSeo: z.string().min(25).max(54).optional(),
       tipo: z.enum(TIPOS_IMOVEL),
       municipio: z.string(),
       localidade: z.string().optional(),

@@ -71,7 +71,7 @@ const {
 const tituloFinal = titulo
   ? titulo.includes(corretor.nome)
     ? titulo
-    : `${titulo} | ${corretor.nome}`
+    : `${titulo} | ${corretor.nomeCurto.split(' ')[0]}`
   : meta.titulo;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogUrl = new URL(og, Astro.site).href;

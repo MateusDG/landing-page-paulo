@@ -24,8 +24,13 @@ const { fotos, municipio, prioridade = false } = Astro.props;
 
 const urlWebp = (src: string, largura: number) =>
   src.replace(/\.(?:jpe?g|png|webp)$/i, `-${largura}.webp`);
+const urlAvif = (src: string, largura: number) =>
+  src.replace(/\.(?:jpe?g|png|webp)$/i, `-${largura}.avif`);
 const srcsetWebp = (src: string) =>
   [320, 640, 960].map((largura) => `${urlWebp(src, largura)} ${largura}w`).join(', ');
+const srcsetAvif = (src: string) =>
+  [320, 640, 960].map((largura) => `${urlAvif(src, largura)} ${largura}w`).join(', ');
+const tamanhosImagem = '(max-width: 700px) calc(100vw - 64px), (max-width: 1050px) calc(100vw - 9rem), 860px';
 
 const shotList = [
   ['A chegada', 'A estrada de acesso vista do carro. Acesso é a objeção nº 1.'],
@@ -53,14 +58,20 @@ const shotList = [
           data-gal-foto
           data-gal-main-trigger
           data-gal-index="0"
-          aria-label={`Abrir foto 1 de ${fotos.length}: ${fotos[0].alt}`}
+          aria-label={`Abrir galeria, foto 1 de ${fotos.length}: ${fotos[0].alt}`}
         >
           <picture>
             <source
-              data-gal-main-source
+              data-gal-main-source-avif
+              type="image/avif"
+              srcset={srcsetAvif(fotos[0].src)}
+              sizes={tamanhosImagem}
+            />
+            <source
+              data-gal-main-source-webp
               type="image/webp"
               srcset={srcsetWebp(fotos[0].src)}
-              sizes="(max-width: 700px) calc(100vw - 42px), 1120px"
+              sizes={tamanhosImagem}
             />
             <img
               data-gal-main
@@ -112,6 +123,7 @@ const shotList = [
               aria-current={i === 0 ? 'true' : undefined}
             >
               <picture>
+                <source type="image/avif" srcset={urlAvif(f.src, 160)} />
                 <source type="image/webp" srcset={urlWebp(f.src, 160)} />
                 <img
                   src={f.src}
@@ -144,7 +156,11 @@ const shotList = [
               <span class="sr-only">Anterior</span>
             </button>
             <figure class="gal__dialog-figure">
-              <img data-gal-dialog-img alt="" decoding="async" />
+              <picture>
+                <source data-gal-dialog-source-avif type="image/avif" />
+                <source data-gal-dialog-source-webp type="image/webp" />
+                <img data-gal-dialog-img alt="" decoding="async" />
+              </picture>
               <figcaption data-gal-dialog-caption>{fotos[0].legenda ?? ''}</figcaption>
             </figure>
             <button type="button" class="gal__dialog-nav" data-gal-next aria-label="Próxima foto">
@@ -257,10 +273,13 @@ const shotList = [
     gap: var(--s-2);
     transform: translateY(-50%);
     pointer-events: none;
+    z-index: 2;
   }
 
   .gal__nav-btn {
+    position: relative;
     pointer-events: auto;
+    z-index: 1;
   }
 
   .gal__nav-btn,
@@ -425,9 +444,13 @@ const shotList = [
     margin: 0;
   }
 
+  .gal__dialog-figure picture,
   .gal__dialog-figure img {
     display: block;
     width: 100%;
+  }
+
+  .gal__dialog-figure img {
     max-height: 76vh;
     min-height: 180px;
     object-fit: contain;
@@ -583,10 +606,13 @@ const shotList = [
     const dialog = root.querySelector<HTMLDialogElement>('[data-gal-dialog]');
     const mainTrigger = root.querySelector<HTMLButtonElement>('[data-gal-main-trigger]');
     const mainImage = root.querySelector<HTMLImageElement>('[data-gal-main]');
-    const mainSource = root.querySelector<HTMLSourceElement>('[data-gal-main-source]');
+    const mainSourceAvif = root.querySelector<HTMLSourceElement>('[data-gal-main-source-avif]');
+    const mainSourceWebp = root.querySelector<HTMLSourceElement>('[data-gal-main-source-webp]');
     const mainCaption = root.querySelector<HTMLElement>('[data-gal-main-caption]');
     const counter = root.querySelector<HTMLElement>('[data-gal-contador]');
     const dialogImage = root.querySelector<HTMLImageElement>('[data-gal-dialog-img]');
+    const dialogSourceAvif = root.querySelector<HTMLSourceElement>('[data-gal-dialog-source-avif]');
+    const dialogSourceWebp = root.querySelector<HTMLSourceElement>('[data-gal-dialog-source-webp]');
     const dialogCaption = root.querySelector<HTMLElement>('[data-gal-dialog-caption]');
     const dialogStatus = root.querySelector<HTMLElement>('[data-gal-dialog-status]');
     const closeButton = root.querySelector<HTMLButtonElement>('[data-gal-close]');
@@ -602,6 +628,10 @@ const shotList = [
     const gerarSrcsetWebp = (src: string) =>
       [320, 640, 960]
         .map((largura) => `${src.replace(/\.(?:jpe?g|png|webp)$/i, `-${largura}.webp`)} ${largura}w`)
+        .join(', ');
+    const gerarSrcsetAvif = (src: string) =>
+      [320, 640, 960]
+        .map((largura) => `${src.replace(/\.(?:jpe?g|png|webp)$/i, `-${largura}.avif`)} ${largura}w`)
         .join(', ');
 
     /* Lê os dados do HTML renderizado para que as imagens sejam substituíveis
@@ -627,16 +657,17 @@ const shotList = [
       index = (proximo + items.length) % items.length;
       const item = items[index];
 
+      if (mainSourceAvif) mainSourceAvif.srcset = gerarSrcsetAvif(item.src);
+      if (mainSourceWebp) mainSourceWebp.srcset = gerarSrcsetWebp(item.src);
       if (mainImage) {
         mainImage.src = item.src;
         mainImage.alt = item.alt;
         mainImage.width = item.largura;
         mainImage.height = item.altura;
       }
-      if (mainSource) mainSource.srcset = gerarSrcsetWebp(item.src);
       if (mainTrigger) {
         mainTrigger.dataset.galIndex = String(index);
-        mainTrigger.setAttribute('aria-label', `Abrir foto ${index + 1} de ${items.length}: ${item.alt}`);
+        mainTrigger.setAttribute('aria-label', `Abrir galeria, foto ${index + 1} de ${items.length}: ${item.alt}`);
       }
       if (mainCaption) {
         mainCaption.textContent = item.legenda;
@@ -644,6 +675,8 @@ const shotList = [
       }
       if (counter) counter.textContent = `${index + 1} / ${items.length}`;
       if (dialogImage && dialog?.open) {
+        if (dialogSourceAvif) dialogSourceAvif.srcset = gerarSrcsetAvif(item.src);
+        if (dialogSourceWebp) dialogSourceWebp.srcset = gerarSrcsetWebp(item.src);
         dialogImage.src = item.src;
         dialogImage.alt = item.alt;
         dialogImage.width = item.largura;
@@ -683,11 +716,19 @@ const shotList = [
     });
 
     root.querySelectorAll<HTMLButtonElement>('[data-gal-prev]').forEach((button) => {
-      button.addEventListener('click', () => render(index - 1));
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        render(index - 1);
+      });
     });
 
     root.querySelectorAll<HTMLButtonElement>('[data-gal-next]').forEach((button) => {
-      button.addEventListener('click', () => render(index + 1));
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        render(index + 1);
+      });
     });
 
     closeButton?.addEventListener('click', fechar);

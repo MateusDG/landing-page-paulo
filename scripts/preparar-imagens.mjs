@@ -86,14 +86,21 @@ for (const grupo of grupos) {
           fit: 'inside',
           withoutEnlargement: true,
         })
-        .jpeg({ quality: 86, progressive: true, mozjpeg: true })
+        .jpeg({ quality: 82, progressive: true, mozjpeg: true })
         .toFile(`${base}.jpg`),
       ...[160, 320, 640, 960].map((largura) =>
         sharp(arquivo)
           .rotate()
           .resize({ width: largura, withoutEnlargement: true })
-          .webp({ quality: largura === 160 ? 76 : 82, effort: 5 })
+          .webp({ quality: largura === 160 ? 64 : 68, effort: 6 })
           .toFile(`${base}-${largura}.webp`),
+      ),
+      ...[160, 320, 640, 960].map((largura) =>
+        sharp(arquivo)
+          .rotate()
+          .resize({ width: largura, withoutEnlargement: true })
+          .avif({ quality: largura <= 320 ? 38 : largura === 640 ? 40 : 42, effort: 4 })
+          .toFile(`${base}-${largura}.avif`),
       ),
     ]);
   }

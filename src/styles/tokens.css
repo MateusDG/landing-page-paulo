@@ -21,9 +21,11 @@
   --filete:       #d1d0c7;
   --filete-fraco: #e2e0d8;
 
-  --terra:        #b75b34;
+  /* 4.62:1 sobre --papel-2 e 5.05:1 sobre --papel: passa WCAG AA
+     também nos rótulos monoespaçados de 13px. */
+  --terra:        #a94f2e;
   --terra-esc:    #8f4328;
-  --terra-fraco:  #b75b341a;
+  --terra-fraco:  #a94f2e1a;
 
   --conilon:      #234b37;
   --conilon-esc:  #193728;
@@ -96,4 +98,5 @@
   --z-ruido: 90;
   --z-header: 100;
   --z-barra-mobile: 110;
+  --z-modal: 200;
 }

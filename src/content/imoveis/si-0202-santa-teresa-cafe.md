@@ -1,6 +1,7 @@
 ---
 codigo: 'SI-0202'
 titulo: 'Sítio com 6 mil pés de café em Rio Saltinho, Santa Teresa'
+tituloSeo: 'Sítio com 6 mil pés de café em Santa Teresa'
 tipo: 'sitio'
 municipio: 'Santa Teresa'
 localidade: 'Rio Saltinho'
