@@ -18,16 +18,16 @@
     "images": "node scripts/preparar-imagens.mjs"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/inter-tight": "^5.3.0",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
-    "astro": "^7.1.6",
+    "astro": "^7.3.1",
     "sharp": "^0.35.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "lightningcss": "^1.33.0",
-    "typescript": "^5.9.2"
+    "typescript": "^7.0.2"
   }
 }
